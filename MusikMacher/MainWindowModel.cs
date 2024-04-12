@@ -257,6 +257,7 @@ namespace MusikMacher
       {
         Tracks.Add(track);
       }
+      RaisePropertyChanged(nameof(TrackCount));
       ReloadTags();
     }
 

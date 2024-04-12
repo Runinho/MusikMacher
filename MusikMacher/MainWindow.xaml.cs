@@ -106,7 +106,7 @@ namespace MusikMacher
           // add if not in selected
           if (!bindedList.Contains(track))
           {
-            System.Diagnostics.Debug.WriteLine($"adding track from selection {track.name}");
+            //System.Diagnostics.Debug.WriteLine($"adding track from selection {track.name}");
             bindedList.Add(track);
           }
         }
@@ -116,7 +116,7 @@ namespace MusikMacher
       {
         if (!items.Contains(track))
         {
-          System.Diagnostics.Debug.WriteLine($"removing track from selection {track.name}");
+          //System.Diagnostics.Debug.WriteLine($"removing track from selection {track.name}");
           bindedList.Remove(track);
         }
       }
