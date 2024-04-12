@@ -1,6 +1,6 @@
 # Musik Macher
 
-Tag and manage your library to use for editing videos.
+Musik Macher is your go-to solution for **organizing and tagging your music collection**, making it a breeze to use in video editing projects. 🎵🎥
 ![image](https://github.com/Runinho/MusikMacher/assets/3237686/a0db753e-075d-4fdc-9448-4ef009123924)
 
 ## Main features:
