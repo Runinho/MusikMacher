@@ -81,9 +81,25 @@ namespace MusikMacher
             }
           }
         }
-        // only include if all are deselected
-        return numTagChecked == matchedTags;
-
+        if (AndTags)
+        {
+          // AND behaviour
+          // only include if all are deselected
+          return numTagChecked == matchedTags;
+        }
+        else
+        {
+          // OR behaviour (default)
+          if (numTagChecked > 0)
+          {
+            return matchedTags > 0;
+          }
+          else
+          {
+            // no tags selected display all
+            return true;
+          }
+        }
       }
       return false;
     }
@@ -98,7 +114,7 @@ namespace MusikMacher
         {
           _search = value;
           RaisePropertyChanged(nameof(Search));
-          TracksView.Refresh();
+          RefreshTracksView();
           //TracksView = _itemSourceList.View;
         }
       }
@@ -119,6 +135,8 @@ namespace MusikMacher
     }
 
     private CollectionViewSource _itemSourceList;
+
+
     private Tag _selectedTag;
     public Tag SelectedTag
     {
@@ -153,6 +171,12 @@ namespace MusikMacher
       get { return _tracksView; }
       set { _tracksView = value; RaisePropertyChanged(nameof(TracksView)); }
     }
+
+    public int TrackCount
+    {
+      get { return TracksView.Cast<object>().Count(); }
+    }
+
     public ICommand LoadDataCommand { get; private set; }
     public ICommand SpaceKeyPressedCommand { get; private set; }
     public ICommand AddTagCommand { get; private set; }
@@ -168,6 +192,35 @@ namespace MusikMacher
         {
           _dataLocation = value;
           RaisePropertyChanged(nameof(dataLocation));
+        }
+      }
+    }
+
+    private bool _importSubfolders = false;
+    public bool ImportSubfolders
+    {
+      get { return _importSubfolders; }
+      set
+      {
+        if (value != _importSubfolders)
+        {
+          _importSubfolders = value;
+          RaisePropertyChanged(nameof(ImportSubfolders));
+        }
+      }
+    }
+
+    private bool _andTags = false;
+    public bool AndTags
+    {
+      get { return _andTags; }
+      set
+      {
+        if (value != _andTags)
+        {
+          _andTags = value;
+          RaisePropertyChanged(nameof(AndTags));
+          RefreshTracksView();
         }
       }
     }
@@ -188,6 +241,7 @@ namespace MusikMacher
     private DispatcherTimer timer;
     private Nullable<Point> startPoint;
     public TrackContext db;
+    private FrozenSet<Track> selected;
 
     private void logLoading(string s)
     {
@@ -272,20 +326,23 @@ namespace MusikMacher
           }
         }
 
-        // iter over directories
-        string[] directories = Directory.GetDirectories(loadFrom);
-        foreach (string dirPath in directories)
+        if (ImportSubfolders)
         {
-          string dirName = Path.GetFileName(dirPath);
-          if(parents.Count < 10) // max 10 dirs deep
+          // iter over directories
+          string[] directories = Directory.GetDirectories(loadFrom);
+          foreach (string dirPath in directories)
           {
-            List<string> newParents = parents.GetRange(0, parents.Count);
-            newParents.Add(dirName);
-            LoadData(newParents, dirPath);
+            string dirName = Path.GetFileName(dirPath);
+            if (parents.Count < 10) // max 10 dirs deep
+            {
+              List<string> newParents = parents.GetRange(0, parents.Count);
+              newParents.Add(dirName);
+              LoadData(newParents, dirPath);
+            }
           }
         }
 
-          db.SaveChanges();
+        db.SaveChanges();
         logLoading($"Found {existing} known songs and created {created} new ones in database.");
       }
       else
@@ -463,7 +520,7 @@ namespace MusikMacher
       {
         case "IsChecked":
           System.Diagnostics.Debug.WriteLine("Update triggered");
-          TracksView.Refresh();
+          RefreshTracksView();
           break;
       }
     }
@@ -485,6 +542,27 @@ namespace MusikMacher
       {
         Console.WriteLine($"Could not find track with name '{trackName}' to add tag '{tag.Name}' to it!");
       }
+    }
+
+    internal void DeleteTracks()
+    {
+      // delete current selection
+      // TODO: maybee add a question dialog LOL
+      selected = Player.SelectedTracks.ToFrozenSet();
+      foreach(Track track in selected)
+      {
+        // delete in db
+        db.Tracks.Remove(track);
+        // delete in tracks
+        Tracks.Remove(track);
+      }
+      RefreshTracksView();
+    }
+
+    private void RefreshTracksView()
+    {
+      TracksView.Refresh();
+      RaisePropertyChanged(nameof(TrackCount));
     }
   }
 }

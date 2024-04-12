@@ -46,7 +46,10 @@ namespace MusikMacher
         OnPropertyChanged(nameof(Position));
         OnPropertyChanged(nameof(Length));
         // check if we can save the duration
-        currentTrack.length = (int)full_length;
+        if(currentTrack != null)
+        {
+          currentTrack.length = (int)full_length;
+        }
         MainWindowModel.Instance.db.SaveChanges();
       }
       else

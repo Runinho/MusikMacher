@@ -19,9 +19,9 @@ namespace MusikMacher
   /// </summary>
   public partial class MainWindow : Window
   {
-      /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     MainWindowModel model = MainWindowModel.Instance;
 
     public MainWindow()
@@ -75,11 +75,11 @@ namespace MusikMacher
         var droppedData = (string[])e.Data.GetData("MusikMakerTrack");
         System.Diagnostics.Debug.WriteLine($"got dropped data: {droppedData}");
         // Process dropped data here
-        if(sender is System.Windows.Controls.CheckBox checkBox)
+        if (sender is System.Windows.Controls.CheckBox checkBox)
         {
-          if(checkBox.DataContext is Tag tag)
+          if (checkBox.DataContext is Tag tag)
           {
-            foreach(string name in droppedData)
+            foreach (string name in droppedData)
             {
               model.AddTrackToTag(name, tag);
             }
@@ -90,6 +90,10 @@ namespace MusikMacher
       e.Effects |= DragDropEffects.Link;
     }
 
+    private void DataGrid_Delete(object sender, RoutedEventArgs e)
+    {
+      model.DeleteTracks();
+    }
     private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var bindedList = model.Player.SelectedTracks;

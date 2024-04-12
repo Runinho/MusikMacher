@@ -29,7 +29,7 @@ namespace LorusMusikMacher.database
     {
       options.UseSqlite($"Data Source={DbPath}");
 
-      options.LogTo(message => System.Diagnostics.Debug.WriteLine(message), LogLevel.Information);
+      //options.LogTo(message => System.Diagnostics.Debug.WriteLine(message), LogLevel.Information);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -67,6 +67,7 @@
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
               <!-- search see: https://stackoverflow.com/a/21672408 -->
               <Grid Grid.Row="0">
@@ -89,15 +90,22 @@
                 x:Name="dataGrid" 
                 Grid.Row="1" 
                 ItemsSource="{Binding TracksView}" 
-                SelectedItem="{Binding Path=Player.currentTrack}"
+                SelectedItem="{Binding Path=Player.currentTrack, Mode=TwoWay}"
                 SelectionChanged="DataGrid_SelectionChanged"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
                 PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
-                PreviewMouseMove="DataGrid_PreviewMouseMove">
+                PreviewMouseMove="DataGrid_PreviewMouseMove"
+                CanUserDeleteRows="False"
+                >
                 <DataGrid.InputBindings>
                   <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
                 </DataGrid.InputBindings>
+                <DataGrid.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem Header="Delete track" Click="DataGrid_Delete"/>
+                  </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                   <DataGridTextColumn Header="Name" Binding="{Binding name}" />
                   <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
@@ -106,6 +114,10 @@
                   <!-- Add more columns here if needed -->
                 </DataGrid.Columns>
               </DataGrid>
+              <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="10,5,5,0">
+                <Run Text="Tracks in view: " />
+                <Run Text="{Binding TrackCount, Mode=OneWay}" />
+              </TextBlock>
             </Grid>
           </Grid>
 
@@ -137,13 +149,19 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
           <Label  Grid.Row="0">
             Path to search
           </Label>
-          <TextBox Grid.Row="1" Text="{Binding Path=dataLocation}"></TextBox>
-          <Button Grid.Row="2" Content="Load Data" Command="{Binding LoadDataCommand}"/>
-          <TextBlock Grid.Row="3" Text="{Binding Path=loadingLog}"/>
+          <TextBox Grid.Row="1" Text="{Binding Path=dataLocation}"/>
+          <CheckBox Grid.Row="2" Content="Import subfolders" IsChecked="{Binding Path=ImportSubfolders}"/>
+          <Button Grid.Row="3" Content="Load Data" Command="{Binding LoadDataCommand}"/>
+          <ScrollViewer Grid.Row="4">
+            <TextBlock Text="{Binding Path=loadingLog}"/>
+          </ScrollViewer>
+          <CheckBox Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
         </Grid>
       </TabItem>
     </TabControl>
