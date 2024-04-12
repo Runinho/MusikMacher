@@ -1,29 +1,36 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using LorusMusikMacher.database;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace MusikMacher
 {
-  class MainWindowModel : INotifyPropertyChanged
+  class MainWindowModel : ViewModelBase
   {
+
+    public static MainWindowModel Instance = new MainWindowModel();
 
     public MainWindowModel()
     {
       LoadDataCommand = new RelayCommand(LoadData);
       SpaceKeyPressedCommand = new RelayCommand(SpaceKeyPressed);
+      AddTagCommand = new RelayCommand(AddTag);
       Player = new PlayerModel();
 
       dataLocation = "C:/some/folder";
@@ -33,36 +40,122 @@ namespace MusikMacher
       db.Database.OpenConnection();
       db.Database.EnsureCreated();
 
-      Tracks = new ObservableCollection<Track>(db.Tracks);
+      Tracks = new ObservableCollection<Track>(db.Tracks.Include(t => t.Tags));
+      ReloadTags();
 
       // Set up collection view and apply sorting
-      TracksView = CollectionViewSource.GetDefaultView(Tracks);
-      TracksView.SortDescriptions.Add(new SortDescription("creationTime", ListSortDirection.Descending));
-
+      _itemSourceList = new CollectionViewSource() { Source = Tracks };
+      //TracksView.SortDescriptions.Add(new SortDescription("creationTime", ListSortDirection.Descending));
+      //_itemSourceList.Filter += new FilterEventHandler(FilterTracks);
+      TracksView  = _itemSourceList.View;
+      TracksView.Filter = FilterTracks;
       //LoadData();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string propertyName)
+    private bool FilterTracks(object obj)
     {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      Track track = obj as Track;
+      if (track != null)
+      {
+        // filter at search
+        if (Search.Length > 0)
+        {
+          if (!track.name.ToLower().Contains(Search.ToLower()))
+          {
+            return false;
+          }
+        }
+        // check with tags
+
+        int numTagChecked = 0;
+        int matchedTags = 0;
+        foreach (Tag tag in Tags)
+        {
+          if (tag.IsChecked)
+          {
+            numTagChecked++;
+            if (track.Tags.Contains(tag))
+            {
+              // have a tag that is included
+              matchedTags++;
+            }
+          }
+        }
+        // only include if all are deselected
+        return numTagChecked == matchedTags;
+
+      }
+      return false;
+    }
+
+    private string _search = "";
+    public string Search
+    {
+      get { return _search; }
+      set
+      {
+        if (value != Search)
+        {
+          _search = value;
+          RaisePropertyChanged(nameof(Search));
+          TracksView.Refresh();
+          //TracksView = _itemSourceList.View;
+        }
+      }
     }
 
     private ObservableCollection<Track> _tracks;
     public ObservableCollection<Track> Tracks
     {
       get { return _tracks; }
-      set { _tracks = value; OnPropertyChanged(nameof(Tracks)); }
+      set { _tracks = value; RaisePropertyChanged(nameof(Tracks)); }
+    }
+
+    public ObservableCollection<Tag> _tags;
+    public ObservableCollection<Tag> Tags
+    {
+      get { return _tags; }
+      set { _tags = value; RaisePropertyChanged(nameof(Tags)); }
+    }
+
+    private CollectionViewSource _itemSourceList;
+    private Tag _selectedTag;
+    public Tag SelectedTag
+    {
+      get { return _selectedTag; }
+      set
+      {
+        if (value != _selectedTag)
+        {
+          _selectedTag = value;
+          RaisePropertyChanged(nameof(SelectedTag));
+        }
+      }
+    }
+
+    private Tag _selectedTags;
+    public Tag SelectedTags
+    {
+      get { return _selectedTags; }
+      set
+      {
+        if (value != _selectedTags)
+        {
+          _selectedTags = value;
+          RaisePropertyChanged(nameof(SelectedTags));
+        }
+      }
     }
 
     private ICollectionView _tracksView;
     public ICollectionView TracksView
     {
       get { return _tracksView; }
-      set { _tracksView = value; OnPropertyChanged(nameof(TracksView)); }
+      set { _tracksView = value; RaisePropertyChanged(nameof(TracksView)); }
     }
     public ICommand LoadDataCommand { get; private set; }
     public ICommand SpaceKeyPressedCommand { get; private set; }
+    public ICommand AddTagCommand { get; private set; }
     public PlayerModel Player { get; private set; }
 
     private string _dataLocation;
@@ -74,7 +167,7 @@ namespace MusikMacher
         if (value != _dataLocation)
         {
           _dataLocation = value;
-          OnPropertyChanged(nameof(dataLocation));
+          RaisePropertyChanged(nameof(dataLocation));
         }
       }
     }
@@ -88,13 +181,13 @@ namespace MusikMacher
         if (value != loadingLog)
         {
           _loadingLog = value;
-          OnPropertyChanged(nameof(loadingLog));
+          RaisePropertyChanged(nameof(loadingLog));
         }
       }
     }
     private DispatcherTimer timer;
     private Nullable<Point> startPoint;
-    private TrackContext db;
+    public TrackContext db;
 
     private void logLoading(string s)
     {
@@ -104,17 +197,33 @@ namespace MusikMacher
     private void LoadData()
     {
       loadingLog = "Trying to load data from " + dataLocation + "\n";
-      string loadFrom = dataLocation;
+      LoadData([], dataLocation);
+      Tracks.Clear();
+      foreach (Track track in db.Tracks)
+      {
+        Tracks.Add(track);
+      }
+      ReloadTags();
+    }
+
+    private void LoadData(List<string> parents, string location)
+    {
+      loadingLog += "loading from sublocation " + location + "\n";
+      string loadFrom = location;
 
       int existing = 0;
       int created = 0;
+
+      Tag? tag = null;
+      if (parents.Count > 0)
+      {
+        tag = db.CreateOrFindTag(parents[parents.Count - 1]);
+      }
 
       // Handle loading data here
       // Check if the directory exists
       if (Directory.Exists(loadFrom))
       {
-        // Clear tracks
-        //Tracks.Clear();
 
         // Get all files in the directory
         string[] files = Directory.GetFiles(loadFrom);
@@ -138,22 +247,45 @@ namespace MusikMacher
 
 
             // check if the track exists
-            bool songExists = db.Tracks.Any(track => track.name == fileInfo.Name);
-            if (songExists)
+            Track? songExists = db.Tracks.Find(fileInfo.Name);
+            if (songExists != null)
             {
               // we do nothing
               // TODO: maybe check if the original location is still valid?
               // TODO: do some hashing of the content???
+              if(tag != null)
+              {
+                songExists.AddTag(tag);
+              }
               existing += 1;
             }
             else
             {
               created += 1;
-              db.Tracks.Add(new Track(fileInfo.Name, filePath, fileInfo.CreationTime, ""));
+              var track = new Track(fileInfo.Name, filePath, fileInfo.LastWriteTime);
+              if(tag != null)
+              {
+                track.AddTag(tag);
+              }
+              db.Tracks.Add(track);
             }
           }
         }
-        db.SaveChanges();
+
+        // iter over directories
+        string[] directories = Directory.GetDirectories(loadFrom);
+        foreach (string dirPath in directories)
+        {
+          string dirName = Path.GetFileName(dirPath);
+          if(parents.Count < 10) // max 10 dirs deep
+          {
+            List<string> newParents = parents.GetRange(0, parents.Count);
+            newParents.Add(dirName);
+            LoadData(newParents, dirPath);
+          }
+        }
+
+          db.SaveChanges();
         logLoading($"Found {existing} known songs and created {created} new ones in database.");
       }
       else
@@ -161,47 +293,54 @@ namespace MusikMacher
         logLoading("Failed to load from '" + loadFrom + "': Directory does not exists.");
       }
       logLoading("Done.");
-      Tracks.Clear();
-      foreach(Track track in db.Tracks)
-      {
-        Tracks.Add(track);
-      }
     }
 
     public void TrackPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
     {
-      if (e.OriginalSource is Decorator decorator)
+      if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
       {
-        if(decorator.Child is ContentPresenter presenter)
+        if (e.OriginalSource is Decorator decorator)
         {
-          if(presenter.Content is Track)
+          if (decorator.Child is ContentPresenter presenter)
           {
-            startPoint = e.GetPosition(null);
-            return;
+            if (presenter.Content is Track selected)
+            {
+              if (Player.SelectedTracks.Contains(selected))
+              {
+                e.Handled = true;
+              }
+              startPoint = e.GetPosition(null);
+              return;
+            }
+            else
+            {
+              //Console.WriteLine("Not Track.");
+            }
           }
           else
           {
-            //Console.WriteLine("Not Track.");
+            //Console.WriteLine("Not presenter.");
           }
         }
         else
         {
-          //Console.WriteLine("Not presenter.");
-        }
-      } else
-      {
-        if(e.OriginalSource is System.Windows.Controls.TextBlock textBlock)
-        {
-          if (textBlock.DataContext is Track)
+          if (e.OriginalSource is System.Windows.Controls.TextBlock textBlock)
           {
-            startPoint = e.GetPosition(null);
-            Console.WriteLine("Drag from text block");
-            return;
+            if (textBlock.DataContext is Track selected)
+            {
+              if (Player.SelectedTracks.Contains(selected))
+              {
+                e.Handled = true;
+              }
+              startPoint = e.GetPosition(null);
+              Console.WriteLine("Drag from text block");
+              return;
+            }
           }
-        }
-        else
-        {
-          Console.WriteLine("Not decorator.");
+          else
+          {
+            Console.WriteLine("Not decorator.");
+          }
         }
       }
       startPoint = null;
@@ -209,7 +348,6 @@ namespace MusikMacher
 
     public void TrackPreviewMouseMove(object sender, MouseEventArgs e)
     {
-
       if (e.LeftButton == MouseButtonState.Pressed && startPoint is Point valueOfStart)
       {
         Point mousePos = e.GetPosition(null);
@@ -220,16 +358,31 @@ namespace MusikMacher
             Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
         {
           // Get the dragged ListBoxItem
-          var listBox = sender as ListBox;
+          var dataGrid = sender as DataGrid;
           // if (listBoxItem != null)
           //{
           // Initialize drag and drop operation
           Console.WriteLine($"Drag: {Player.currentTrack.path}");
           var toDrag = Player.currentTrack;
           DataObject dragData = new DataObject(DataFormats.FileDrop, new string[] { toDrag.path });
-          DragDropEffects effect = DragDrop.DoDragDrop(listBox, dragData, DragDropEffects.Copy | DragDropEffects.Move);
+          // put all the selected strings into it.
+          var selected = Player.SelectedTracks.ToFrozenSet();
+          var strings = new string[selected.Count];
+          int i = 0;
+          foreach ( var item in selected )
+          {
+            strings[i] = item.name;
+            i++;
+          }
+          dragData.SetData("MusikMakerTrack", strings); // use the full selection.
+          dragData.SetData(DataFormats.Text, toDrag.name);
+          DragDropEffects effect = DragDrop.DoDragDrop(dataGrid, dragData, DragDropEffects.Copy);
           // pause track 
-          if (effect == DragDropEffects.Copy || effect == DragDropEffects.Move)
+          if (effect == DragDropEffects.Link)
+          {
+            System.Diagnostics.Debug.WriteLine("Got linked so not stopping lol");
+          }
+          else  if (effect == DragDropEffects.Copy)
           {
             Player.Pause();
             Console.WriteLine($"sucessfully dragged {toDrag.name}");
@@ -245,6 +398,93 @@ namespace MusikMacher
     private void SpaceKeyPressed()
     {
       Player.PlayPause();
+    }
+
+    private void AddTag()
+    {
+      var tagName = openTagDialog("tag name:");
+      if (tagName != null)
+      {
+        System.Diagnostics.Debug.WriteLine($"creating new tag: '{tagName}'");
+        Tag tag = new Tag();
+        tag.Name = tagName;
+        db.Tags.Add(tag);
+        db.SaveChanges();
+        ReloadTags();
+      }
+    }
+
+    public string? openTagDialog(string question){
+      // TODO remove need for dialog and just add an empty that can be renamed.
+      // create dialog box
+      var viewModel = new NewTagDialogViewModel(question);
+
+      var dialog = new NewTagDialog
+      {
+        DataContext = viewModel
+      };
+      string? result = null;
+      viewModel.createTag = (tagName) =>
+      {
+        result = tagName;
+        dialog.Close();
+      };
+      dialog.ShowDialog();
+      return result;
+    }
+
+
+    internal void RenameTag()
+    {
+      var toRename = SelectedTag;
+      var newName = openTagDialog($"rename '{toRename.Name}' to:");
+      if(newName != null)
+      {
+        toRename.Name = newName;
+        db.SaveChanges();
+        
+      }
+    }
+
+    private void ReloadTags()
+    {
+      // just overwrite LOL
+      Tags = new ObservableCollection<Tag>(db.Tags);
+      foreach(var tag in Tags)
+      {
+        tag.PropertyChanged += Tag_PropertyChanged;
+      }
+    }
+
+    private void Tag_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+      System.Diagnostics.Debug.WriteLine(e.PropertyName);
+      switch (e.PropertyName)
+      {
+        case "IsChecked":
+          System.Diagnostics.Debug.WriteLine("Update triggered");
+          TracksView.Refresh();
+          break;
+      }
+    }
+
+    internal void AddTrackToTag(string trackName, Tag tag)
+    {
+      // find the track
+      Track? track = db.Tracks.Find(trackName);
+      if(track != null)
+      {
+        if (!track.Tags.Contains(tag))
+        {
+          // need to add it
+          track.AddTag(tag);
+          db.SaveChanges();
+          System.Diagnostics.Debug.WriteLine($"added tag '{tag.Name}' to track {trackName}");
+        }
+      } else
+      {
+        Console.WriteLine($"Could not find track with name '{trackName}' to add tag '{tag.Name}' to it!");
+      }
     }
   }
 }

@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:MusikMacher"
+        xmlns:localConverter="clr-namespace:MusikMacher.converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Lorus Musik Macher" Height="450" Width="800">
   <Window.Resources>
-    <local:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
+    <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
+    <localConverter:TagListConverter x:Key="TagListConverter"/>
   </Window.Resources>
   <Window.InputBindings>
     <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
@@ -22,20 +24,91 @@
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
 
-          <ListBox 
-            x:Name="listBox" 
-            Grid.Row="0" ItemsSource="{Binding Tracks}" SelectedItem="{Binding Path=Player.currentTrack}"
-            PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
-            PreviewMouseMove="ListBox_PreviewMouseMove">
-            <ListBox.InputBindings>
-              <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
-            </ListBox.InputBindings>
-            <ListBox.ItemTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding name}" Margin="5"/>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
+          <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="200"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- tag selction -->
+            <Grid Grid.Column="0">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <ListBox Grid.Row="0"
+                       x:Name="listBox"
+                       ItemsSource="{Binding Tags}"
+                       SelectedItem="{Binding Path=SelectedTag}"
+                       >
+                <ListBox.ItemContainerStyle>
+                  <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                  </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem Header="Rename" Click="MenuItem_Rename"/>
+                  </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Content="{Binding Name}" HorizontalContentAlignment="Stretch"
+                                                     AllowDrop="True"
+                       DragEnter="Tag_DragEnter"
+                       DragOver="Tag_DragOver"
+                       Drop="Tag_Drop"/>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+              <Button Grid.Row="1" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+            </Grid>
+            <Grid Grid.Column="1" >
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <!-- search see: https://stackoverflow.com/a/21672408 -->
+              <Grid Grid.Row="0">
+                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" x:Name="SearchTermTextBox" Margin="5"/>
+                <TextBlock IsHitTestVisible="False" Text="Enter Search Term Here" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                  <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Visibility" Value="Collapsed"/>
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
+                          <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </TextBlock.Style>
+                </TextBlock>
+              </Grid>
+              <!-- data -->
+              <DataGrid 
+                x:Name="dataGrid" 
+                Grid.Row="1" 
+                ItemsSource="{Binding TracksView}" 
+                SelectedItem="{Binding Path=Player.currentTrack}"
+                SelectionChanged="DataGrid_SelectionChanged"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
+                PreviewMouseMove="DataGrid_PreviewMouseMove">
+                <DataGrid.InputBindings>
+                  <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="Name" Binding="{Binding name}" />
+                  <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
+                  <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime}" />
+                  <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
+                  <!-- Add more columns here if needed -->
+                </DataGrid.Columns>
+              </DataGrid>
+            </Grid>
+          </Grid>
+
 
           <StackPanel Grid.Row="1">
             <Label Content="{Binding Path=Player.currentTrack.name}"/>

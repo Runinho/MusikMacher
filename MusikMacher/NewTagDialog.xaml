@@ -1,0 +1,19 @@
+﻿<Window x:Class="MusikMacher.NewTagDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusikMacher"
+        mc:Ignorable="d"
+        Title="New Tag" Height="150" Width="300">
+  <Grid Margin="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0" Content="{Binding Question}"/>
+    <TextBox x:Name="textBoxTagName" Grid.Row="1"  Margin="5" Text="{Binding Path=TagName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    <Button Grid.Row="2" IsDefault="True"  Content="Create" Command="{Binding CreateCommand}" Margin="5"/>
+  </Grid>
+</Window>

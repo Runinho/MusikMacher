@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -38,11 +39,15 @@ namespace MusikMacher
       // skip forward
       if (mediaPlayer.NaturalDuration.HasTimeSpan)
       {
+        double full_length = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
         double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * 0.24;
         mediaPlayer.Position = TimeSpan.FromSeconds(skipTo);
         Console.WriteLine("media opend");
         OnPropertyChanged(nameof(Position));
         OnPropertyChanged(nameof(Length));
+        // check if we can save the duration
+        currentTrack.length = (int)full_length;
+        MainWindowModel.Instance.db.SaveChanges();
       }
       else
       {
@@ -86,6 +91,19 @@ namespace MusikMacher
             timer.Start();
           }
         }
+      }
+    }
+
+
+    private ObservableCollection<Track> _selectedTracks = new ObservableCollection<Track>();
+
+    public ObservableCollection<Track> SelectedTracks
+    {
+      get { return _selectedTracks; }
+      set
+      {
+        _selectedTracks = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedTracks)));
       }
     }
 
