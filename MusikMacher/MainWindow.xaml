@@ -18,7 +18,7 @@
         <Setter.Value>
           <ControlTemplate TargetType="{x:Type Slider}">
             <Grid VerticalAlignment="Center">
-              <Border x:Name="borderBackgroundForClick" Margin="6,0" Height="20" Background="Transparent" />
+              <Border x:Name="borderBackgroundForClick" Margin="6,0" Height="40" Background="Transparent" />
               <Border x:Name="borderBackground" Margin="6,0" Height="4" Background="#8a8a8a" CornerRadius="2" />
               <Canvas Margin="0,-4,0,0" VerticalAlignment="Center">
                 <Border x:Name="PART_SelectionRange" HorizontalAlignment="Left" Margin="-4,0,0,0" Height="4" CornerRadius="2" Background="{TemplateBinding Foreground}" />
@@ -173,7 +173,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
-              <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}"/>
+              <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
               <local:TimeSlider 
                 Focusable="False" 
                 Grid.Column="1" 
@@ -186,7 +186,7 @@
                 IsSelectionRangeEnabled="True"
                 >
               </local:TimeSlider>
-              <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}"/>
+              <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
             </Grid>
             <StackPanel Orientation="Horizontal">
               <Button Content="Play" Command="{Binding Path=Player.PlayCommand}" IsEnabled="{Binding !IsPlaying}"/>
