@@ -66,7 +66,14 @@ namespace MusikMacher
     {
       if (obj is TagList tagList)
       {
-        return this.Count.CompareTo(tagList.Count);
+        if (this.Count == 1 && tagList.Count == 1)
+        {
+          return this[0].Name.CompareTo(tagList[0].Name);
+        }
+        else
+        {
+          return this.Count.CompareTo(tagList.Count);
+        }
         for(int i =0; i < this.Count; i++)
         {
           if(tagList.Count > i)
