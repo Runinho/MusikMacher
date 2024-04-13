@@ -11,6 +11,49 @@
   <Window.Resources>
     <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
     <localConverter:TagListConverter x:Key="TagListConverter"/>
+    
+    <!-- time slider style -->
+    <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="{x:Type Slider}">
+            <Grid VerticalAlignment="Center">
+              <Border x:Name="borderBackgroundForClick" Margin="6,0" Height="20" Background="Transparent" />
+              <Border x:Name="borderBackground" Margin="6,0" Height="4" Background="#8a8a8a" CornerRadius="2" />
+              <Canvas Margin="0,-4,0,0" VerticalAlignment="Center">
+                <Border x:Name="PART_SelectionRange" HorizontalAlignment="Left" Margin="-4,0,0,0" Height="4" CornerRadius="2" Background="{TemplateBinding Foreground}" />
+              </Canvas>
+              <Track x:Name="PART_Track">
+                <Track.Thumb>
+                  <Thumb Width="20" Height="20">
+                    <Thumb.Style>
+                      <Style TargetType="Thumb">
+                        <Setter Property="Template">
+                          <Setter.Value>
+                            <ControlTemplate TargetType="Thumb">
+                              <Border Width="20" Height="20" Background="#d55223" CornerRadius="10" BorderBrush="White" BorderThickness="5">
+                                <Border.Effect>
+                                  <DropShadowEffect ShadowDepth="1" Color="Black" Opacity="0.5"/>
+                                </Border.Effect>
+                              </Border>
+                            </ControlTemplate>
+                          </Setter.Value>
+                        </Setter>
+                      </Style>
+                    </Thumb.Style>
+                  </Thumb>
+                </Track.Thumb>
+              </Track>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="IsSelectionRangeEnabled" Value="True" />
+      <Setter Property="SelectionStart" Value="{Binding Minimum, RelativeSource={RelativeSource Self}}" />
+      <Setter Property="SelectionEnd" Value="{Binding Value, RelativeSource={RelativeSource Self}}" />
+      <Setter Property="Foreground" Value="#c94617" />
+    </Style>
+
   </Window.Resources>
   <Window.InputBindings>
     <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
@@ -18,7 +61,7 @@
   <Grid>
     <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
       <TabItem Header="Browse">
-        <Grid Background="#FFE5E5E5">
+        <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -131,7 +174,18 @@
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
               <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}"/>
-              <Slider Grid.Column="1" HorizontalAlignment="Stretch" Maximum="{Binding Path=Player.Length}" Value="{Binding Path=Player.Position}"/>
+              <local:TimeSlider 
+                Focusable="False" 
+                Grid.Column="1" 
+                IsMoveToPointEnabled="True" 
+                HorizontalAlignment="Stretch" 
+                Maximum="{Binding Path=Player.Length}" 
+                Value="{Binding Path=Player.Position}"
+                SelectionEnd="{Binding Path=Player.Position}"
+                Style="{StaticResource SliderStyle}"
+                IsSelectionRangeEnabled="True"
+                >
+              </local:TimeSlider>
               <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}"/>
             </Grid>
             <StackPanel Orientation="Horizontal">

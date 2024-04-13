@@ -67,6 +67,14 @@ namespace MusikMacher
 
     private void Timer_Tick(object sender, EventArgs e)
     {
+      var tmp_seek_request = seek_request;
+      if(tmp_seek_request != null)
+      {
+        seek_request = null; //TODO: maybe we need a semaphore to protect seek_request
+        // we seek
+        mediaPlayer.Position = TimeSpan.FromSeconds((double)tmp_seek_request);
+      }
+
       //Console.WriteLine("got tick lol.");
       OnPropertyChanged(nameof(Position));
       OnPropertyChanged(nameof(Length));
@@ -110,14 +118,23 @@ namespace MusikMacher
       }
     }
 
+    private double? seek_request = null; //seek request is done by the timer. so we
     public double Position
     {
-      get { return mediaPlayer.Position.TotalSeconds; }
+      get {
+        var tmp_seek_request = seek_request; // copy to prevent race condition
+        // return requested if it is not fullfiled already.
+        if(tmp_seek_request != null)
+        {
+          return (double)tmp_seek_request;
+        }
+        return mediaPlayer.Position.TotalSeconds; 
+      }
       set
       {
         // seek forward
         Console.Write("need to seek to " + value);
-        mediaPlayer.Position = TimeSpan.FromSeconds(value);
+        seek_request = value;
         OnPropertyChanged(nameof(Position));
       }
     }
