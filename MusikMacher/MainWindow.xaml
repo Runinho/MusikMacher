@@ -51,7 +51,7 @@
                         <Setter Property="Template">
                           <Setter.Value>
                             <ControlTemplate TargetType="Thumb">
-                              <Border Width="20" Height="20" Background="#d55223" CornerRadius="10" BorderBrush="White" BorderThickness="5">
+                              <Border Width="20" Height="20" Background="#429660" CornerRadius="10" BorderBrush="White" BorderThickness="5">
                                 <Border.Effect>
                                   <DropShadowEffect ShadowDepth="1" Color="Black" Opacity="0.5"/>
                                 </Border.Effect>
@@ -71,7 +71,7 @@
       <Setter Property="IsSelectionRangeEnabled" Value="True" />
       <Setter Property="SelectionStart" Value="{Binding Minimum, RelativeSource={RelativeSource Self}}" />
       <Setter Property="SelectionEnd" Value="{Binding Value, RelativeSource={RelativeSource Self}}" />
-      <Setter Property="Foreground" Value="#c94617" />
+      <Setter Property="Foreground" Value="#429660" />
     </Style>
 
   </Window.Resources>
@@ -124,7 +124,7 @@
                   </DataTemplate>
                 </ListBox.ItemTemplate>
               </ListBox>
-              <Button Grid.Row="1" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+              <Button Focusable="False" Grid.Row="1" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
             </Grid>
             <Grid Grid.Column="1" >
               <Grid.RowDefinitions>
@@ -163,6 +163,8 @@
                 >
                 <DataGrid.InputBindings>
                   <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
+                  <KeyBinding Key="Left" Command="{Binding Path=Player.SkipBackwardCommand}" />
+                  <KeyBinding Key="Right" Command="{Binding Path=Player.SkipForwardCommand}" />
                 </DataGrid.InputBindings>
                 <DataGrid.ContextMenu>
                   <ContextMenu>
@@ -213,10 +215,12 @@
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="1*"/>
               </Grid.ColumnDefinitions>
-              <Label Grid.Column="0" Content="{Binding Path=Player.currentTrack.name}"/>
-              <Button Grid.Column="1" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PauseButtonStyle}" Background="Transparent" BorderThickness="0">
+              <Label Grid.Column="0" Content="{Binding Path=Player.currentTrack.name}" VerticalAlignment="Center"/>
+              <Button Grid.Column="2" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PauseButtonStyle}" Background="Transparent" BorderThickness="0">
 
                 <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
                   <Path Fill="Black" Data="M20,2.5C10.3,2.5,2.5,10.3,2.5,20S10.3,37.5,20,37.5S37.5,29.7,37.5,20S29.7,2.5,20,2.5z M20,35.5
@@ -224,8 +228,15 @@
                   <Path Fill="Black" Data="M18.7,26.5c0,1.2-1,2.2-2.2,2.2l0,0c-1.2,0-2.2-1-2.2-2.2V14.4c0-1.2,1-2.2,2.2-2.2l0,0c1.2,0,2.2,1,2.2,2.2V26.5z" />
                   <Path Fill="Black" Data="M25.8,26.5c0,1.2-1,2.2-2.2,2.2l0,0c-1.2,0-2.2-1-2.2-2.2V14.4c0-1.2,1-2.2,2.2-2.2l0,0c1.2,0,2.2,1,2.2,2.2V26.5z" />
                 </Grid>
+                <Button.ToolTip>
+                  <ToolTip>
+                    <StackPanel>
+                      <TextBlock FontWeight="Bold">Pause (Space)</TextBlock>
+                    </StackPanel>
+                  </ToolTip>
+                </Button.ToolTip>
               </Button>
-              <Button Grid.Column="1" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PlayButtonStyle}" Background="Transparent" BorderThickness="0">
+              <Button Grid.Column="2" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PlayButtonStyle}" Background="Transparent" BorderThickness="0">
 
                 <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
                   <Path Fill="Black  " Data="M20,2.5C10.3,2.5,2.5,10.3,2.5,20S10.3,37.5,20,37.5S37.5,29.7,37.5,20S29.7,2.5,20,2.5z M20,35.5
@@ -233,15 +244,58 @@
                   <Path Fill="Black" Data="M28.1,22.4c0.7-0.4,1.2-1.2,1.2-2c0-1-0.6-1.5-1.1-1.9l-12.3-6c-0.2-0.1-0.4-0.2-0.7-0.2c-0.1,0-0.1,0-0.1,0
 		c-1.2,0-2.2,1-2.2,2.2c0,4,0,8.1,0,12.1c0,0.2,0,0.8,0.5,1.4c0.1,0.1,0.7,0.8,1.7,0.8c0.2,0,0.7,0,1.2-0.4l-0.3,0.2" />
                 </Grid>
+                <Button.ToolTip>
+                  <ToolTip>
+                    <StackPanel>
+                      <TextBlock FontWeight="Bold">Play (Space)</TextBlock>
+                    </StackPanel>
+                  </ToolTip>
+                </Button.ToolTip>
               </Button>
-              <Slider Grid.Column="2" Width="150" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
+              <!-- skip backward -->
+              <Button Grid.Column="1" Focusable="False" Command="{Binding Path=Player.SkipBackwardCommand}" Background="Transparent" BorderThickness="0">
+
+                <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
+                  <Path Fill="Black  " Data="M16.8,10.3c0.2,0.3,0.5,0.4,1,0.3c1-0.3,1.9-0.2,2.2-0.2c0,0,0,0,0.1,0c0.5,0,3.6-0.2,6.7,2.4
+	c1,0.8,3.8,3.2,3.8,8.1c0,5.5-4.9,10.4-10.4,10.4c-5.5,0-10.5-4.9-10.5-10.5c0-2.1,0.8-4.5,2.1-6.3c0.3-0.4,0.3-0.9,0-1.2
+	c-0.3-0.2-0.8,0-1.1,0.4c-1.6,2.1-2.4,4.5-2.4,7.1c0,6.5,5.3,11.8,11.8,11.8c6.5,0,11.8-5.3,11.8-11.8C31.8,14.3,26.5,9,20,9
+	c-0.1,0-0.2,0-0.3,0l1-1.3c0.3-0.4,0.2-0.9,0-1.1c-0.2-0.2-0.7-0.2-1,0.2c-0.4,0.5-1.7,1.7-2.9,2.8C16.7,9.8,16.6,10.2,16.8,10.3z" />
+                </Grid>
+                <Button.ToolTip>
+                  <ToolTip>
+                    <StackPanel>
+                      <TextBlock FontWeight="Bold">Skip back (Left Arrow)</TextBlock>
+                      <TextBlock>Skip the track about 1/10 back in time.</TextBlock>
+                    </StackPanel>
+                  </ToolTip>
+                </Button.ToolTip>
+              </Button>
+              <!-- skip forawd -->
+              <Button Grid.Column="3" Focusable="False" Command="{Binding Path=Player.SkipForwardCommand}" Background="Transparent" BorderThickness="0">
+
+                <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
+                  <Path Fill="Black  " Data="M23.2,9.6c-1.1-1.1-2.4-2.3-2.9-2.8c-0.3-0.3-0.7-0.4-1-0.2c-0.3,0.2-0.3,0.7,0,1.1l1,1.3c-0.1,0-0.2,0-0.3,0
+	C13.5,9,8.2,14.3,8.2,20.8c0,6.5,5.3,11.8,11.8,11.8c6.5,0,11.8-5.3,11.8-11.8c0-2.5-0.8-5-2.4-7.1c-0.3-0.4-0.8-0.6-1.1-0.4
+	c-0.3,0.2-0.3,0.8,0,1.2c1.3,1.8,2.1,4.1,2.1,6.3c0,5.5-4.9,10.5-10.5,10.5c-5.5,0-10.4-4.9-10.4-10.4c0-4.9,2.8-7.3,3.8-8.1
+	c3-2.6,6.2-2.4,6.7-2.4c0,0,0.1,0,0.1,0c0.3,0,1.2,0,2.2,0.2c0.5,0.1,0.8,0,1-0.3C23.4,10.2,23.3,9.8,23.2,9.6z" />
+                </Grid>
+                <Button.ToolTip>
+                  <ToolTip>
+                    <StackPanel>
+                      <TextBlock FontWeight="Bold">Skip forward (Right Arrow)</TextBlock>
+                      <TextBlock>Skip the track about 1/10 forward in time.</TextBlock>
+                    </StackPanel>
+                  </ToolTip>
+                </Button.ToolTip>
+              </Button>
+              <Slider Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
             </Grid>
           </StackPanel>
         </Grid> 
       </TabItem>
-      <!-- Settings -->
-      <TabItem Header="Settings">
-        <Grid Background="#FFE5E5E5">
+      <!-- Import -->
+      <TabItem Header="Import">
+        <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -259,11 +313,17 @@
           <ScrollViewer Grid.Row="4">
             <TextBlock Text="{Binding Path=loadingLog}"/>
           </ScrollViewer>
-          <CheckBox Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
         </Grid>
       </TabItem>
+      <!-- Settings -->
+      <TabItem Header="Settings">
+        <StackPanel Orientation="Vertical">
+          <Label Content="Skip music to position: " />
+          <Slider Margin="0,0,0,0"  Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding Player.SkipPosition}"/>
+          <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
+        </StackPanel>
+      </TabItem>
     </TabControl>
-
   </Grid>
 </Window>
 

@@ -35,7 +35,6 @@ namespace MusikMacher
 
       dataLocation = "C:/some/folder";
 
-
       db = new TrackContext();
       db.Database.OpenConnection();
       db.Database.EnsureCreated();
@@ -50,6 +49,12 @@ namespace MusikMacher
       TracksView  = _itemSourceList.View;
       TracksView.Filter = FilterTracks;
       //LoadData();
+
+      // load Settings
+      Settings settings = Settings.getSettings();
+      dataLocation = settings.ImportPath;
+      AndTags = settings.ANDTagCombination;
+      Search = settings.Search;
     }
 
     private bool FilterTracks(object obj)
@@ -116,6 +121,7 @@ namespace MusikMacher
           RaisePropertyChanged(nameof(Search));
           RefreshTracksView();
           //TracksView = _itemSourceList.View;
+          Settings.getSettings().Search = value;
         }
       }
     }
@@ -221,6 +227,10 @@ namespace MusikMacher
           _andTags = value;
           RaisePropertyChanged(nameof(AndTags));
           RefreshTracksView();
+
+          // saving location in settings
+          Settings.getSettings().ANDTagCombination = value;
+          Settings.saveSettings();
         }
       }
     }
@@ -250,6 +260,12 @@ namespace MusikMacher
 
     private void LoadData()
     {
+      // saving location in settings
+      var settings = Settings.getSettings();
+      settings.ImportPath = dataLocation;
+      settings.ImportSubfolders = ImportSubfolders;
+      Settings.saveSettings();
+
       loadingLog = "Trying to load data from " + dataLocation + "\n";
       LoadData([], dataLocation);
       Tracks.Clear();
@@ -353,7 +369,7 @@ namespace MusikMacher
       logLoading("Done.");
     }
 
-    public void TrackPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+    public void TrackPreviewMouseLeftButtonDown(MouseButtonEventArgs e, bool isFocused)
     {
       if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
       {
@@ -363,7 +379,7 @@ namespace MusikMacher
           {
             if (presenter.Content is Track selected)
             {
-              if (Player.SelectedTracks.Contains(selected))
+              if (Player.SelectedTracks.Contains(selected) && isFocused)
               {
                 e.Handled = true;
               }
@@ -386,7 +402,7 @@ namespace MusikMacher
           {
             if (textBlock.DataContext is Track selected)
             {
-              if (Player.SelectedTracks.Contains(selected))
+              if (Player.SelectedTracks.Contains(selected) && isFocused)
               {
                 e.Handled = true;
               }

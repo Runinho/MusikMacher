@@ -28,12 +28,32 @@ namespace MusikMacher
     {
       InitializeComponent();
       DataContext = model;
+      this.Closed += Window_Closed;
+
+      Settings settings = Settings.getSettings();
+
+      Left = settings.MainWindowLeft;
+      Top = settings.MainWindowTop;
+      Width = settings.MainWindowWidth;
+      Height = settings.MainWindowHeight;
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      // Save the loaction of the window
+      Settings settings = Settings.getSettings();
+
+      settings.MainWindowLeft = Left;
+      settings.MainWindowTop = Top;
+      settings.MainWindowWidth = Width;
+      settings.MainWindowHeight = Height;
+      Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
     }
 
     private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // can this also be done in the binding???
-      model.TrackPreviewMouseLeftButtonDown(e);
+      model.TrackPreviewMouseLeftButtonDown(e, dataGrid.IsFocused);
     }
 
     private void DataGrid_PreviewMouseMove(object sender, MouseEventArgs e)

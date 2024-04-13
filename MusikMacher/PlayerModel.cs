@@ -19,6 +19,8 @@ namespace MusikMacher
     public ICommand PlayCommand { get; private set; }
     public ICommand PauseCommand { get; private set; }
     public ICommand PlayPauseCommand { get; private set; }
+    public RelayCommand SkipForwardCommand { get; private set; }
+    public RelayCommand SkipBackwardCommand { get; private set; }
 
     private DispatcherTimer timer;
 
@@ -27,6 +29,8 @@ namespace MusikMacher
       PlayCommand = new RelayCommand(Play);
       PauseCommand = new RelayCommand(Pause);
       PlayPauseCommand = new RelayCommand(PlayPause);
+      SkipForwardCommand = new RelayCommand(SkipForward);
+      SkipBackwardCommand = new RelayCommand(SkipBackward);
 
       // start timer for the playbar
       timer = new DispatcherTimer();
@@ -34,6 +38,9 @@ namespace MusikMacher
       timer.Tick += Timer_Tick;
 
       mediaPlayer.MediaOpened += MediaOpend;
+
+      Volume = Settings.getSettings().Volume;
+      SkipPosition = Settings.getSettings().SkipPosition;
     }
 
     private void MediaOpend(object sender, EventArgs e)
@@ -42,7 +49,7 @@ namespace MusikMacher
       if (mediaPlayer.NaturalDuration.HasTimeSpan)
       {
         double full_length = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-        double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * 0.24;
+        double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * SkipPosition;
         mediaPlayer.Position = TimeSpan.FromSeconds(skipTo);
         Console.WriteLine("media opend");
         OnPropertyChanged(nameof(Position));
@@ -115,6 +122,9 @@ namespace MusikMacher
             // skip to 1/3 of the song
             Play();
             timer.Start();
+          } else
+          {
+            Pause();
           }
         }
       }
@@ -135,10 +145,30 @@ namespace MusikMacher
         {
           mediaPlayer.Volume = value;
           OnPropertyChanged(nameof(Volume));
+
+          // save
+          Settings.getSettings().Volume = value;
         }
       }
     }
 
+    private double _skipPosition;
+    public double SkipPosition
+    {
+      get { return _skipPosition; }
+      set
+      {
+        if (value != _skipPosition)
+        {
+          _skipPosition = value;
+          OnPropertyChanged(nameof(SkipPosition));
+
+          // saving location in settings
+          Settings.getSettings().SkipPosition = value;
+          Settings.saveSettings();
+        }
+      }
+    }
 
     private ObservableCollection<Track> _selectedTracks = new ObservableCollection<Track>();
 
@@ -207,6 +237,18 @@ namespace MusikMacher
       {
         Play();
       }
+    }
+
+    internal void SkipForward()
+    {
+      double factor = 0.1;
+      Position += Length * factor;
+    }
+
+    internal void SkipBackward()
+    {
+      double factor = 0.1;
+      Position -= Length * factor;
     }
   }
 }

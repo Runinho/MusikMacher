@@ -23,7 +23,21 @@ namespace MusikMacher
     {
       InitializeComponent();
       this.Loaded += Dialog_Loaded;
+      this.Closed += Window_Closed;
 
+      Settings settings = Settings.getSettings();
+      Left = settings.DialogLeft;
+      Top = settings.DialogTop;
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      // Save the loaction of the window
+      Settings settings = Settings.getSettings();
+
+      settings.DialogLeft = Left;
+      settings.DialogTop = Top;
+      Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
     }
 
     private void Dialog_Loaded(object sender, RoutedEventArgs e)
