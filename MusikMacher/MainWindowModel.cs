@@ -7,6 +7,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace MusikMacher
       db.Database.EnsureCreated();
 
       Tracks = new ObservableCollection<Track>(db.Tracks.Include(t => t.Tags));
+      Tags = new ObservableCollection<Tag>();
       ReloadTags();
 
       // Set up collection view and apply sorting
@@ -50,11 +52,28 @@ namespace MusikMacher
       TracksView.Filter = FilterTracks;
       //LoadData();
 
+      var _tagSourceList = new CollectionViewSource() { Source = Tags };
+      TagsView = _tagSourceList.View;
+      TagsView.Filter = FilterTags;
+
       // load Settings
       Settings settings = Settings.getSettings();
       dataLocation = settings.ImportPath;
       AndTags = settings.ANDTagCombination;
       Search = settings.Search;
+    }
+
+    private bool FilterTags(object obj)
+    {
+      Tag tag = obj as Tag;
+      if (tag != null)
+      {
+        if(SearchTag.Length > 0)
+        {
+          return tag.Name.Contains(SearchTag);
+        }
+      }
+      return true;
     }
 
     private bool FilterTracks(object obj)
@@ -126,6 +145,21 @@ namespace MusikMacher
       }
     }
 
+    private string _searchTag = "";
+    public string SearchTag
+    {
+      get { return _searchTag; }
+      set
+      {
+        if (value != SearchTag)
+        {
+          _searchTag = value;
+          RaisePropertyChanged(nameof(SearchTag));
+          TagsView.Refresh();
+        }
+      }
+    }
+
     private ObservableCollection<Track> _tracks;
     public ObservableCollection<Track> Tracks
     {
@@ -176,6 +210,13 @@ namespace MusikMacher
     {
       get { return _tracksView; }
       set { _tracksView = value; RaisePropertyChanged(nameof(TracksView)); }
+    }
+
+    private ICollectionView _tagsView;
+    public ICollectionView TagsView
+    {
+      get { return _tagsView; }
+      set { _tagsView = value; RaisePropertyChanged(nameof(TagsView)); }
     }
 
     public int TrackCount
@@ -248,6 +289,7 @@ namespace MusikMacher
         }
       }
     }
+
     private DispatcherTimer timer;
     private Nullable<Point> startPoint;
     public TrackContext db;
@@ -371,21 +413,36 @@ namespace MusikMacher
       logLoading("Done.");
     }
 
-    public void TrackPreviewMouseLeftButtonDown(MouseButtonEventArgs e, bool isFocused)
+    public void TrackPreviewMouseLeftButtonDown(MouseButtonEventArgs e, object focusedControl)
     {
+      // we check the focus. If the focused element has a Track as DataContext
+      Track focusedTrack = null;
+      if(focusedControl is FrameworkElement element)
+      {
+        if(element.DataContext is Track track)
+        {
+          focusedTrack = track;
+        }
+      }
+      System.Diagnostics.Debug.WriteLine($"focused track: {(focusedTrack?.name)}");
+      var isFocused = focusedTrack != null;
+
       if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
       {
         if (e.OriginalSource is Decorator decorator)
         {
           if (decorator.Child is ContentPresenter presenter)
           {
-            if (presenter.Content is Track selected)
+            // check data context
+            if (presenter.DataContext is Track selected)
             {
               if (Player.SelectedTracks.Contains(selected) && isFocused)
               {
                 e.Handled = true;
+                System.Diagnostics.Debug.WriteLine("Handeled");
               }
               startPoint = e.GetPosition(null);
+              System.Diagnostics.Debug.WriteLine("Content_presenter.");
               return;
             }
             else
@@ -525,10 +582,15 @@ namespace MusikMacher
     private void ReloadTags()
     {
       // just overwrite LOL
-      Tags = new ObservableCollection<Tag>(db.Tags);
-      foreach(var tag in Tags)
+      Tags.Clear();
+      foreach(var tag in db.Tags)
       {
         tag.PropertyChanged += Tag_PropertyChanged;
+        Tags.Add(tag);
+      }
+      if(TagsView != null)
+      {
+        TagsView.Refresh();
       }
     }
 

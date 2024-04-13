@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:MusikMacher"
         xmlns:localConverter="clr-namespace:MusikMacher.converter"
-        xmlns:lc="clr-namespace:MusikMacher.components" 
+        xmlns:uc="clr-namespace:MusikMacher.components" 
         mc:Ignorable="d"
         Title="Lorus Musik Macher" Height="450" Width="800">
   <Window.Resources>
@@ -97,12 +97,14 @@
             <!-- tag selction -->
             <Grid Grid.Column="0">
               <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
-              <ListBox Grid.Row="0"
+              <uc:MySearchTextBox x:Name="TagSearchTextBox" Grid.Row="0" Placeholder="Find in tags" Value="{Binding SearchTag, Mode=TwoWay}"/>
+              <ListBox Grid.Row="1"
                        x:Name="listBox"
-                       ItemsSource="{Binding Tags}"
+                       ItemsSource="{Binding TagsView}"
                        SelectedItem="{Binding Path=SelectedTag}"
                        >
                 <ListBox.ItemContainerStyle>
@@ -125,7 +127,7 @@
                   </DataTemplate>
                 </ListBox.ItemTemplate>
               </ListBox>
-              <Button Focusable="False" Grid.Row="1" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+              <Button Focusable="False" Grid.Row="2" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
             </Grid>
             <Grid Grid.Column="1" >
               <Grid.RowDefinitions>
@@ -134,23 +136,9 @@
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
               <!-- search see: https://stackoverflow.com/a/21672408 -->
-              <Grid Grid.Row="0">
-                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" x:Name="SearchTermTextBox" Margin="5"/>
-                <TextBlock IsHitTestVisible="False" Text="Enter Search Term Here. (Ctrl + L)" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
-                  <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                      <Setter Property="Visibility" Value="Collapsed"/>
-                      <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
-                          <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                      </Style.Triggers>
-                    </Style>
-                  </TextBlock.Style>
-                </TextBlock>
-              </Grid>
+              <uc:MySearchTextBox x:Name="SoundSearchTextBox" Placeholder="Find in songs" Value="{Binding Search, Mode=TwoWay}"/>
               <!-- data -->
-              <DataGrid 
+              <uc:MyDataGrid 
                 x:Name="dataGrid" 
                 Grid.Row="1" 
                 ItemsSource="{Binding TracksView}" 
@@ -179,7 +167,7 @@
                   <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
                   <!-- Add more columns here if needed -->
                 </DataGrid.Columns>
-              </DataGrid>
+              </uc:MyDataGrid>
               <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="10,5,5,0">
                 <Run Text="Tracks in view: " />
                 <Run Text="{Binding TrackCount, Mode=OneWay}" />
@@ -196,7 +184,7 @@
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
               <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
-              <lc:TimeSlider 
+              <uc:TimeSlider 
                 Focusable="False" 
                 Grid.Column="1" 
                 IsMoveToPointEnabled="True" 
@@ -207,7 +195,7 @@
                 Style="{StaticResource SliderStyle}"
                 IsSelectionRangeEnabled="True"
                 >
-              </lc:TimeSlider>
+              </uc:TimeSlider>
               <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
             </Grid>
 
@@ -320,7 +308,7 @@
       <TabItem Header="Settings">
         <StackPanel Orientation="Vertical">
           <Label Content="Skip music to position: " />
-          <Slider Margin="0,0,0,0"  Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding Player.SkipPosition}"/>
+          <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding Player.SkipPosition}"/>
           <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
         </StackPanel>
       </TabItem>

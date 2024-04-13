@@ -41,33 +41,34 @@ namespace MusikMacher
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.L)
+      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.F)
       {
         // focus search box
-        SearchTermTextBox.Focus();
-        SearchTermTextBox.SelectAll();
+        SoundSearchTextBox.FocusAndSelect();
       }
 
-      if (SearchTermTextBox.IsFocused)
+      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+      {
+        // focus search box
+        TagSearchTextBox.FocusAndSelect();
+      }
+
+      if (SoundSearchTextBox.IsTextBoxFocus())
       {
         if (e.Key == Key.Down || e.Key == Key.Enter || e.Key == Key.Up)
         {
-          if (SearchTermTextBox.IsFocused)
+          System.Diagnostics.Debug.WriteLine("focus data Grid because Arrow down");
+          int index = dataGrid.SelectedIndex;
+          if (index == -1)
           {
-            System.Diagnostics.Debug.WriteLine("focus data Grid because Arrow down");
-            int index = dataGrid.SelectedIndex;
-            if (index == -1)
-            {
-              index = 0;
-            }
-            var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-            var direction = (e.Key == Key.Up ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next);
-            row.MoveFocus(new TraversalRequest(direction));
-            e.Handled = true;
+            index = 0;
           }
+          var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
+          var direction = (e.Key == Key.Up ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next);
+          row.MoveFocus(new TraversalRequest(direction));
+          e.Handled = true;
         }
       }
-
     }
 
     private void Window_Closed(object sender, EventArgs e)
@@ -85,7 +86,9 @@ namespace MusikMacher
     private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // can this also be done in the binding???
-      model.TrackPreviewMouseLeftButtonDown(e, dataGrid.IsFocused);
+      //Logical focus
+      var focusedControl = FocusManager.GetFocusedElement(this);
+      model.TrackPreviewMouseLeftButtonDown(e, focusedControl);
     }
 
     private void DataGrid_PreviewMouseMove(object sender, MouseEventArgs e)
