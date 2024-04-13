@@ -267,7 +267,9 @@ namespace MusikMacher
       Settings.saveSettings();
 
       loadingLog = "Trying to load data from " + dataLocation + "\n";
-      LoadData([], dataLocation);
+      // we set the folder name as the tag
+      var parent = Path.GetFileName(dataLocation);
+      LoadData([parent], dataLocation);
       Tracks.Clear();
       foreach (Track track in db.Tracks)
       {

@@ -29,6 +29,7 @@ namespace MusikMacher
       InitializeComponent();
       DataContext = model;
       this.Closed += Window_Closed;
+      this.PreviewKeyDown += Window_PreviewKeyDown;
 
       Settings settings = Settings.getSettings();
 
@@ -36,6 +37,37 @@ namespace MusikMacher
       Top = settings.MainWindowTop;
       Width = settings.MainWindowWidth;
       Height = settings.MainWindowHeight;
+    }
+
+    private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.L)
+      {
+        // focus search box
+        SearchTermTextBox.Focus();
+        SearchTermTextBox.SelectAll();
+      }
+
+      if (SearchTermTextBox.IsFocused)
+      {
+        if (e.Key == Key.Down || e.Key == Key.Enter || e.Key == Key.Up)
+        {
+          if (SearchTermTextBox.IsFocused)
+          {
+            System.Diagnostics.Debug.WriteLine("focus data Grid because Arrow down");
+            int index = dataGrid.SelectedIndex;
+            if (index == -1)
+            {
+              index = 0;
+            }
+            var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
+            var direction = (e.Key == Key.Up ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next);
+            row.MoveFocus(new TraversalRequest(direction));
+            e.Handled = true;
+          }
+        }
+      }
+
     }
 
     private void Window_Closed(object sender, EventArgs e)

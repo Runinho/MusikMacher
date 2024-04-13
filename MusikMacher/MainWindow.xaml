@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:MusikMacher"
         xmlns:localConverter="clr-namespace:MusikMacher.converter"
+        xmlns:lc="clr-namespace:MusikMacher.components" 
         mc:Ignorable="d"
         Title="Lorus Musik Macher" Height="450" Width="800">
   <Window.Resources>
@@ -195,7 +196,7 @@
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
               <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
-              <local:TimeSlider 
+              <lc:TimeSlider 
                 Focusable="False" 
                 Grid.Column="1" 
                 IsMoveToPointEnabled="True" 
@@ -206,7 +207,7 @@
                 Style="{StaticResource SliderStyle}"
                 IsSelectionRangeEnabled="True"
                 >
-              </local:TimeSlider>
+              </lc:TimeSlider>
               <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
             </Grid>
 
@@ -288,7 +289,7 @@
                   </ToolTip>
                 </Button.ToolTip>
               </Button>
-              <Slider Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
+              <Slider Grid.Column="4"  Focusable="False" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
             </Grid>
           </StackPanel>
         </Grid> 
