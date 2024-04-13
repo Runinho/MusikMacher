@@ -18,6 +18,7 @@ namespace MusikMacher
 
     public ICommand PlayCommand { get; private set; }
     public ICommand PauseCommand { get; private set; }
+    public ICommand PlayPauseCommand { get; private set; }
 
     private DispatcherTimer timer;
 
@@ -25,6 +26,7 @@ namespace MusikMacher
     {
       PlayCommand = new RelayCommand(Play);
       PauseCommand = new RelayCommand(Pause);
+      PlayPauseCommand = new RelayCommand(PlayPause);
 
       // start timer for the playbar
       timer = new DispatcherTimer();
@@ -81,7 +83,20 @@ namespace MusikMacher
     }
 
     private Track _currentTrack;
-    private bool isPlaying;
+    private bool _isPlaying;
+
+    public bool IsPlaying
+    {
+      get { return _isPlaying; }
+      set
+      {
+        if (value != _isPlaying)
+        {
+          _isPlaying = value;
+          OnPropertyChanged(nameof(IsPlaying));
+        }
+      }
+    }
 
     public Track currentTrack
     {
@@ -101,6 +116,25 @@ namespace MusikMacher
             Play();
             timer.Start();
           }
+        }
+      }
+    }
+
+    public double Volume
+    {
+      get {
+        if (mediaPlayer != null)
+        {
+          return mediaPlayer.Volume;
+        }
+        return 0.5;
+       }
+      set
+      {
+        if (mediaPlayer != null && mediaPlayer.Volume != value)
+        {
+          mediaPlayer.Volume = value;
+          OnPropertyChanged(nameof(Volume));
         }
       }
     }
@@ -154,18 +188,18 @@ namespace MusikMacher
     public void Play()
     {
       mediaPlayer.Play();
-      isPlaying = true;
+      IsPlaying = true;
     }
     public void Pause()
     {
       mediaPlayer.Pause();
-      isPlaying = false;
+      IsPlaying = false;
     }
 
     internal void PlayPause()
     {
       Console.WriteLine("play pause triggerd");
-      if (isPlaying)
+      if (IsPlaying)
       {
         Pause();
       }
