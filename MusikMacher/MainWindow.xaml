@@ -109,7 +109,7 @@
                 <DataGrid.Columns>
                   <DataGridTextColumn Header="Name" Binding="{Binding name}" />
                   <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
-                  <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime}" />
+                  <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
                   <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
                   <!-- Add more columns here if needed -->
                 </DataGrid.Columns>
