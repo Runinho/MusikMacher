@@ -136,7 +136,7 @@
               <!-- search see: https://stackoverflow.com/a/21672408 -->
               <Grid Grid.Row="0">
                 <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" x:Name="SearchTermTextBox" Margin="5"/>
-                <TextBlock IsHitTestVisible="False" Text="Enter Search Term Here" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                <TextBlock IsHitTestVisible="False" Text="Enter Search Term Here. (Ctrl + L)" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
                   <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                       <Setter Property="Visibility" Value="Collapsed"/>
