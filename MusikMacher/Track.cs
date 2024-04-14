@@ -203,13 +203,24 @@ namespace MusikMacher
 
     internal static System.Windows.Point[][] LoadWaveformGeometry(string path)
     {
-      // TODO: move this into own 
-      using (var audioFile = new AudioFileReader(path))
+      // try to read from cache
+      var points = WaveformCache.FromCache(path);
+      if (points == null)
       {
-        var defaultSettings = new StandardWaveFormRendererSettings();
-        defaultSettings.Width = 1000;
-        return WaveFormPathRenderer.LoadPoints(audioFile, new AveragePeakProvider(4), defaultSettings);
+        // load data from file.
+        // TODO: move this into own 
+        using (var audioFile = new AudioFileReader(path))
+        {
+          var defaultSettings = new StandardWaveFormRendererSettings();
+          defaultSettings.Width = 1000;
+          var data =  WaveFormPathRenderer.LoadPoints(audioFile, new AveragePeakProvider(4), defaultSettings);
+          // save
+          WaveformCache.SaveInCache(path, data);
+          return data;
+        }
       }
+      System.Diagnostics.Debug.WriteLine($"loaded from waveform cache {path}");
+      return points;
     }
   }
 
