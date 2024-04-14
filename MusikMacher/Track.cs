@@ -74,9 +74,9 @@ namespace MusikMacher
 
     [NotMapped]
     private bool _artworkLoaded = false;
-    private BitmapImage? _artwork = null;
+    private BitmapSource? _artwork = null;
     [NotMapped]
-    public BitmapImage? Artwork
+    public BitmapSource? Artwork
     {
       get
       {
@@ -131,7 +131,7 @@ namespace MusikMacher
 
     }
     
-    public static BitmapImage? DataToBitmapImage(byte[] data)
+    public static BitmapSource? DataToBitmapImage(byte[] data)
     {
       // Get the Image
       BitmapImage artwork = null;
@@ -151,7 +151,11 @@ namespace MusikMacher
         System.Diagnostics.Debug.WriteLine($"Failed to convert artwork");
       }
 
-      return artwork;
+      int center_size = Math.Min(artwork.PixelWidth, artwork.PixelHeight);
+      int start_x = (artwork.PixelWidth / 2) - (center_size/2);
+      int start_y = (artwork.PixelHeight / 2) - (center_size / 2);
+
+      return new CroppedBitmap(artwork, new Int32Rect(start_x, start_y, center_size, center_size)); ;
     }
 
     public static BitmapImage ConvertImageToBitmapImage(System.Drawing.Image image)

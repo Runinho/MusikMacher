@@ -195,7 +195,6 @@
               <ColumnDefinition Width="Auto"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Width="129" Height="128" Source="{StaticResource Pepe}"/>
             <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}"/>
             <StackPanel Grid.Column="1">
                 <Grid>
