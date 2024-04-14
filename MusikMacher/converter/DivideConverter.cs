@@ -23,13 +23,13 @@ namespace MusikMacher.converter
         double divisor = System.Convert.ToDouble(values[1]);
 
         if (divisor == 0)
-          return 0;//DependencyProperty.UnsetValue;
+          return 0.0;//DependencyProperty.UnsetValue;
 
         return dividend / divisor;
       }
       else
       {
-        return 0;
+        return 0.0;
       }
     }
 
