@@ -1,17 +1,23 @@
 ﻿using LorusMusikMacher.database;
 using NAudio.Wave;
 using NAudio.WaveFormRenderer;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using TagLib.Mpeg;
 
 namespace MusikMacher
@@ -66,7 +72,37 @@ namespace MusikMacher
     public DateTime creationTime { get; set; }
 
 
-    public BitmapImage? LoadArtwork()
+    [NotMapped]
+    private bool _artworkLoaded = false;
+    private BitmapImage? _artwork = null;
+    [NotMapped]
+    public BitmapImage? Artwork
+    {
+      get
+      {
+        if (_artworkLoaded)
+        {
+          return _artwork;
+        } else
+        {
+          _artworkLoaded = true;
+
+          // load in waveform in other thread
+          ArtworkLoader.getInstance().Shedule(new Tuple<string, Action<byte[]?>>(path,
+                (byte[]? data) =>
+                {
+                  if (data != null)
+                  {
+                    _artwork = DataToBitmapImage(data);
+                    OnPropertyChanged(nameof(Artwork));
+                  }
+                }));
+          return null;
+        }
+      }
+    }
+
+    public static byte[]? LoadArtworkData(string path)
     {
       // load meta data
       // Get the tag for the file
@@ -87,13 +123,21 @@ namespace MusikMacher
 
       // Find the frontcover
       var picture = tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
-      if (picture == null) picture = tag.Pictures.First();
+      //if (picture == null) picture = tag.Pictures.First();
+      if (picture == null) return null;
 
+
+      return picture.Data.ToArray();
+
+    }
+    
+    public static BitmapImage? DataToBitmapImage(byte[] data)
+    {
       // Get the Image
       BitmapImage artwork = null;
       try
       {
-        using (MemoryStream memory = new MemoryStream(picture.Data.ToArray()))
+        using (MemoryStream memory = new MemoryStream(data))
         {
           artwork = new BitmapImage();
           artwork.BeginInit();
@@ -104,7 +148,7 @@ namespace MusikMacher
       }
       catch (Exception)
       {
-        System.Diagnostics.Debug.WriteLine($"Failed to load artwork: {path}");
+        System.Diagnostics.Debug.WriteLine($"Failed to convert artwork");
       }
 
       return artwork;
@@ -153,7 +197,7 @@ namespace MusikMacher
       }
     }
 
-    internal System.Windows.Point[][] LoadWaveformGeometry()
+    internal static System.Windows.Point[][] LoadWaveformGeometry(string path)
     {
       // TODO: move this into own 
       using (var audioFile = new AudioFileReader(path))

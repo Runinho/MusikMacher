@@ -42,6 +42,7 @@ namespace MusikMacher
       PauseCommand = new RelayCommand(Pause);
       PlayPauseCommand = new RelayCommand(PlayPause);
       SkipForwardCommand = new RelayCommand(SkipForward);
+      SkipBackwardCommand = new RelayCommand(SkipBackward);
       SkipCommand = new RelayCommand<double>(Skip);
 
       // start timer for the playbar
@@ -136,18 +137,14 @@ namespace MusikMacher
             timer.Start();
 
             // set wafeform to placeholder.
-            WaveformGeometry = loadingGeometry;
+            if(WaveformGeometry != loadingGeometry)
+            {
+              WaveformGeometry = loadingGeometry;
+            }
 
             // load in waveform in other thread
-            new Thread(() =>
-            {
-              if (_currentTrack == value) // still the current one after switching in other thread?
-              {
-                System.Diagnostics.Debug.WriteLine("Loading in other thread");
-                var points = value.LoadWaveformGeometry();
-                // set in UI thread
-                Application.Current.Dispatcher.Invoke(
-                  () =>
+            SheduleLoad.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
+                  (Point[][] points) =>
                   {
                     System.Diagnostics.Debug.WriteLine($"loaded wafeform is same track??: {_currentTrack == value}");
                     // Code to run on the GUI thread.
@@ -156,12 +153,7 @@ namespace MusikMacher
                       var geometry = WaveFormPathRenderer.PointsToPathGeometry(points);
                       WaveformGeometry = geometry;
                     }
-                  });
-              }
-            }).Start();
-
-
-            Artwork = value.LoadArtwork();
+                  }));
           } else
           {
             Pause();
@@ -252,21 +244,6 @@ namespace MusikMacher
         }
         Console.WriteLine("no media open");
         return 1; 
-      }
-    }
-
-    private BitmapImage? _artwork;
-    public BitmapImage? Artwork
-    {
-      get { return _artwork; }
-      set
-      {
-        System.Diagnostics.Debug.WriteLine($"got artwork: {Artwork}");
-        if (value != _artwork)
-        {
-          _artwork = value;
-          OnPropertyChanged(nameof(Artwork));
-        }
       }
     }
 

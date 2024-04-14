@@ -8,7 +8,9 @@
         xmlns:localConverter="clr-namespace:MusikMacher.converter"
         xmlns:uc="clr-namespace:MusikMacher.components" 
         mc:Ignorable="d"
-        Title="Lorus Musik Macher" Height="450" Width="800">
+        Title="Lorus Musik Macher" Height="450" Width="800"
+        KeyDown="MainWindow_OnKeyDown"
+        >
   <Window.Resources>
     <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
     <localConverter:TagListConverter x:Key="TagListConverter"/>
@@ -109,6 +111,7 @@
                        x:Name="listBox"
                        ItemsSource="{Binding TagsView}"
                        SelectedItem="{Binding Path=SelectedTag}"
+                       Focusable="False"
                        >
                 <ListBox.ItemContainerStyle>
                   <Style TargetType="ListBoxItem">
@@ -126,7 +129,9 @@
                                                      AllowDrop="True"
                        DragEnter="Tag_DragEnter"
                        DragOver="Tag_DragOver"
-                       Drop="Tag_Drop"/>
+                       Drop="Tag_Drop"
+                       Focusable="False"
+                              />
                   </DataTemplate>
                 </ListBox.ItemTemplate>
               </ListBox>
@@ -164,6 +169,13 @@
                   </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
+                  <DataGridTemplateColumn Header="" Width="32">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Image Source="{Binding Artwork}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
                   <DataGridTextColumn Header="Name" Binding="{Binding name}" />
                   <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
                   <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
@@ -184,7 +196,7 @@
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Width="129" Height="128" Source="{StaticResource Pepe}"/>
-            <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.Artwork}"/>
+            <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}"/>
             <StackPanel Grid.Column="1">
                 <Grid>
                 <Grid.ColumnDefinitions>

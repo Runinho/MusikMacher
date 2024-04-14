@@ -92,6 +92,14 @@ namespace MusikMacher
       Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
     }
 
+    private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Space)
+      {
+        model.Player.PlayPause();
+      }
+    }
+
     private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // can this also be done in the binding???
