@@ -37,6 +37,8 @@ namespace MusikMacher
       Top = settings.MainWindowTop;
       Width = settings.MainWindowWidth;
       Height = settings.MainWindowHeight;
+      // try to load last sorting direction
+      dataGrid.LoadedSortingDirection = settings.TracksSortingDescriptions;
     }
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -85,6 +87,8 @@ namespace MusikMacher
       settings.MainWindowTop = Top;
       settings.MainWindowWidth = Width;
       settings.MainWindowHeight = Height;
+      settings.TracksSortingDescriptions = dataGrid.GetSortDescriptions();
+
       Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
     }
 

@@ -66,6 +66,10 @@ namespace MusikMacher
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public string Search = "";
 
+    [DefaultValue(null)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public List<SortDescription>? TracksSortingDescriptions = [];
+
     public static Settings getSettings()
     {
       if (Instance == null)
