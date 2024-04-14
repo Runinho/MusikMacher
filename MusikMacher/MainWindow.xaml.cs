@@ -47,7 +47,7 @@ namespace MusikMacher
         SoundSearchTextBox.FocusAndSelect();
       }
 
-      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+      if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.T)
       {
         // focus search box
         TagSearchTextBox.FocusAndSelect();
@@ -63,10 +63,15 @@ namespace MusikMacher
           {
             index = 0;
           }
+          dataGrid.ScrollIntoView(dataGrid.Items[index]);
+          dataGrid.UpdateLayout();
           var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-          var direction = (e.Key == Key.Up ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next);
-          row.MoveFocus(new TraversalRequest(direction));
-          e.Handled = true;
+          var direction = (e.Key == Key.Up ? FocusNavigationDirection.Up : FocusNavigationDirection.Down);
+          if(row != null)
+          {
+            row.MoveFocus(new TraversalRequest(direction));
+            e.Handled = true;
+          }
         }
       }
     }

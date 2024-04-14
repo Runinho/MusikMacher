@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace MusikMacher
@@ -122,6 +126,8 @@ namespace MusikMacher
             // skip to 1/3 of the song
             Play();
             timer.Start();
+
+            Artwork = value.LoadArtwork();
           } else
           {
             Pause();
@@ -212,6 +218,22 @@ namespace MusikMacher
         }
         Console.WriteLine("no media open");
         return 1; 
+      }
+    }
+
+    private BitmapImage? _artwork;
+
+    public BitmapImage? Artwork
+    {
+      get { return _artwork; }
+      set
+      {
+        System.Diagnostics.Debug.WriteLine($"got artwork: {Artwork}");
+        if (value != _artwork)
+        {
+          _artwork = value;
+          OnPropertyChanged(nameof(Artwork));
+        }
       }
     }
 

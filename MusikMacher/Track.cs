@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media.Imaging;
 
 namespace MusikMacher
 {
@@ -58,6 +61,51 @@ namespace MusikMacher
     }
 
     public DateTime creationTime { get; set; }
+
+
+    public BitmapImage? LoadArtwork()
+    {
+      // load meta data
+      // Get the tag for the file
+      TagLib.Tag tag = null;
+      TagLib.File tagFile = null;
+      try
+      {
+        tagFile = TagLib.File.Create(path);
+        tag = tagFile.Tag;
+      }
+      catch (Exception)
+      {
+        System.Diagnostics.Debug.WriteLine("Could not parse tags for file " + path);
+      }
+
+      // If we have no pictures, bail out
+      if (tagFile == null || tag == null || tag.Pictures.Length == 0) return null;
+
+      // Find the frontcover
+      var picture = tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
+      if (picture == null) picture = tag.Pictures.First();
+
+      // Get the Image
+      BitmapImage artwork = null;
+      try
+      {
+        using (MemoryStream memory = new MemoryStream(picture.Data.ToArray()))
+        {
+          artwork = new BitmapImage();
+          artwork.BeginInit();
+          artwork.StreamSource = memory;
+          artwork.CacheOption = BitmapCacheOption.OnLoad;
+          artwork.EndInit();
+        }
+      }
+      catch (Exception)
+      {
+        System.Diagnostics.Debug.WriteLine($"Failed to load artwork: {path}");
+      }
+
+      return artwork;
+    }
   }
 
   public class TagList : List<Tag>, IComparable
