@@ -186,26 +186,16 @@
             <Image Grid.Column="0" Width="129" Height="128" Source="{StaticResource Pepe}"/>
             <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.Artwork}"/>
             <StackPanel Grid.Column="1">
-              <uc:Waveform SkipCommand="{Binding Path=Player.SkipCommand}" Position="{Binding Path=Player.Position}" Length="{Binding Path=Player.Length}"/>
-              <Grid>
+                <Grid>
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="Auto"/>
                   <ColumnDefinition Width="*"/>
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
-                <uc:TimeSlider 
-                Focusable="False" 
-                Grid.Column="1" 
-                IsMoveToPointEnabled="True" 
-                HorizontalAlignment="Stretch" 
-                Maximum="{Binding Path=Player.Length}" 
-                Value="{Binding Path=Player.Position}"
-                SelectionEnd="{Binding Path=Player.Position}"
-                Style="{StaticResource SliderStyle}"
-                IsSelectionRangeEnabled="True"
-                >
-                </uc:TimeSlider>
+                <uc:Waveform
+                  Grid.Column="1" 
+                  SkipCommand="{Binding Path=Player.SkipCommand}" Position="{Binding Path=Player.Position}" Length="{Binding Path=Player.Length}"/>
                 <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
               </Grid>
 

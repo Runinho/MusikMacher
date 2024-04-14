@@ -6,23 +6,42 @@
              xmlns:local="clr-namespace:MusikMacher.components"
              xmlns:localConverter="clr-namespace:MusikMacher.converter"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="800">
+             d:DesignHeight="80" d:DesignWidth="800">
   <UserControl.Resources>
     <localConverter:DivideConverter x:Key="DivideConverter"/>
 
-  </UserControl.Resources>
-
-  <Grid x:Name="LayoutRoot" MouseMove="MouseMoveHandler" MouseDown="MouseDownHandler" MouseLeave="MouseLeaveHandler">
-    <Image Source="{Binding Player.Waveform}" Height="50" Width="1000"/>
-    <Rectangle Stretch="Fill" Height="50" Fill="Transparent" />
-    <!-- force size -->
-    <Path  x:Name="Path" Stretch="Fill" Height="50"  Data="{Binding DataContext.Player.WaveformGeometry, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
-      <Path.Style>
-        <Style TargetType="{x:Type Path}">
+    <Style x:Key="WaveFormStyle" TargetType="{x:Type Path}">
+      <Setter Property="Fill">
+        <Setter.Value>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="Black">
+              <GradientStop.Offset>
+                <MultiBinding Converter="{StaticResource DivideConverter}">
+                  <Binding Path="Position"/>
+                  <Binding Path="Length"/>
+                </MultiBinding>
+              </GradientStop.Offset>
+            </GradientStop>
+            <GradientStop Color="DarkGray">
+              <GradientStop.Offset>
+                <MultiBinding Converter="{StaticResource DivideConverter}">
+                  <Binding Path="Position"/>
+                  <Binding Path="Length"/>
+                </MultiBinding>
+              </GradientStop.Offset>
+            </GradientStop>
+          </LinearGradientBrush>
+        </Setter.Value>
+      </Setter>
+      <Style.Triggers>
+        <!-- mouse before current position -->
+        <DataTrigger Binding="{Binding MouseState}" Value="1">
           <Setter Property="Fill">
             <Setter.Value>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                <GradientStop Color="Black">
+                <GradientStop Color="Black" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="#666" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="#666">
                   <GradientStop.Offset>
                     <MultiBinding Converter="{StaticResource DivideConverter}">
                       <Binding Path="Position"/>
@@ -41,64 +60,48 @@
               </LinearGradientBrush>
             </Setter.Value>
           </Setter>
-          <Style.Triggers>
-            <!-- mouse before current position -->
-            <DataTrigger Binding="{Binding MouseState}" Value="1">
-              <Setter Property="Fill">
-                <Setter.Value>
-                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Black" Offset="{Binding MousePosition}"/>
-                    <GradientStop Color="Gray" Offset="{Binding MousePosition}"/>
-                    <GradientStop Color="Gray">
-                      <GradientStop.Offset>
-                        <MultiBinding Converter="{StaticResource DivideConverter}">
-                          <Binding Path="Position"/>
-                          <Binding Path="Length"/>
-                        </MultiBinding>
-                      </GradientStop.Offset>
-                    </GradientStop>
-                    <GradientStop Color="DarkGray">
-                      <GradientStop.Offset>
-                        <MultiBinding Converter="{StaticResource DivideConverter}">
-                          <Binding Path="Position"/>
-                          <Binding Path="Length"/>
-                        </MultiBinding>
-                      </GradientStop.Offset>
-                    </GradientStop>
-                  </LinearGradientBrush>
-                </Setter.Value>
-              </Setter>
-            </DataTrigger>
-            <!-- mouse after current position -->
-            <DataTrigger Binding="{Binding MouseState}" Value="2">
-              <Setter Property="Fill">
-                <Setter.Value>
-                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Black">
-                      <GradientStop.Offset>
-                        <MultiBinding Converter="{StaticResource DivideConverter}">
-                          <Binding Path="Position"/>
-                          <Binding Path="Length"/>
-                        </MultiBinding>
-                      </GradientStop.Offset>
-                    </GradientStop>
-                    <GradientStop Color="Gray">
-                      <GradientStop.Offset>
-                        <MultiBinding Converter="{StaticResource DivideConverter}">
-                          <Binding Path="Position"/>
-                          <Binding Path="Length"/>
-                        </MultiBinding>
-                      </GradientStop.Offset>
-                    </GradientStop>
-                    <GradientStop Color="Gray" Offset="{Binding MousePosition}"/>
-                    <GradientStop Color="DarkGray" Offset="{Binding MousePosition}"/>
-                  </LinearGradientBrush>
-                </Setter.Value>
-              </Setter>
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Path.Style>
+        </DataTrigger>
+        <!-- mouse after current position -->
+        <DataTrigger Binding="{Binding MouseState}" Value="2">
+          <Setter Property="Fill">
+            <Setter.Value>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="Black">
+                  <GradientStop.Offset>
+                    <MultiBinding Converter="{StaticResource DivideConverter}">
+                      <Binding Path="Position"/>
+                      <Binding Path="Length"/>
+                    </MultiBinding>
+                  </GradientStop.Offset>
+                </GradientStop>
+                <GradientStop Color="Gray">
+                  <GradientStop.Offset>
+                    <MultiBinding Converter="{StaticResource DivideConverter}">
+                      <Binding Path="Position"/>
+                      <Binding Path="Length"/>
+                    </MultiBinding>
+                  </GradientStop.Offset>
+                </GradientStop>
+                <GradientStop Color="Gray" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="DarkGray" Offset="{Binding MousePosition}"/>
+              </LinearGradientBrush>
+            </Setter.Value>
+          </Setter>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+
+  </UserControl.Resources>
+
+  <Grid x:Name="LayoutRoot" MouseMove="MouseMoveHandler" MouseDown="MouseDownHandler" MouseLeave="MouseLeaveHandler">
+    <Rectangle Stretch="Fill" Height="80" Fill="Transparent" />
+    <!-- force size -->
+    <Path  
+      x:Name="Path" 
+      Stretch="Fill" 
+      Height="60"  
+      Data="{Binding DataContext.Player.WaveformGeometry, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+      Style="{StaticResource WaveFormStyle}">
       <!-- 
       
     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">

@@ -153,14 +153,14 @@ namespace MusikMacher
       }
     }
 
-    internal System.Windows.Media.PathGeometry? LoadWaveformGeometry()
+    internal System.Windows.Point[][] LoadWaveformGeometry()
     {
       // TODO: move this into own 
       using (var audioFile = new AudioFileReader(path))
       {
         var defaultSettings = new StandardWaveFormRendererSettings();
         defaultSettings.Width = 1000;
-        return WaveFormPathRenderer.render(audioFile, new AveragePeakProvider(4), defaultSettings);
+        return WaveFormPathRenderer.LoadPoints(audioFile, new AveragePeakProvider(4), defaultSettings);
       }
     }
   }

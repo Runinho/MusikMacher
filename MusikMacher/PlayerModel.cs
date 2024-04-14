@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,11 +14,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Point = System.Windows.Point;
 
 namespace MusikMacher
 {
   public class PlayerModel: INotifyPropertyChanged
   {
+
+    private static PathGeometry loadingGeometry = WaveFormPathRenderer.PointsToPathGeometry(
+      [[new Point(0, 0), new Point(0, 10), new Point(0, 1), new Point(100,1), new Point(100, 0), new Point(0, 0)],
+       [new Point(0, 0), new Point(0, -10), new Point(0, -1), new Point(100, -1), new Point(100, -0), new Point(0, 0)]]);
+
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
     public ICommand PlayCommand { get; private set; }
@@ -128,9 +135,33 @@ namespace MusikMacher
             Play();
             timer.Start();
 
+            // set wafeform to placeholder.
+            WaveformGeometry = loadingGeometry;
+
+            // load in waveform in other thread
+            new Thread(() =>
+            {
+              if (_currentTrack == value) // still the current one after switching in other thread?
+              {
+                System.Diagnostics.Debug.WriteLine("Loading in other thread");
+                var points = value.LoadWaveformGeometry();
+                // set in UI thread
+                Application.Current.Dispatcher.Invoke(
+                  () =>
+                  {
+                    System.Diagnostics.Debug.WriteLine($"loaded wafeform is same track??: {_currentTrack == value}");
+                    // Code to run on the GUI thread.
+                    if (_currentTrack == value)
+                    {
+                      var geometry = WaveFormPathRenderer.PointsToPathGeometry(points);
+                      WaveformGeometry = geometry;
+                    }
+                  });
+              }
+            }).Start();
+
+
             Artwork = value.LoadArtwork();
-            //Waveform = value.LoadWaveform();
-            WaveformGeometry = value.LoadWaveformGeometry();
           } else
           {
             Pause();
