@@ -51,11 +51,18 @@ namespace MusikMacher
         // TODO: check if there is another LOL
         //System.Diagnostics.Debug.WriteLine($"try to load waveform of {task.Item1}");
 
-        var points = Handle(task.Item1);
-        Application.Current.Dispatcher.Invoke(() =>
+        try
         {
-          task.Item2.Invoke(points);
-        });
+          var points = Handle(task.Item1);
+          Application.Current.Dispatcher.Invoke(() =>
+          {
+            task.Item2.Invoke(points);
+          });
+        }
+        catch(Exception e)
+        {
+          System.Diagnostics.Debug.WriteLine($"Exception in worker thread e");
+        }
       }
     }
 
