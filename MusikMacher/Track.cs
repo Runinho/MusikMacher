@@ -1,4 +1,6 @@
 ﻿using LorusMusikMacher.database;
+using NAudio.Wave;
+using NAudio.WaveFormRenderer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
+using TagLib.Mpeg;
 
 namespace MusikMacher
 {
@@ -105,6 +108,60 @@ namespace MusikMacher
       }
 
       return artwork;
+    }
+
+    public static BitmapImage ConvertImageToBitmapImage(System.Drawing.Image image)
+    {
+      Bitmap bitmap = new Bitmap(image);
+
+      using (MemoryStream memory = new MemoryStream())
+      {
+        bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+        memory.Position = 0;
+
+        BitmapImage bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = memory;
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.EndInit();
+
+        return bitmapImage;
+      }
+    }
+
+    public BitmapImage LoadWaveform()
+    {
+      // move into track class?
+
+      // Load the MP3 file
+      using (var audioFile = new AudioFileReader(path))
+      {
+        var renderer = new WaveFormRenderer();
+        var settings = new SoundCloudBlockWaveFormSettings(Color.FromArgb(66, 150, 96), Color.FromArgb(66, 150, 96), Color.FromArgb(124, 153, 134),
+                Color.FromArgb(154, 184, 164));
+        var soundCloudLightBlocks = new SoundCloudBlockWaveFormSettings(Color.FromArgb(102, 102, 102), Color.FromArgb(103, 103, 103), Color.FromArgb(179, 179, 179),
+    Color.FromArgb(218, 218, 218))
+        { Name = "SoundCloud Light Blocks" };
+        var defaultSettings = new StandardWaveFormRendererSettings();
+        defaultSettings.TopPeakPen = Pens.DarkGray;
+        defaultSettings.TopSpacerPen = Pens.White;
+        defaultSettings.BottomPeakPen = Pens.DarkGray;
+        defaultSettings.BottomSpacerPen = Pens.White;
+        defaultSettings.BackgroundColor = Color.White;
+        var image = renderer.Render(audioFile, new AveragePeakProvider(4), soundCloudLightBlocks);
+        return ConvertImageToBitmapImage(image);
+      }
+    }
+
+    internal System.Windows.Media.PathGeometry? LoadWaveformGeometry()
+    {
+      // TODO: move this into own 
+      using (var audioFile = new AudioFileReader(path))
+      {
+        var defaultSettings = new StandardWaveFormRendererSettings();
+        defaultSettings.Width = 1000;
+        return WaveFormPathRenderer.render(audioFile, new AveragePeakProvider(4), defaultSettings);
+      }
     }
   }
 

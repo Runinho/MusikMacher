@@ -186,6 +186,7 @@
             <Image Grid.Column="0" Width="129" Height="128" Source="{StaticResource Pepe}"/>
             <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.Artwork}"/>
             <StackPanel Grid.Column="1">
+              <uc:Waveform SkipCommand="{Binding Path=Player.SkipCommand}" Position="{Binding Path=Player.Position}" Length="{Binding Path=Player.Length}"/>
               <Grid>
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="Auto"/>

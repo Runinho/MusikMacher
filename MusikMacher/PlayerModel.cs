@@ -23,8 +23,9 @@ namespace MusikMacher
     public ICommand PlayCommand { get; private set; }
     public ICommand PauseCommand { get; private set; }
     public ICommand PlayPauseCommand { get; private set; }
-    public RelayCommand SkipForwardCommand { get; private set; }
-    public RelayCommand SkipBackwardCommand { get; private set; }
+    public ICommand SkipForwardCommand { get; private set; }
+    public ICommand SkipBackwardCommand { get; private set; }
+    public ICommand SkipCommand { get; private set; }
 
     private DispatcherTimer timer;
 
@@ -34,11 +35,11 @@ namespace MusikMacher
       PauseCommand = new RelayCommand(Pause);
       PlayPauseCommand = new RelayCommand(PlayPause);
       SkipForwardCommand = new RelayCommand(SkipForward);
-      SkipBackwardCommand = new RelayCommand(SkipBackward);
+      SkipCommand = new RelayCommand<double>(Skip);
 
       // start timer for the playbar
       timer = new DispatcherTimer();
-      timer.Interval = TimeSpan.FromSeconds(0.1);
+      timer.Interval = TimeSpan.FromSeconds(0.03);//30fps
       timer.Tick += Timer_Tick;
 
       mediaPlayer.MediaOpened += MediaOpend;
@@ -128,6 +129,8 @@ namespace MusikMacher
             timer.Start();
 
             Artwork = value.LoadArtwork();
+            //Waveform = value.LoadWaveform();
+            WaveformGeometry = value.LoadWaveformGeometry();
           } else
           {
             Pause();
@@ -222,7 +225,6 @@ namespace MusikMacher
     }
 
     private BitmapImage? _artwork;
-
     public BitmapImage? Artwork
     {
       get { return _artwork; }
@@ -233,6 +235,34 @@ namespace MusikMacher
         {
           _artwork = value;
           OnPropertyChanged(nameof(Artwork));
+        }
+      }
+    }
+
+    private BitmapImage? _wafeform;
+    public BitmapImage? Waveform
+    {
+      get { return _wafeform; }
+      set
+      {
+        if (value != _wafeform)
+        {
+          _wafeform = value;
+          OnPropertyChanged(nameof(Waveform));
+        }
+      }
+    }
+
+    private PathGeometry? _waveformGeometry;
+    public PathGeometry? WaveformGeometry
+    {
+      get { return _waveformGeometry; }
+      set
+      {
+        if (value != _waveformGeometry)
+        {
+          _waveformGeometry = value;
+          OnPropertyChanged(nameof(WaveformGeometry));
         }
       }
     }
@@ -271,6 +301,11 @@ namespace MusikMacher
     {
       double factor = 0.1;
       Position -= Length * factor;
+    }
+
+    internal void Skip(double relative)
+    {
+      Position = Length * relative;
     }
   }
 }
