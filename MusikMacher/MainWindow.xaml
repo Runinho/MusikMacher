@@ -43,10 +43,11 @@
         </TabItem>
         <!-- Settings -->
         <TabItem Header="Settings">
-          <StackPanel Orientation="Vertical" Margin="20">
+          <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
             <Label Content="Skip music to position: " />
             <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}"/>
             <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
+            <uc:CheckUpdate Margin="0,30,0,0"/>
           </StackPanel>
         </TabItem>
       </TabControl>

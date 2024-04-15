@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="MusikMacher.components.CheckUpdate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MusikMacher.components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel>
+    <Button Command="{Binding CheckCommand}">check for update</Button>
+    <Label Content="{Binding UpdateResult}" />
+    <TextBlock>
+      <TextBlock.Style>
+        <Style TargetType="TextBlock">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding DownloadLink}" Value="">
+              <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </TextBlock.Style>
+      <Hyperlink NavigateUri="{Binding DownloadLink}" RequestNavigate="Hyperlink_RequestNavigate">
+          <Run Text="Click here to download "/>
+         <Run Text="{Binding DownloadFilename}"/>
+      </Hyperlink>
+    </TextBlock>
+  </StackPanel>
+</UserControl>
