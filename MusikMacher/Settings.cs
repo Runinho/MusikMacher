@@ -19,7 +19,7 @@ namespace MusikMacher
 
     [DefaultValue(0.5)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public double Volume;
+    public double Volume = 0.5;
   }
 
     // persistant Settings storage
