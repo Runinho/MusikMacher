@@ -115,11 +115,13 @@
               <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                   <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
                   <RowDefinition Height="*"/>
                   <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <ui:TextBox x:Name="TagSearchTextBox" Grid.Row="0"  PlaceholderText="Find in tags (Ctrl + T)" Text="{Binding SearchTag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <ListBox Grid.Row="1"
+                <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="1" Command="{Binding ClearTagsCommand}">reset tags</Button>
+                <ListBox Grid.Row="2"
                        x:Name="listBox"
                        ItemsSource="{Binding TagsView}"
                        SelectedItem="{Binding Path=SelectedTag}"
@@ -147,7 +149,7 @@
                     </DataTemplate>
                   </ListBox.ItemTemplate>
                 </ListBox>
-                <Button Focusable="False" HorizontalAlignment="Stretch" Grid.Row="2" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+                <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="3" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
               </Grid>
               <Grid Grid.Column="1" >
                 <Grid.RowDefinitions>
@@ -212,6 +214,14 @@
                 <Run Text="Tracks in view: " />
                 <Run Text="{Binding TrackCount, Mode=OneWay}" />
                 </TextBlock>
+                <StackPanel Margin="0,50,0,0" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding ShowNoSongs}">
+                  <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="50px">No songs found.</Label>
+                  <Label HorizontalAlignment="Center">Try without tags or search?</Label>
+                  <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Button Focusable="False" Margin="0,0,5,0" HorizontalAlignment="Center" Command="{Binding ClearTagsCommand}">reset tags</Button>
+                    <Button Focusable="False" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding ClearSearchCommand}">reset search</Button>
+                  </StackPanel>
+                </StackPanel>
               </Grid>
             </Grid>
 
@@ -358,8 +368,11 @@
 
     <ui:TitleBar
             Title="Lorus Musik Macher"
-            Grid.Row="0"
-            Icon="loru_musik_z7J_icon.ico" />
+            Grid.Row="0">
+      <ui:TitleBar.Icon>
+        <ui:ImageIcon Source="loru_musik_z7J_icon.ico" />
+      </ui:TitleBar.Icon>
+    </ui:TitleBar>
   </Grid>
 </ui:FluentWindow>
 

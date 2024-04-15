@@ -32,6 +32,8 @@ namespace MusikMacher
       LoadDataCommand = new RelayCommand(LoadData);
       SpaceKeyPressedCommand = new RelayCommand(SpaceKeyPressed);
       AddTagCommand = new RelayCommand(AddTag);
+      ClearTagsCommand = new RelayCommand(ClearTags);
+      ClearSearchCommand = new RelayCommand(ClearSearch);
       Player = new PlayerModel();
 
       dataLocation = "C:/some/folder";
@@ -53,6 +55,7 @@ namespace MusikMacher
       //LoadData();
 
       var _tagSourceList = new CollectionViewSource() { Source = Tags };
+      _tagSourceList.SortDescriptions.Add(new SortDescription("IsChecked", ListSortDirection.Descending));
       TagsView = _tagSourceList.View;
       TagsView.Filter = FilterTags;
 
@@ -63,14 +66,32 @@ namespace MusikMacher
       Search = settings.Search;
     }
 
+    private void ClearTags()
+    {
+      foreach(var tag in Tags)
+      {
+        tag.IsChecked = false;
+      }
+    }
+
+    private void ClearSearch()
+    {
+      Search = "";
+    }
+
     private bool FilterTags(object obj)
     {
       Tag tag = obj as Tag;
       if (tag != null)
       {
+        if (tag.IsChecked)
+        {
+          // always show tagged
+          return true;
+        }
         if(SearchTag.Length > 0)
         {
-          return tag.Name.Contains(SearchTag);
+          return tag.Name.ToLower().Contains(SearchTag.ToLower());
         }
       }
       return true;
@@ -227,6 +248,8 @@ namespace MusikMacher
     public ICommand LoadDataCommand { get; private set; }
     public ICommand SpaceKeyPressedCommand { get; private set; }
     public ICommand AddTagCommand { get; private set; }
+    public ICommand ClearTagsCommand { get; private set; }
+    public ICommand ClearSearchCommand { get; private set; }
     public PlayerModel Player { get; private set; }
 
     private string _dataLocation;
@@ -290,6 +313,25 @@ namespace MusikMacher
       }
     }
 
+    public Visibility ShowNoSongs
+    {
+      get
+      {
+        if(TrackCount == 0)
+        {
+          if(Search != "")
+          {
+            if (Tags.FirstOrDefault(t => t.IsChecked) != null)
+            {
+              // also check if we have a search
+              return Visibility.Visible;
+            }
+          }
+        }
+        return Visibility.Collapsed;
+      }
+    }
+
     private DispatcherTimer timer;
     private Nullable<Point> startPoint;
     public TrackContext db;
@@ -318,6 +360,7 @@ namespace MusikMacher
         Tracks.Add(track);
       }
       RaisePropertyChanged(nameof(TrackCount));
+      RaisePropertyChanged(nameof(ShowNoSongs));
       ReloadTags();
     }
 
@@ -602,6 +645,8 @@ namespace MusikMacher
         case "IsChecked":
           System.Diagnostics.Debug.WriteLine("Update triggered");
           RefreshTracksView();
+          TagsView.Refresh();
+          RaisePropertyChanged(nameof(ShowNoSongs));
           break;
       }
     }
@@ -644,6 +689,7 @@ namespace MusikMacher
     {
       TracksView.Refresh();
       RaisePropertyChanged(nameof(TrackCount));
+      RaisePropertyChanged(nameof(ShowNoSongs));
     }
   }
 }
