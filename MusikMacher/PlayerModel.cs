@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using MusikMacher.components;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +27,7 @@ namespace MusikMacher
        [new Point(0, 0), new Point(0, -10), new Point(0, -1), new Point(100, -1), new Point(100, -0), new Point(0, 0)]]);
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
+    private BrowseViewModel browseViewModel;
 
     public ICommand PlayCommand { get; private set; }
     public ICommand PauseCommand { get; private set; }
@@ -36,8 +38,10 @@ namespace MusikMacher
 
     private DispatcherTimer timer;
 
-    public PlayerModel()
+    public PlayerModel(BrowseViewModel browseViewModel)
     {
+      this.browseViewModel = browseViewModel;
+
       PlayCommand = new RelayCommand(Play);
       PauseCommand = new RelayCommand(Pause);
       PlayPauseCommand = new RelayCommand(PlayPause);
@@ -52,8 +56,7 @@ namespace MusikMacher
 
       mediaPlayer.MediaOpened += MediaOpend;
 
-      Volume = Settings.getSettings().Volume;
-      SkipPosition = Settings.getSettings().SkipPosition;
+      Volume = this.browseViewModel.settings.Volume;
     }
 
     private void MediaOpend(object sender, EventArgs e)
@@ -62,7 +65,7 @@ namespace MusikMacher
       if (mediaPlayer.NaturalDuration.HasTimeSpan)
       {
         double full_length = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-        double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * SkipPosition;
+        double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * MainWindowModel.Instance.SkipPosition;
         mediaPlayer.Position = TimeSpan.FromSeconds(skipTo);
         Console.WriteLine("media opend");
         OnPropertyChanged(nameof(Position));
@@ -72,7 +75,7 @@ namespace MusikMacher
         {
           currentTrack.length = (int)full_length;
         }
-        MainWindowModel.Instance.db.SaveChanges();
+        browseViewModel.db.SaveChanges();
       }
       else
       {
@@ -179,25 +182,7 @@ namespace MusikMacher
           OnPropertyChanged(nameof(Volume));
 
           // save
-          Settings.getSettings().Volume = value;
-        }
-      }
-    }
-
-    private double _skipPosition;
-    public double SkipPosition
-    {
-      get { return _skipPosition; }
-      set
-      {
-        if (value != _skipPosition)
-        {
-          _skipPosition = value;
-          OnPropertyChanged(nameof(SkipPosition));
-
-          // saving location in settings
-          Settings.getSettings().SkipPosition = value;
-          Settings.saveSettings();
+          this.browseViewModel.settings.Volume = value;
         }
       }
     }
@@ -243,7 +228,7 @@ namespace MusikMacher
           return mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
         }
         Console.WriteLine("no media open");
-        return 1; 
+        return 1;
       }
     }
 
@@ -275,10 +260,15 @@ namespace MusikMacher
       }
     }
 
+    public void DoPlay() // only to be used by PlayerManager
+    {
+      this.mediaPlayer.Play();
+      IsPlaying = true;
+    }
+
     public void Play()
     {
-      mediaPlayer.Play();
-      IsPlaying = true;
+      PlayManager.Instance.Play(this);
     }
     public void Pause()
     {

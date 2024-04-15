@@ -10,356 +10,42 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         Title="Lorus Musik Macher" Height="450" Width="800"
-        KeyDown="MainWindow_OnKeyDown"
         
         ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
         ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
         ExtendsContentIntoTitleBar="True"
         WindowBackdropType="Mica"
         WindowCornerPreference="Round"
+        KeyDown="Window_OnKeyDown"
         >
   <ui:FluentWindow.Resources>
-    <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
-    <localConverter:TagListConverter x:Key="TagListConverter"/>
-    
+
     <!-- Images -->
     <BitmapImage x:Key="Pepe" UriSource="content/pepe.png" />
 
-    <!-- Play pause button-->
-    <Style x:Key="PlayButtonStyle" TargetType="Button">
-      <Setter Property="Visibility" Value="Collapsed"/>
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Player.IsPlaying}" Value="False">
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
-
-    <Style x:Key="PauseButtonStyle" TargetType="Button">
-      <Setter Property="Visibility" Value="Collapsed"/>
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Player.IsPlaying}" Value="True">
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
-
-
-    <!-- time slider style -->
-    <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="{x:Type Slider}">
-            <Grid VerticalAlignment="Center">
-              <Border x:Name="borderBackgroundForClick" Margin="6,0" Height="40" Background="Transparent" />
-              <Border x:Name="borderBackground" Margin="6,0" Height="4" Background="#8a8a8a" CornerRadius="2" />
-              <Canvas Margin="0,-4,0,0" VerticalAlignment="Center">
-                <Border x:Name="PART_SelectionRange" HorizontalAlignment="Left" Margin="-4,0,0,0" Height="4" CornerRadius="2" Background="{TemplateBinding Foreground}" />
-              </Canvas>
-              <Track x:Name="PART_Track">
-                <Track.Thumb>
-                  <Thumb Width="20" Height="20">
-                    <Thumb.Style>
-                      <Style TargetType="Thumb">
-                        <Setter Property="Template">
-                          <Setter.Value>
-                            <ControlTemplate TargetType="Thumb">
-                              <Border Width="20" Height="20" Background="#429660" CornerRadius="10" BorderBrush="White" BorderThickness="5">
-                                <Border.Effect>
-                                  <DropShadowEffect ShadowDepth="1" Color="Black" Opacity="0.5"/>
-                                </Border.Effect>
-                              </Border>
-                            </ControlTemplate>
-                          </Setter.Value>
-                        </Setter>
-                      </Style>
-                    </Thumb.Style>
-                  </Thumb>
-                </Track.Thumb>
-              </Track>
-            </Grid>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-      <Setter Property="IsSelectionRangeEnabled" Value="True" />
-      <Setter Property="SelectionStart" Value="{Binding Minimum, RelativeSource={RelativeSource Self}}" />
-      <Setter Property="SelectionEnd" Value="{Binding Value, RelativeSource={RelativeSource Self}}" />
-      <Setter Property="Foreground" Value="#429660" />
-    </Style>
-
   </ui:FluentWindow.Resources>
-  <ui:FluentWindow.InputBindings>
-    <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
-  </ui:FluentWindow.InputBindings>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Grid Grid.Row="1">
-      <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabItem Header="Browse">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-
-              <!-- tag selction -->
-              <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <ui:TextBox x:Name="TagSearchTextBox" Grid.Row="0"  PlaceholderText="Find in tags (Ctrl + T)" Text="{Binding SearchTag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="1" Command="{Binding ClearTagsCommand}">reset tags</Button>
-                <ListBox Grid.Row="2"
-                       x:Name="listBox"
-                       ItemsSource="{Binding TagsView}"
-                       SelectedItem="{Binding Path=SelectedTag}"
-                       Focusable="False"
-                       >
-                  <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                      <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                  </ListBox.ItemContainerStyle>
-                  <ListBox.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="Rename" Click="MenuItem_Rename"/>
-                    </ContextMenu>
-                  </ListBox.ContextMenu>
-                  <ListBox.ItemTemplate>
-                    <DataTemplate>
-                      <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Content="{Binding Name}" HorizontalContentAlignment="Stretch"
-                                                     AllowDrop="True"
-                       DragEnter="Tag_DragEnter"
-                       DragOver="Tag_DragOver"
-                       Drop="Tag_Drop"
-                       Focusable="False"
-                              />
-                    </DataTemplate>
-                  </ListBox.ItemTemplate>
-                </ListBox>
-                <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="3" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
-              </Grid>
-              <Grid Grid.Column="1" >
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <!-- search see: https://stackoverflow.com/a/21672408 -->
-                <ui:TextBox PlaceholderText="Find in songs (Ctrl + F)" x:Name="SoundSearchTextBox" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <!-- data -->
-                <ui:DataGrid
-                x:Name="dataGrid" 
-                Grid.Row="1" 
-                ItemsSource="{Binding TracksView}" 
-                SelectedItem="{Binding Path=Player.currentTrack, Mode=TwoWay}"
-                SelectionChanged="DataGrid_SelectionChanged"
-                AutoGenerateColumns="False"
-                IsReadOnly="True"
-                PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
-                PreviewMouseMove="DataGrid_PreviewMouseMove"
-                CanUserDeleteRows="False"
-                >
-
-                  <DataGrid.RowStyle>
-                    <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="DataGridRow">
-                      <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                          <Setter Property="Foreground" Value="#FFB9E1FF" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                          <Setter Property="Foreground" Value="#4eb2fc" />
-                        </Trigger>
-                      </Style.Triggers>
-                    </Style>
-                  </DataGrid.RowStyle>
-                  <DataGrid.InputBindings>
-                    <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
-                    <KeyBinding Key="Left" Command="{Binding Path=Player.SkipBackwardCommand}" />
-                    <KeyBinding Key="Right" Command="{Binding Path=Player.SkipForwardCommand}" />
-                  </DataGrid.InputBindings>
-                  <DataGrid.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="Delete track" Click="DataGrid_Delete"/>
-                    </ContextMenu>
-                  </DataGrid.ContextMenu>
-                  <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" Width="32">
-                      <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                          <Image Source="{Binding Artwork}" />
-                        </DataTemplate>
-                      </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Name" Binding="{Binding name}" />
-                    <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
-                    <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
-                    <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
-                    <!-- Add more columns here if needed -->
-                  </DataGrid.Columns>
-                </ui:DataGrid>
-                <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="10,5,5,0">
-                <Run Text="Tracks in view: " />
-                <Run Text="{Binding TrackCount, Mode=OneWay}" />
-                </TextBlock>
-                <StackPanel Margin="0,50,0,0" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding ShowNoSongs}">
-                  <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="50px">No songs found.</Label>
-                  <Label HorizontalAlignment="Center">Try without tags or search?</Label>
-                  <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Button Focusable="False" Margin="0,0,5,0" HorizontalAlignment="Center" Command="{Binding ClearTagsCommand}">reset tags</Button>
-                    <Button Focusable="False" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding ClearSearchCommand}">reset search</Button>
-                  </StackPanel>
-                </StackPanel>
-              </Grid>
-            </Grid>
-
-            <Grid Grid.Row="1">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}"/>
-              <StackPanel Grid.Column="1" Margin="20,0,20,0">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                  </Grid.ColumnDefinitions>
-                  <Label Grid.Column="0" Content="{Binding  Path=Player.Position, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
-                  <uc:Waveform
-                    Margin="10,0,10,0"
-                  Grid.Column="1" 
-                  SkipCommand="{Binding Path=Player.SkipCommand}" Position="{Binding Path=Player.Position}" Length="{Binding Path=Player.Length}"/>
-                  <Label Grid.Column="2" Content="{Binding  Path=Player.Length, Converter={StaticResource SecondsToTimeStringConverter}}" VerticalAlignment="Center"/>
-                </Grid>
-
-                <!-- Play information (trackname, controls, volume) -->
-                <Grid Margin="0,0,0,0">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="1*"/>
-                  </Grid.ColumnDefinitions>
-                  <Label Grid.Column="0" Content="{Binding Path=Player.currentTrack.name}" VerticalAlignment="Center"/>
-                  <!-- Pause Bottom -->
-                  <Button Grid.Column="2" Width="50" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PauseButtonStyle}" Background="Transparent" BorderThickness="0">
-                    <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
-                      <Path Fill="white" Data="M20,2.5C10.3,2.5,2.5,10.3,2.5,20S10.3,37.5,20,37.5S37.5,29.7,37.5,20S29.7,2.5,20,2.5z M20,35.5
-		c-8.5,0-15.5-6.9-15.5-15.5S11.5,4.5,20,4.5S35.5,11.5,35.5,20S28.5,35.5,20,35.5z" />
-                      <Path Fill="white" Data="M18.7,26.5c0,1.2-1,2.2-2.2,2.2l0,0c-1.2,0-2.2-1-2.2-2.2V14.4c0-1.2,1-2.2,2.2-2.2l0,0c1.2,0,2.2,1,2.2,2.2V26.5z" />
-                      <Path Fill="white" Data="M25.8,26.5c0,1.2-1,2.2-2.2,2.2l0,0c-1.2,0-2.2-1-2.2-2.2V14.4c0-1.2,1-2.2,2.2-2.2l0,0c1.2,0,2.2,1,2.2,2.2V26.5z" />
-                    </Grid>
-                    <Button.ToolTip>
-                      <ToolTip>
-                        <StackPanel>
-                          <TextBlock FontWeight="Bold">Pause (Space)</TextBlock>
-                        </StackPanel>
-                      </ToolTip>
-                    </Button.ToolTip>
-                  </Button>
-                  
-                  <!-- Play Bottom -->
-                  <Button Grid.Column="2" Width="50" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PlayButtonStyle}" Background="Transparent" BorderThickness="0">
-
-                    <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
-                      <Path Fill="white  " Data="M20,2.5C10.3,2.5,2.5,10.3,2.5,20S10.3,37.5,20,37.5S37.5,29.7,37.5,20S29.7,2.5,20,2.5z M20,35.5
-		c-8.5,0-15.5-6.9-15.5-15.5S11.5,4.5,20,4.5S35.5,11.5,35.5,20S28.5,35.5,20,35.5z" />
-                      <Path Fill="white" Data="M28.1,22.4c0.7-0.4,1.2-1.2,1.2-2c0-1-0.6-1.5-1.1-1.9l-12.3-6c-0.2-0.1-0.4-0.2-0.7-0.2c-0.1,0-0.1,0-0.1,0
-		c-1.2,0-2.2,1-2.2,2.2c0,4,0,8.1,0,12.1c0,0.2,0,0.8,0.5,1.4c0.1,0.1,0.7,0.8,1.7,0.8c0.2,0,0.7,0,1.2-0.4l-0.3,0.2" />
-                    </Grid>
-                    <Button.ToolTip>
-                      <ToolTip>
-                        <StackPanel>
-                          <TextBlock FontWeight="Bold">Play (Space)</TextBlock>
-                        </StackPanel>
-                      </ToolTip>
-                    </Button.ToolTip>
-                  </Button>
-                  
-                  <!-- skip backward -->
-                  <Button Grid.Column="1" Focusable="False" Command="{Binding Path=Player.SkipBackwardCommand}" Width="50" Background="Transparent" BorderThickness="0">
-
-                    <Grid Background="Transparent" HorizontalAlignment="Center" Width="40" Height="40">
-                      <Path Fill="white" Data="M16.8,10.3c0.2,0.3,0.5,0.4,1,0.3c1-0.3,1.9-0.2,2.2-0.2c0,0,0,0,0.1,0c0.5,0,3.6-0.2,6.7,2.4
-	c1,0.8,3.8,3.2,3.8,8.1c0,5.5-4.9,10.4-10.4,10.4c-5.5,0-10.5-4.9-10.5-10.5c0-2.1,0.8-4.5,2.1-6.3c0.3-0.4,0.3-0.9,0-1.2
-	c-0.3-0.2-0.8,0-1.1,0.4c-1.6,2.1-2.4,4.5-2.4,7.1c0,6.5,5.3,11.8,11.8,11.8c6.5,0,11.8-5.3,11.8-11.8C31.8,14.3,26.5,9,20,9
-	c-0.1,0-0.2,0-0.3,0l1-1.3c0.3-0.4,0.2-0.9,0-1.1c-0.2-0.2-0.7-0.2-1,0.2c-0.4,0.5-1.7,1.7-2.9,2.8C16.7,9.8,16.6,10.2,16.8,10.3z" />
-                    </Grid>
-                    <Button.ToolTip>
-                      <ToolTip>
-                        <StackPanel>
-                          <TextBlock FontWeight="Bold">Skip back (Left Arrow)</TextBlock>
-                          <TextBlock>Skip the track about 1/10 back in time.</TextBlock>
-                        </StackPanel>
-                      </ToolTip>
-                    </Button.ToolTip>
-                  </Button>
-                  <!-- skip forawd -->
-                  <Button Grid.Column="3" Focusable="False" Command="{Binding Path=Player.SkipForwardCommand}" Width="50" Background="Transparent" BorderThickness="0">
-
-                    <Grid Background="Transparent" HorizontalAlignment="Center" Width="40" Height="40">
-                      <Path Fill="white" Data="M23.2,9.6c-1.1-1.1-2.4-2.3-2.9-2.8c-0.3-0.3-0.7-0.4-1-0.2c-0.3,0.2-0.3,0.7,0,1.1l1,1.3c-0.1,0-0.2,0-0.3,0
-	C13.5,9,8.2,14.3,8.2,20.8c0,6.5,5.3,11.8,11.8,11.8c6.5,0,11.8-5.3,11.8-11.8c0-2.5-0.8-5-2.4-7.1c-0.3-0.4-0.8-0.6-1.1-0.4
-	c-0.3,0.2-0.3,0.8,0,1.2c1.3,1.8,2.1,4.1,2.1,6.3c0,5.5-4.9,10.5-10.5,10.5c-5.5,0-10.4-4.9-10.4-10.4c0-4.9,2.8-7.3,3.8-8.1
-	c3-2.6,6.2-2.4,6.7-2.4c0,0,0.1,0,0.1,0c0.3,0,1.2,0,2.2,0.2c0.5,0.1,0.8,0,1-0.3C23.4,10.2,23.3,9.8,23.2,9.6z" />
-                    </Grid>
-                    <Button.ToolTip>
-                      <ToolTip>
-                        <StackPanel>
-                          <TextBlock FontWeight="Bold">Skip forward (Right Arrow)</TextBlock>
-                          <TextBlock>Skip the track about 1/10 forward in time.</TextBlock>
-                        </StackPanel>
-                      </ToolTip>
-                    </Button.ToolTip>
-                  </Button>
-                  <Slider Grid.Column="4"  Focusable="False" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
-                </Grid>
-              </StackPanel>
-            </Grid>
-          </Grid>
+      <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabItem Header="Songs">
+          <uc:Browse x:Name="tracksBrowse"/>
+        </TabItem>
+        <TabItem Header="Effects">
+          <uc:Browse x:Name="effectsBrowse"/>
         </TabItem>
         <!-- Import -->
         <TabItem Header="Import">
-          <Grid Margin="20">
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Label  Grid.Row="0">
-              Path to search
-            </Label>
-            <TextBox Grid.Row="1" Text="{Binding Path=dataLocation}"/>
-            <CheckBox Grid.Row="2" Content="Import subfolders" IsChecked="{Binding Path=ImportSubfolders}"/>
-            <Button Grid.Row="3" Content="Load Data" Command="{Binding LoadDataCommand}"/>
-            <ScrollViewer Grid.Row="4">
-              <TextBlock Text="{Binding Path=loadingLog}"/>
-            </ScrollViewer>
-          </Grid>
+          <uc:Import x:Name="import" />
         </TabItem>
         <!-- Settings -->
         <TabItem Header="Settings">
           <StackPanel Orientation="Vertical" Margin="20">
             <Label Content="Skip music to position: " />
-            <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding Player.SkipPosition}"/>
+            <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}"/>
             <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
           </StackPanel>
         </TabItem>

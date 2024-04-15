@@ -100,7 +100,7 @@
       x:Name="Path" 
       Stretch="Fill" 
       Height="60"  
-      Data="{Binding DataContext.Player.WaveformGeometry, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+      Data="{Binding DataContext.Player.WaveformGeometry, RelativeSource={RelativeSource AncestorType={x:Type local:Browse}, Mode=FindAncestor}}"
       Style="{StaticResource WaveFormStyle}">
       <!-- 
       

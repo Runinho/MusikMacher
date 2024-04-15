@@ -10,16 +10,23 @@ using System.Windows.Input;
 
 namespace MusikMacher
 {
-
-  // persistant Settings storage
-  internal class Settings
+  // we have multiple browse sections so we save them seperate
+  public class BrowseSettings
   {
-    private const string FilePath = "settings.json";
-    private static Settings? Instance;
+    [DefaultValue("")]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public string Search = "";
 
     [DefaultValue(0.5)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double Volume;
+  }
+
+    // persistant Settings storage
+    public class Settings
+  {
+    private const string FilePath = "settings.json";
+    private static Settings? Instance;
 
     [DefaultValue("C:/some/path")]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
@@ -62,13 +69,13 @@ namespace MusikMacher
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double SkipPosition;
 
-    [DefaultValue("")]
-    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public string Search = "";
 
     [DefaultValue(null)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public List<SortDescription>? TracksSortingDescriptions = [];
+
+    public BrowseSettings TrackBrowseSettings = new BrowseSettings();
+    public BrowseSettings EffectBrowseSettings = new BrowseSettings();
 
     public static Settings getSettings()
     {

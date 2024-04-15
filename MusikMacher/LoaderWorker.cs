@@ -61,7 +61,7 @@ namespace MusikMacher
         }
         catch(Exception e)
         {
-          System.Diagnostics.Debug.WriteLine($"Exception in worker thread e");
+          System.Diagnostics.Debug.WriteLine($"Exception in worker thread {e}");
         }
       }
     }

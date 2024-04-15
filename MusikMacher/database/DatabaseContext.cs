@@ -15,11 +15,11 @@ namespace LorusMusikMacher.database
 
     public string DbPath { get; }
 
-    public TrackContext()
+    public TrackContext(string name)
     {
       var folder = Environment.SpecialFolder.LocalApplicationData;
       var path = Environment.GetFolderPath(folder);
-      DbPath = System.IO.Path.Join(path, "tracks.db");
+      DbPath = System.IO.Path.Join(path, $"{name}.db");
       Console.WriteLine($"Using db at: {DbPath}");
     }
 
