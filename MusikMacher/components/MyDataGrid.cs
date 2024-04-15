@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Wpf.Ui.Controls;
 
 namespace MusikMacher.components
 {
@@ -16,7 +16,7 @@ namespace MusikMacher.components
   // from https://stackoverflow.com/a/55485136
   // also use it to safe sorting order between restarts
   // https://stackoverflow.com/a/34947185
-  public class MyDataGrid : DataGrid
+  public class MyDataGrid : Wpf.Ui.Controls.DataGrid
   {
     private static readonly FieldInfo s_isDraggingSelectionField =
         typeof(DataGrid).GetField("_isDraggingSelection", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -64,7 +64,7 @@ namespace MusikMacher.components
 
         // I need to tell the column its SortDirection,
         // otherwise it doesn't draw the triangle adornment
-        DataGridColumn column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
+        System.Windows.Controls.DataGridColumn column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
         if (column != null)
           column.SortDirection = sortDescription.Direction;
       }

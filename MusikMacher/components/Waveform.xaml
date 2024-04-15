@@ -14,7 +14,7 @@
       <Setter Property="Fill">
         <Setter.Value>
           <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="Black">
+            <GradientStop Color="White">
               <GradientStop.Offset>
                 <MultiBinding Converter="{StaticResource DivideConverter}">
                   <Binding Path="Position"/>
@@ -22,7 +22,7 @@
                 </MultiBinding>
               </GradientStop.Offset>
             </GradientStop>
-            <GradientStop Color="DarkGray">
+            <GradientStop Color="Gray">
               <GradientStop.Offset>
                 <MultiBinding Converter="{StaticResource DivideConverter}">
                   <Binding Path="Position"/>
@@ -39,9 +39,9 @@
           <Setter Property="Fill">
             <Setter.Value>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                <GradientStop Color="Black" Offset="{Binding MousePosition}"/>
-                <GradientStop Color="#666" Offset="{Binding MousePosition}"/>
-                <GradientStop Color="#666">
+                <GradientStop Color="White" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="#CCC" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="#CCC">
                   <GradientStop.Offset>
                     <MultiBinding Converter="{StaticResource DivideConverter}">
                       <Binding Path="Position"/>
@@ -49,7 +49,7 @@
                     </MultiBinding>
                   </GradientStop.Offset>
                 </GradientStop>
-                <GradientStop Color="DarkGray">
+                <GradientStop Color="Gray">
                   <GradientStop.Offset>
                     <MultiBinding Converter="{StaticResource DivideConverter}">
                       <Binding Path="Position"/>
@@ -66,7 +66,7 @@
           <Setter Property="Fill">
             <Setter.Value>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                <GradientStop Color="Black">
+                <GradientStop Color="White">
                   <GradientStop.Offset>
                     <MultiBinding Converter="{StaticResource DivideConverter}">
                       <Binding Path="Position"/>
@@ -74,7 +74,7 @@
                     </MultiBinding>
                   </GradientStop.Offset>
                 </GradientStop>
-                <GradientStop Color="Gray">
+                <GradientStop Color="DarkGray">
                   <GradientStop.Offset>
                     <MultiBinding Converter="{StaticResource DivideConverter}">
                       <Binding Path="Position"/>
@@ -82,8 +82,8 @@
                     </MultiBinding>
                   </GradientStop.Offset>
                 </GradientStop>
-                <GradientStop Color="Gray" Offset="{Binding MousePosition}"/>
                 <GradientStop Color="DarkGray" Offset="{Binding MousePosition}"/>
+                <GradientStop Color="Gray" Offset="{Binding MousePosition}"/>
               </LinearGradientBrush>
             </Setter.Value>
           </Setter>

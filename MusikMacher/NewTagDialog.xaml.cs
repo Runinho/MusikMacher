@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
 
 namespace MusikMacher
 {
   /// <summary>
   /// Interaction logic for NewTagDialog.xaml
   /// </summary>
-  public partial class NewTagDialog : Window
+  public partial class NewTagDialog : FluentWindow
   {
     public NewTagDialog()
     {

@@ -11,13 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
 
 namespace MusikMacher
 {
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class MainWindow : FluentWindow
   {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -38,7 +39,7 @@ namespace MusikMacher
       Width = settings.MainWindowWidth;
       Height = settings.MainWindowHeight;
       // try to load last sorting direction
-      dataGrid.LoadedSortingDirection = settings.TracksSortingDescriptions;
+      //dataGrid.LoadedSortingDirection = settings.TracksSortingDescriptions;
     }
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -46,16 +47,18 @@ namespace MusikMacher
       if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.F)
       {
         // focus search box
-        SoundSearchTextBox.FocusAndSelect();
+        SoundSearchTextBox.Focus();
+        SoundSearchTextBox.SelectAll();
       }
 
       if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.T)
       {
         // focus search box
-        TagSearchTextBox.FocusAndSelect();
+        TagSearchTextBox.Focus();
+        TagSearchTextBox.SelectAll();
       }
 
-      if (SoundSearchTextBox.IsTextBoxFocus())
+      if (SoundSearchTextBox.IsFocused)
       {
         if (e.Key == Key.Down || e.Key == Key.Enter || e.Key == Key.Up)
         {
@@ -87,7 +90,7 @@ namespace MusikMacher
       settings.MainWindowTop = Top;
       settings.MainWindowWidth = Width;
       settings.MainWindowHeight = Height;
-      settings.TracksSortingDescriptions = dataGrid.GetSortDescriptions();
+      //settings.TracksSortingDescriptions = dataGrid.GetSortDescriptions();
 
       Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
     }
