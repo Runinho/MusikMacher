@@ -147,7 +147,7 @@
                     </DataTemplate>
                   </ListBox.ItemTemplate>
                 </ListBox>
-                <Button Focusable="False" Grid.Row="2" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+                <Button Focusable="False" HorizontalAlignment="Stretch" Grid.Row="2" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
               </Grid>
               <Grid Grid.Column="1" >
                 <Grid.RowDefinitions>
