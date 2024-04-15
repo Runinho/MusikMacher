@@ -30,3 +30,11 @@ Download [Visual Studio 2022](https://visualstudio.microsoft.com/de/downloads/) 
 ## Feedback
 This is currently a prototype and alpha level software, and there is a lot to do.
 If you have ideas or find annoying bugs, feel free to file an [issue](https://github.com/Runinho/MusikMacher/issues/new). Pull requests are welcome :)
+
+## FAQ
+### I importet to much what to do?
+Currently there is only the option to reset the full db. This will empty all songs and tags you added.
+
+Go to `C:\Users\<USERNAME>\AppData\Local` (replace `<USERNAME>` with your windows username) and delete `track.db`.
+
+[Here](https://clips.twitch.tv/BombasticPleasantDelicataCopyThis-dLi2RsKZ6ylnQJTI) is a Twitch clip from a user that explains it in german.
