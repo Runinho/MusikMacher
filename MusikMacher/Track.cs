@@ -2,6 +2,7 @@
 using NAudio.Wave;
 using NAudio.WaveFormRenderer;
 using Newtonsoft.Json.Linq;
+using NLayer.NAudioSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -209,11 +210,21 @@ namespace MusikMacher
       {
         // load data from file.
         // TODO: move this into own 
-        using (var audioFile = new AudioFileReader(path))
+
+        WaveStream reader = null;
+        if (path.EndsWith(".mp3"))
+        {
+          var builder = new Mp3FileReader.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf));
+          reader = new Mp3FileReaderBase(path, builder);
+        } else
+        {
+          reader = new AudioFileReader(path);
+        }
+        using (reader)
         {
           var defaultSettings = new StandardWaveFormRendererSettings();
           defaultSettings.Width = 1000;
-          var data =  WaveFormPathRenderer.LoadPoints(audioFile, new AveragePeakProvider(4), defaultSettings);
+          var data =  WaveFormPathRenderer.LoadPoints(reader, new AveragePeakProvider(4), defaultSettings);
           // save
           WaveformCache.SaveInCache(path, data);
           return data;

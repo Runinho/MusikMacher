@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Windows.Media;
 using Point = System.Windows.Point;
 using System.Windows.Ink;
+using System.Diagnostics;
 
 namespace MusikMacher
 {
@@ -30,8 +31,14 @@ namespace MusikMacher
       while (x < settings.Width)
       {
         var currentPeak = peakProvider.GetNextPeak();
-        points[x] = new Point(x, currentPeak.Max * 20);
-        pointsBottom[x] = new Point(x, currentPeak.Min * 20);
+        // check if we get NaN. -> just set that samples to 0.
+        float peak = currentPeak.Max;
+        if(float.IsNaN(peak))
+        {
+          peak = 0;
+        }
+        points[x] = new Point(x, peak * 20);
+        pointsBottom[x] = new Point(x, -peak * 20);
         x++;
       }
       points[x] = new Point(x, 0);

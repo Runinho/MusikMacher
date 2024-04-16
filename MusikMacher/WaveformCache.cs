@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -14,7 +15,7 @@ namespace MusikMacher
   internal class WaveformCache
   {
     public static string path = "WaveformCache";
-    public static int version = 47;// start with 47 so its not 0 and less likly to be for random files.
+    public static int version = 48;// start with 47 so its not 0 and less likly to be for random files.
 
     private static string GetCacheFilename(string filename)
     {
@@ -30,12 +31,26 @@ namespace MusikMacher
       {
         using (BinaryReader reader = new BinaryReader(File.Open(cacheFile, FileMode.Open)))
         {
+          bool checkForAllZeros = false;
+          bool allZeros = true;
           // Read the number of arrays
           int magicVersion = reader.ReadInt32();
-          if(magicVersion != version)
+          if (magicVersion < 47)
           {
+            // unkown version
+            return null;
+          } else if(magicVersion == 47)
+          {
+            // we had a bug where some mp3 got not decoded fully.
+            // we check these old files if they are all zeors
+            checkForAllZeros = true;
+          } else if(magicVersion > version)
+          {
+            // file from newer version of programm?
             return null;
           }
+
+          // check if all are zero
 
           // Read the number of arrays
           int arrayCount = reader.ReadInt32();
@@ -58,9 +73,24 @@ namespace MusikMacher
               double x = reader.ReadDouble();
               double y = reader.ReadDouble();
               points[j] = new Point(x, y);
+              if (double.IsNaN(y))
+              {
+                // invalid data, dont'use cache.
+                return null;
+              }
+              if(y != 0)
+              {
+                allZeros = false;
+              }
             }
 
             pointsArray[i] = points;
+          }
+
+          if(checkForAllZeros && allZeros)
+          {
+            // ignore that file.
+            return null;
           }
 
           return pointsArray;
