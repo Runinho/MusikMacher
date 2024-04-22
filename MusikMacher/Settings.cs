@@ -74,6 +74,9 @@ namespace MusikMacher
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public List<SortDescription>? TracksSortingDescriptions = [];
 
+    [DefaultValue("Lorus Musk Macher")] [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public string WindowTitle = "Lorus Musk Macher";
+
     public BrowseSettings TrackBrowseSettings = new BrowseSettings();
     public BrowseSettings EffectBrowseSettings = new BrowseSettings();
 

@@ -48,13 +48,15 @@
             <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}"/>
             <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
             <uc:CheckUpdate Margin="0,30,0,0"/>
+            <Label Content="Window title" />
+            <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
           </StackPanel>
         </TabItem>
       </TabControl>
     </Grid>
 
     <ui:TitleBar
-            Title="Lorus Musik Macher"
+            Title="{Binding WindowTitle}"
             Grid.Row="0">
       <ui:TitleBar.Icon>
         <ui:ImageIcon Source="loru_musik_z7J_icon.ico" />

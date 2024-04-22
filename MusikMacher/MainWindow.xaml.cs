@@ -83,6 +83,7 @@ namespace MusikMacher
       settings.MainWindowTop = Top;
       settings.MainWindowWidth = Width;
       settings.MainWindowHeight = Height;
+      settings.WindowTitle = model.WindowTitle;
       //settings.TracksSortingDescriptions = dataGrid.GetSortDescriptions();
 
       Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?

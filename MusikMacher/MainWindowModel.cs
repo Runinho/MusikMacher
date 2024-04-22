@@ -30,11 +30,11 @@ namespace MusikMacher
 
     public MainWindowModel()
     {
-
       // load Settings
       Settings settings = Settings.getSettings();
       AndTags = settings.ANDTagCombination;
       SkipPosition = settings.SkipPosition;
+      WindowTitle = settings.WindowTitle;
     }
 
     private bool _andTags = false;
@@ -60,10 +60,10 @@ namespace MusikMacher
         }
       }
     }
-
-    private double _skipPosition;
+    
     public BrowseViewModel[] viewModels = [];
 
+    private double _skipPosition;
     public double SkipPosition
     {
       get { return _skipPosition; }
@@ -78,6 +78,20 @@ namespace MusikMacher
           // saving location in settings
           Settings.getSettings().SkipPosition = value;
           Settings.saveSettings();
+        }
+      }
+    }
+
+    private string _windowTitle;
+    public string WindowTitle
+    {
+      get => _windowTitle;
+      set
+      {
+        if (value != _windowTitle)
+        {
+          _windowTitle = value;
+          RaisePropertyChanged(nameof(WindowTitle));
         }
       }
     }
