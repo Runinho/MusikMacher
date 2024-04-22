@@ -34,8 +34,8 @@ namespace MusikMacher
       InitializeComponent();
       DataContext = model;
 
-      var browseTracksViewModel = new BrowseViewModel("tracks", settings.TrackBrowseSettings); // TODO tell it that it should save it in Tracks
-      var effectsTracksViewModel = new BrowseViewModel("effects", settings.EffectBrowseSettings);
+      var browseTracksViewModel = new BrowseViewModel("tracks", settings.TrackBrowseSettings, false);
+      var effectsTracksViewModel = new BrowseViewModel("effects", settings.EffectBrowseSettings, true);
       var importDataModel = new ImportViewModel(model, browseTracksViewModel, effectsTracksViewModel);
       import.DataContext = importDataModel;
       tracksBrowse.model = browseTracksViewModel;
