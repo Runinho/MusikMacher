@@ -66,6 +66,15 @@ namespace MusikMacher
       {
         double full_length = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
         double skipTo = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds * MainWindowModel.Instance.SkipPosition;
+        // is the setting applicable for current view model
+        if (this.browseViewModel.checkPlayFromStart)
+        {
+          if (MainWindowModel.Instance.PlayEffectsFromBeginning)
+          {
+            // skip to the beginngin
+            skipTo = 0;
+          }
+        }
         mediaPlayer.Position = TimeSpan.FromSeconds(skipTo);
         Console.WriteLine("media opend");
         OnPropertyChanged(nameof(Position));
@@ -131,15 +140,14 @@ namespace MusikMacher
           _currentTrack = value;
           OnPropertyChanged(nameof(currentTrack));
 
-          if(currentTrack != null)
+          if (currentTrack != null)
           {
             // start playing that track lol
             mediaPlayer.Open(new Uri(_currentTrack.path));
-            // skip to 1/3 of the song
             Play();
             timer.Start();
 
-            // set wafeform to placeholder.
+            // set waveform to placeholder.
             if(WaveformGeometry != loadingGeometry)
             {
               WaveformGeometry = loadingGeometry;
@@ -149,7 +157,7 @@ namespace MusikMacher
             SheduleLoad.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
                   (Point[][] points) =>
                   {
-                    System.Diagnostics.Debug.WriteLine($"loaded wafeform is same track??: {_currentTrack == value}");
+                    System.Diagnostics.Debug.WriteLine($"loaded waveform is same track??: {_currentTrack == value}");
                     // Code to run on the GUI thread.
                     if (_currentTrack == value)
                     {
@@ -214,7 +222,6 @@ namespace MusikMacher
       set
       {
         // seek forward
-        Console.Write("need to seek to " + value);
         seek_request = value;
         OnPropertyChanged(nameof(Position));
       }
@@ -227,7 +234,6 @@ namespace MusikMacher
         {
           return mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
         }
-        Console.WriteLine("no media open");
         return 1;
       }
     }
@@ -291,13 +297,13 @@ namespace MusikMacher
 
     internal void SkipForward()
     {
-      double factor = 0.1;
+      double factor =MainWindowModel.Instance.SkipPositionMovement;
       Position += Length * factor;
     }
 
     internal void SkipBackward()
     {
-      double factor = 0.1;
+      double factor =MainWindowModel.Instance.SkipPositionMovement;
       Position -= Length * factor;
     }
 

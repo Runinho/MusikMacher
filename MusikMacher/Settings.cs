@@ -68,8 +68,15 @@ namespace MusikMacher
     [DefaultValue(0.3)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double SkipPosition;
+    
+    [DefaultValue(0.1)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public double SkipPositionMovement;
 
-
+    [DefaultValue(true)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool PlayEffectsFromBeginning;
+    
     [DefaultValue(null)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public List<SortDescription>? TracksSortingDescriptions = [];

@@ -19,7 +19,9 @@
         KeyDown="Window_OnKeyDown"
         >
   <ui:FluentWindow.Resources>
-
+    <!-- Converter -->
+    <localConverter:PercentageConverter x:Key="PercentageConverter"/>
+    
     <!-- Images -->
     <BitmapImage x:Key="Pepe" UriSource="content/pepe.png" />
 
@@ -44,12 +46,26 @@
         <!-- Settings -->
         <TabItem Header="Settings">
           <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
-            <Label Content="Skip music to position: " />
+            <Label>
+              <TextBlock>
+                <Run Text="Skip music to position: "/>
+                <Run Text="{Binding SkipPosition, Converter={StaticResource PercentageConverter}}"/>
+              </TextBlock>
+            </Label>
             <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}"/>
-            <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
-            <uc:CheckUpdate Margin="0,30,0,0"/>
+            <Label>
+              <TextBlock>
+                <Run Text="Skip amount on left/right arrow key press: "/>
+                <Run Text="{Binding SkipPositionMovement, Converter={StaticResource PercentageConverter}}"/>
+              </TextBlock>
+            </Label>
+            <CheckBox IsChecked="{Binding PlayEffectsFromBeginning}" Content="Play effects always from beginning"/>
+            <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPositionMovement}"/>
             <Label Content="Window title" />
             <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
+            <uc:CheckUpdate Margin="0,30,0,0"/>
+
           </StackPanel>
         </TabItem>
       </TabControl>

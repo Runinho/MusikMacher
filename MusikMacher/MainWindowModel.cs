@@ -34,7 +34,9 @@ namespace MusikMacher
       Settings settings = Settings.getSettings();
       AndTags = settings.ANDTagCombination;
       SkipPosition = settings.SkipPosition;
+      SkipPositionMovement = settings.SkipPositionMovement;
       WindowTitle = settings.WindowTitle;
+      PlayEffectsFromBeginning = settings.PlayEffectsFromBeginning;
     }
 
     private bool _andTags = false;
@@ -74,13 +76,51 @@ namespace MusikMacher
           _skipPosition = value;
           RaisePropertyChanged(nameof(SkipPosition));
 
-
           // saving location in settings
           Settings.getSettings().SkipPosition = value;
           Settings.saveSettings();
         }
       }
     }
+
+    private double _skipPositionMovement; // amount to move on arrow key press
+    public double SkipPositionMovement
+    {
+      get => _skipPositionMovement;
+      set
+      {
+        if (value != _skipPositionMovement)
+        {
+          _skipPositionMovement = value;
+          RaisePropertyChanged(nameof(SkipPositionMovement));
+          
+          // saving location in settings
+          Settings.getSettings().SkipPositionMovement = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
+    private bool _playEffectsFromBeginning;
+
+    public bool PlayEffectsFromBeginning
+    {
+      get => _playEffectsFromBeginning;
+      set
+      {
+        if (value != _playEffectsFromBeginning)
+        {
+          _playEffectsFromBeginning = value;
+          RaisePropertyChanged(nameof(PlayEffectsFromBeginning));
+          
+          // saving location in settings
+          Settings.getSettings().PlayEffectsFromBeginning = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
+
 
     private string _windowTitle;
     public string WindowTitle

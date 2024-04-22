@@ -33,8 +33,9 @@ namespace MusikMacher.components
     public ICommand ClearTagsCommand { get; private set; }
     public ICommand ClearSearchCommand { get; private set; }
 
-    public BrowseViewModel(string v, BrowseSettings settings) {
+    public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
+      this.checkPlayFromStart = checkPlayFromStart;
       this.db = new TrackContext(v);
       db.Database.OpenConnection();
       db.Database.EnsureCreated();
@@ -73,6 +74,8 @@ namespace MusikMacher.components
       {
         tag.IsChecked = false;
       }
+
+      SearchTag = ""; // clear search
     }
 
     private void ClearSearch()
@@ -235,6 +238,8 @@ namespace MusikMacher.components
     }
 
     private ICollectionView _tagsView;
+    public readonly bool checkPlayFromStart;
+
     public ICollectionView TagsView
     {
       get { return _tagsView; }
