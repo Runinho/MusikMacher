@@ -43,6 +43,9 @@
         <TabItem Header="Import">
           <uc:Import x:Name="import" />
         </TabItem>
+        <TabItem Header="Premiere"> 
+          <uc:PremiereLoader/>
+        </TabItem>
         <!-- Settings -->
         <TabItem Header="Settings">
           <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
