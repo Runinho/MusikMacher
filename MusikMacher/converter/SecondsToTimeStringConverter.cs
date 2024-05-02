@@ -12,18 +12,28 @@ namespace MusikMacher.converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            double s;
             if (value is double seconds)
             {
-                TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
-                return timeSpan.ToString(@"mm\:ss");
+                s = seconds;
             }
-            if (value is int intSeconds)
+            else if (value is int intSeconds)
             {
-                TimeSpan timeSpan = TimeSpan.FromSeconds(intSeconds);
-                return timeSpan.ToString(@"mm\:ss");
+                s = intSeconds;
             }
+            else
+            {
+                return "--:--"; // Default value if conversion fails
+            }
+            
+            TimeSpan timeSpan = TimeSpan.FromSeconds(s);
+            if (s > 60 * 60)
+            {
+                // more than 1 hour
+                return timeSpan.ToString(@"hh\:mm\:ss");
+            }
+            return timeSpan.ToString(@"mm\:ss");
 
-            return "--:--"; // Default value if conversion fails
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

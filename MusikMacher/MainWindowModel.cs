@@ -120,8 +120,6 @@ namespace MusikMacher
       }
     }
 
-
-
     private string _windowTitle;
     public string WindowTitle
     {

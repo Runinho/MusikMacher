@@ -154,7 +154,7 @@ namespace MusikMacher
             }
 
             // load in waveform in other thread
-            SheduleLoad.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
+            WaveformLoader.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
                   (Point[][] points) =>
                   {
                     System.Diagnostics.Debug.WriteLine($"loaded waveform is same track??: {_currentTrack == value}");

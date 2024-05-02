@@ -16,6 +16,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <Label  Grid.Row="0">
@@ -34,7 +35,8 @@
       </ComboBox.ItemTemplate>
     </ComboBox>
     <Button Grid.Row="5" Content="Load Data" Command="{Binding LoadDataCommand}"/>
-    <ScrollViewer Grid.Row="6">
+    <Button Grid.Row="6" Content="Preload all waveforms" Command="{Binding LoadWaveformsCommand}"/>
+    <ScrollViewer Grid.Row="7">
       <TextBlock Text="{Binding Path=loadingLog}"/>
     </ScrollViewer>
   </Grid>

@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using MusikMacher.dialog;
 
 namespace MusikMacher
 {
@@ -50,6 +51,8 @@ namespace MusikMacher
   internal class ImportViewModel : ViewModelBase
   {
     public ICommand LoadDataCommand { get; private set; }
+    public ICommand LoadWaveformsCommand { get; private set; }
+
     MainWindowModel model;
     private BrowseViewModel browseTracksViewModel;
 
@@ -71,6 +74,7 @@ namespace MusikMacher
     public ImportViewModel(MainWindowModel model, BrowseViewModel browseTracksViewModel, BrowseViewModel browseEffectsViewModel)
     {
       LoadDataCommand = new RelayCommand(LoadData);
+      LoadWaveformsCommand = new RelayCommand(LoadWaveforms);
 
       this.model = model;
       this.browseTracksViewModel = browseTracksViewModel;
@@ -82,6 +86,22 @@ namespace MusikMacher
       Settings settings = Settings.getSettings();
       dataLocation = settings.ImportPath;
     }
+
+    private void LoadWaveforms()
+    {
+      // open loading dialog
+      if (Dialog is null || !Dialog.IsVisible)
+      {
+        Dialog = new PreloadWaveformsWindow();
+        Dialog.Show();
+      }
+      else
+      {
+        Dialog.Focus();
+      }
+    }
+
+    public PreloadWaveformsWindow? Dialog { get; set; }
 
     private string _dataLocation = "C:/some/folder";
     public string dataLocation
