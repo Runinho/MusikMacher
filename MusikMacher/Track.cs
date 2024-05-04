@@ -221,10 +221,18 @@ namespace MusikMacher
       }
     }
 
-    internal static System.Windows.Point[][] LoadWaveformGeometry(string path)
+    public static System.Windows.Point[][] LoadWaveformGeometry(string path)
+    {
+      return LoadWaveformGeometry(path, true);
+    }
+    public static System.Windows.Point[][] LoadWaveformGeometry(string path, bool useCache)
     {
       // try to read from cache
-      var points = WaveformCache.FromCache(path);
+      System.Windows.Point[][]? points = null;
+      if (useCache)
+      {
+        points = WaveformCache.FromCache(path);
+      }
       if (points == null)
       {
         // load data from file.
@@ -243,9 +251,12 @@ namespace MusikMacher
         {
           var defaultSettings = new StandardWaveFormRendererSettings();
           defaultSettings.Width = 1000;
-          var data =  WaveFormPathRenderer.LoadPoints(reader, new AveragePeakProvider(4), defaultSettings);
+          var data =  WaveFormPathRenderer.LoadPoints(reader, new MyAveragePeakProvider(4), defaultSettings);
           // save
-          WaveformCache.SaveInCache(path, data);
+          if (useCache)
+          {
+            WaveformCache.SaveInCache(path, data);
+          }
           return data;
         }
       }

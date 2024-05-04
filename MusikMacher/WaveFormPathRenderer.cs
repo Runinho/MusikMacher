@@ -16,7 +16,7 @@ namespace MusikMacher
 {
   internal class WaveFormPathRenderer
   {
-    public static Point[][] LoadPoints(WaveStream waveStream, IPeakProvider peakProvider, WaveFormRendererSettings settings)
+    public static Point[][] LoadPoints(WaveStream waveStream, MyAveragePeakProvider peakProvider, WaveFormRendererSettings settings)
     {
       Point[] points = new Point[settings.Width + 2];
       Point[] pointsBottom = new Point[settings.Width + 2];
@@ -28,11 +28,14 @@ namespace MusikMacher
       peakProvider.Init(waveStream.ToSampleProvider(), samplesPerPixel * stepSize);
 
       int x = 0;
+
+      var start = DateTime.Now;
+      
       while (x < settings.Width)
       {
-        var currentPeak = peakProvider.GetNextPeak();
+        var currentPeak = peakProvider.MyGetNextPeak();
         // check if we get NaN. -> just set that samples to 0.
-        float peak = currentPeak.Max;
+        float peak = currentPeak;
         if(float.IsNaN(peak))
         {
           peak = 0;
@@ -41,6 +44,10 @@ namespace MusikMacher
         pointsBottom[x] = new Point(x, -peak * 20);
         x++;
       }
+
+      var time = DateTime.Now - start;
+      Console.WriteLine($"loading waveform took {time.TotalMilliseconds}ms");
+      
       points[x] = new Point(x, 0);
       points[x+1] = new Point(x, 0);
 

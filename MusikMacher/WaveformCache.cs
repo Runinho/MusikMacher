@@ -12,7 +12,7 @@ using System.Windows.Ink;
 namespace MusikMacher
 {
   // cache the waveforms
-  internal class WaveformCache
+  public class WaveformCache
   {
     public static string path = "WaveformCache";
     public static int version = 48;// start with 47 so its not 0 and less likly to be for random files.
