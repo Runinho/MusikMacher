@@ -173,9 +173,10 @@
         <!-- search see: https://stackoverflow.com/a/21672408 -->
         <ui:TextBox PlaceholderText="Find in songs (Ctrl + F)" x:Name="SoundSearchTextBox" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- data -->
-        <ui:DataGrid
+        <local:MyDataGrid
                 x:Name="dataGrid" 
-                Grid.Row="1" 
+                Grid.Row="1"                
+                TracksSortingDescriptions="{Binding TracksSortingDescriptions, Mode=TwoWay}"
                 ItemsSource="{Binding TracksView}" 
                 SelectedItem="{Binding Path=Player.currentTrack, Mode=TwoWay}"
                 SelectionChanged="DataGrid_SelectionChanged"
@@ -188,6 +189,9 @@
                 MouseDown="DataGrid_OnClick"
                 >
 
+          <DataGrid.Style>
+            <Style BasedOn="{StaticResource DefaultDataGridStyle}" TargetType="{x:Type DataGrid}" />
+          </DataGrid.Style>
           <DataGrid.RowStyle>
             <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="DataGridRow">
               <Style.Triggers>
@@ -226,7 +230,7 @@
             <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
             <!-- Add more columns here if needed -->
           </DataGrid.Columns>
-        </ui:DataGrid>
+        </local:MyDataGrid>
         <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="10,5,5,0">
                 <Run Text="Tracks in view: " />
                 <Run Text="{Binding TrackCount, Mode=OneWay}" />

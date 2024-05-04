@@ -6,9 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Wpf.Ui.Controls;
+using DataGrid = Wpf.Ui.Controls.DataGrid;
 
 namespace MusikMacher.components
 {
@@ -24,8 +26,24 @@ namespace MusikMacher.components
     private static readonly MethodInfo s_endDraggingMethod =
         typeof(DataGrid).GetMethod("EndDragging", BindingFlags.Instance | BindingFlags.NonPublic);
     
-    internal List<SortDescription>? LoadedSortingDirection = null;
+    public static readonly DependencyProperty TracksSortingDescriptionsProperty = DependencyProperty.Register(
+      nameof(TracksSortingDescriptions), typeof(List<SortDescription>), typeof(MyDataGrid), new PropertyMetadata(default(List<SortDescription>)));
 
+    public List<SortDescription>? TracksSortingDescriptions
+    {
+      get { return (List<SortDescription>?)GetValue(TracksSortingDescriptionsProperty); }
+      set
+      {
+        Console.WriteLine("Sorting description changed");
+        if (value != null)
+        {
+          Console.WriteLine("loaded sorting description");
+          SetSortDescription(value); // update sorting to the loaded value
+        }
+        SetValue(TracksSortingDescriptionsProperty, value);
+      }
+    }
+    
     // DataGrid.OnMouseMove() serves no other purpose than to execute click-drag-selection.
     // Bypass that, and stop 'is dragging selection' mode for DataGrid
     protected override void OnMouseMove(MouseEventArgs e)
@@ -41,19 +59,25 @@ namespace MusikMacher.components
       }
     }
 
+    protected override void OnSorting(DataGridSortingEventArgs eventArgs)
+    {
+      base.OnSorting(eventArgs);
+      // call set value directly, so we get no endless recursion;
+      SetValue(TracksSortingDescriptionsProperty, GetSortDescriptions());
+    }
+
     protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
     {
       base.OnItemsSourceChanged(oldValue, newValue);
 
-      if (LoadedSortingDirection != null)
+      // only works if the sorting description is binded before the source!
+      if (TracksSortingDescriptions != null)
       {
-        SetSortDescription(LoadedSortingDirection);
-        // set to null because we only do this on first load.
-        LoadedSortingDirection = null;
+        SetSortDescription(TracksSortingDescriptions);
       }
     }
 
-      public void SetSortDescription(List<SortDescription> descriptions)
+      public void SetSortDescription(List<SortDescription>? descriptions)
     {
       ICollectionView view = CollectionViewSource.GetDefaultView(ItemsSource);
       view.SortDescriptions.Clear();

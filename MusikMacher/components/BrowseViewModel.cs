@@ -76,6 +76,7 @@ namespace MusikMacher.components
       TagsView.Filter = FilterTags;
 
       // load Settings
+      TracksSortingDescriptions = settings.TracksSortingDescriptions;
       Search = settings.Search;
     }
 
@@ -192,6 +193,26 @@ namespace MusikMacher.components
         }
       }
     }
+
+    private List<SortDescription>? _tracksSortingDescriptions;
+
+    public List<SortDescription>? TracksSortingDescriptions
+    {
+      get => _tracksSortingDescriptions;
+      set
+      {
+        if (value != _tracksSortingDescriptions)
+        {
+          //save in settings
+          _tracksSortingDescriptions = value;
+          RaisePropertyChanged(nameof(TracksSortingDescriptions));
+          
+          settings.TracksSortingDescriptions = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
 
     private string _searchTag = "";
     public string SearchTag

@@ -20,6 +20,10 @@ namespace MusikMacher
     [DefaultValue(0.5)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double Volume = 0.5;
+
+    [DefaultValue(null)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public List<SortDescription>? TracksSortingDescriptions = [];
   }
 
     // persistant Settings storage
@@ -84,10 +88,6 @@ namespace MusikMacher
     [DefaultValue(true)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool PlayEffectsFromBeginning;
-    
-    [DefaultValue(null)]
-    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public List<SortDescription>? TracksSortingDescriptions = [];
 
     [DefaultValue("Lorus Musik Macher")] [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public string WindowTitle = "Lorus Musik Macher";
