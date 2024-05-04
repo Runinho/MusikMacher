@@ -21,9 +21,14 @@ namespace MusikMacher.converter
         int i = 0;
         foreach (Tag t in tags)
         {
+          if (t.IsHidden)
+          {
+            // skip this one
+            continue;
+          }
           if(i > 0){
              s += ", ";
-           }
+          }
           s += t.Name;
           i++;
         }

@@ -125,13 +125,40 @@
           </ListBox.ContextMenu>
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Content="{Binding Name}" HorizontalContentAlignment="Stretch"
-                                                     AllowDrop="True"
-                       DragEnter="Tag_DragEnter"
-                       DragOver="Tag_DragOver"
-                       Drop="Tag_Drop"
-                       Focusable="False"
-                              />
+              <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        AllowDrop="True"
+                        DragEnter="Tag_DragEnter"
+                        DragOver="Tag_DragOver"
+                        Drop="Tag_Drop"
+                        Focusable="False"
+                >
+                <CheckBox.Style>
+                  <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                        <Setter Property="Content">
+                          <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                              <!--<TextBlock Text="★ "/> -->
+                              <!-- Start emoji -->
+                              <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            </StackPanel>
+                          </Setter.Value>
+                        </Setter>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                        <Setter Property="Content">
+                          <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                          </Setter.Value>
+                        </Setter>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </CheckBox.Style>
+              </CheckBox>
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
