@@ -32,6 +32,9 @@ namespace MusikMacher.components
     public ICommand AddTagCommand { get; private set; }
     public ICommand ClearTagsCommand { get; private set; }
     public ICommand ClearSearchCommand { get; private set; }
+    public ICommand DeleteTracksCommand { get; private set; }
+    public ICommand CopyTracksNameCommand { get; private set; }
+    public ICommand CopyTracksPathCommand { get; private set; }
 
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
@@ -44,6 +47,9 @@ namespace MusikMacher.components
       AddTagCommand = new RelayCommand(AddTag);
       ClearTagsCommand = new RelayCommand(ClearTags);
       ClearSearchCommand = new RelayCommand(ClearSearch);
+      DeleteTracksCommand = new RelayCommand(DeleteTracks);
+      CopyTracksNameCommand = new RelayCommand(CopyTracksName);
+      CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
 
       Player = new PlayerModel(this);
 
@@ -540,6 +546,34 @@ namespace MusikMacher.components
       RefreshTracksView();
     }
 
+    private void CopyTracksName()
+    {
+      // copy the selected track names into the clipboard
+      selected = Player.SelectedTracks.ToFrozenSet();
+      if (selected.Count == 1)
+      {
+        Clipboard.SetText(selected.First().name);
+      }
+      else
+      {
+        Clipboard.SetText(string.Join(", ", selected.Select(t => t.name)));
+      }
+    }
+    
+    private void CopyTracksPath()
+    {
+      // copy the selected track names into the clipboard
+      selected = Player.SelectedTracks.ToFrozenSet();
+      if (selected.Count == 1)
+      {
+        Clipboard.SetText(selected.First().path);
+      }
+      else
+      {
+        Clipboard.SetText(string.Join("\n", selected.Select(t => t.path)));
+      }
+    }
+    
     public void RefreshTracksView()
     {
       TracksView.Refresh();

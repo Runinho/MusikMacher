@@ -176,7 +176,9 @@
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Delete track" Click="DataGrid_Delete"/>
+              <MenuItem Header="Delete track" Command="{Binding DeleteTracksCommand}"/>
+              <MenuItem Header="Copy name" Command="{Binding CopyTracksNameCommand}"/>
+              <MenuItem Header="Copy as path" Command="{Binding CopyTracksPathCommand}"/>
             </ContextMenu>
           </DataGrid.ContextMenu>
           <DataGrid.Columns>
