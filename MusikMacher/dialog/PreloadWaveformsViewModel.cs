@@ -54,9 +54,7 @@ namespace MusikMacher.dialog
       foreach (string dbName in dbNames)
       {
         // open another db instance and load the data
-        var db = new TrackContext(dbName);
-        db.Database.OpenConnection();
-        db.Database.EnsureCreated();
+        var db = TrackContext.GetTrackContext(dbName);
 
         NumberTracks += db.Tracks.Count();
 

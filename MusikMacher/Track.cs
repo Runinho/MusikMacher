@@ -74,6 +74,19 @@ namespace MusikMacher
 
     public DateTime creationTime { get; set; }
 
+    private bool _isHidden;
+    public bool IsHidden
+    {
+      get { return _isHidden; }
+      set
+      {
+        if (value != _isHidden)
+        {
+          _isHidden = value;
+          OnPropertyChanged(nameof(IsHidden));
+        }
+      }
+    }
 
     [NotMapped]
     private bool _artworkLoaded = false;

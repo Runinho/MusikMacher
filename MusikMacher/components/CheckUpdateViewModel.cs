@@ -14,7 +14,7 @@ namespace MusikMacher.components
 {
   class CheckUpdateViewModel: ViewModelBase
   {
-    public static string VERSION = "v0.1.6-alpha";
+    public static string VERSION = "v0.1.7-alpha";
 
     private string _updateResult = "";
     public string UpdateResult

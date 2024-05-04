@@ -39,9 +39,7 @@ namespace MusikMacher.components
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
       this.checkPlayFromStart = checkPlayFromStart;
-      this.db = new TrackContext(v);
-      db.Database.OpenConnection();
-      db.Database.EnsureCreated();
+      this.db = TrackContext.GetTrackContext(v);
 
       SpaceKeyPressedCommand = new RelayCommand(SpaceKeyPressed);
       AddTagCommand = new RelayCommand(AddTag);
