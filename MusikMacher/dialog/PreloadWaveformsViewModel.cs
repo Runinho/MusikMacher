@@ -45,14 +45,25 @@ namespace MusikMacher.dialog
       Console.WriteLine($"using {workers} workers to load the waveforms");
 
       Loader = new WaveformLoader(false, 10);
-      // open another db instance and load the data
-      var db = new TrackContext("tracks");
-      db.Database.OpenConnection();
-      db.Database.EnsureCreated();
 
-      NumberTracks = db.Tracks.Count();
+      List<Track> allTracks = new List<Track>();
+      NumberTracks = 0;
 
-      foreach (var track in db.Tracks)
+      string[] dbNames = ["tracks", "effects"];
+      
+      foreach (string dbName in dbNames)
+      {
+        // open another db instance and load the data
+        var db = new TrackContext(dbName);
+        db.Database.OpenConnection();
+        db.Database.EnsureCreated();
+
+        NumberTracks += db.Tracks.Count();
+
+        allTracks.AddRange(db.Tracks);
+      }
+
+      foreach (var track in allTracks)
       {
         Loader.Shedule(new Tuple<string, Action<Point[][]>>(track.path,
           (Point[][] points) =>
