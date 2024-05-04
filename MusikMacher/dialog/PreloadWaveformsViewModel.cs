@@ -34,7 +34,7 @@ namespace MusikMacher.dialog
     {
       // create a new loader and just trigger all
       StartTime = DateTime.Now;
-      EndTimes = new Queue<DateTime>(30);
+      EndTimes = new Queue<DateTime>(100);
 
       int workers = Environment.ProcessorCount;
       workers = workers / 2;
@@ -68,15 +68,15 @@ namespace MusikMacher.dialog
           {
             LoadedTracks += 1;
             // update estimated time.
-            // only use the last 30 samples.
-            if (EndTimes.Count >= 30)
+            // only use the last 100 samples.
+            if (EndTimes.Count >= 100)
             {
               EndTimes.Dequeue();
             }
 
             if (EndTimes.Count > 0)
             {
-              // estimate over the last 30 samples
+              // estimate over the last 100 samples
               var timeUsed = DateTime.Now - EndTimes.Peek();
               EstimatedTimeLeft = (timeUsed.TotalSeconds / EndTimes.Count) * (NumberTracks - LoadedTracks);
               // save the current time

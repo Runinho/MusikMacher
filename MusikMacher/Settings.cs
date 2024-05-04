@@ -60,6 +60,14 @@ namespace MusikMacher
     [DefaultValue(200)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double DialogTop;
+    
+    [DefaultValue(200)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public double DialogPreloadeWaveformsLeft;
+
+    [DefaultValue(200)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public double DialogPreloadeWaveformsTop;
 
     [DefaultValue(false)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]

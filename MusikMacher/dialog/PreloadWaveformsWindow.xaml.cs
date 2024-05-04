@@ -28,12 +28,23 @@ namespace MusikMacher.dialog
       _model = new PreloadWaveformsViewModel();
       DataContext = _model;
       Closed += Window_Closed;
+      
+      Settings settings = Settings.getSettings();
+      Left = settings.DialogPreloadeWaveformsLeft;
+      Top = settings.DialogPreloadeWaveformsTop;
     }
 
     private void Window_Closed(object sender, EventArgs e)
     {
       Console.WriteLine("Preload window closed");
       _model.Cancle();
+      // Save the loaction of the window
+      Settings settings = Settings.getSettings();
+
+      settings.DialogPreloadeWaveformsLeft = Left;
+      settings.DialogPreloadeWaveformsTop = Top;
+      Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
+
     }
   }
 }
