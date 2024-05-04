@@ -25,7 +25,8 @@ Click the checkboxes on the right to filter, or enter a search term to find the 
 
 ## Development
 The software uses .Net 7 WPF with data binding and Entity Framework as a database.
-Download [Visual Studio 2022](https://visualstudio.microsoft.com/de/downloads/) and .Net 7 to compile the solution.
+Download [Visual Studio 2022](https://visualstudio.microsoft.com/de/downloads/) and .Net 8 to compile the solution.
+You also need the UWP development kit to compile NAudio. Don't forget to initalize the submodules with `git submodule init` before compiling.
 
 ## Feedback
 This is currently a prototype and alpha level software, and there is a lot to do.
