@@ -178,5 +178,10 @@ namespace MusikMacher.components
         }
       }
     }
+
+    private void listBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      model.ToggleCurrentTag();
+    }
   }
 }

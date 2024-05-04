@@ -62,6 +62,10 @@ namespace LorusMusikMacher.database
               migrator.Migrate(migrationName);
               InitialCreate.tryCreation = true; // for next database
             }
+            else
+            {
+              throw;
+            }
           }
         }else
         {

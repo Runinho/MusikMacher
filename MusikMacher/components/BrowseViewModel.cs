@@ -32,9 +32,12 @@ namespace MusikMacher.components
     public ICommand AddTagCommand { get; private set; }
     public ICommand ClearTagsCommand { get; private set; }
     public ICommand ClearSearchCommand { get; private set; }
-    public ICommand DeleteTracksCommand { get; private set; }
+    public ICommand HideTracksCommand { get; private set; }
+    public ICommand FavoriteTagCommand { get; private set; }
     public ICommand CopyTracksNameCommand { get; private set; }
     public ICommand CopyTracksPathCommand { get; private set; }
+    public ICommand HideTagCommand { get; private set; }
+    public ICommand RenameTagCommand { get; private set; }
 
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
@@ -44,8 +47,11 @@ namespace MusikMacher.components
       SpaceKeyPressedCommand = new RelayCommand(SpaceKeyPressed);
       AddTagCommand = new RelayCommand(AddTag);
       ClearTagsCommand = new RelayCommand(ClearTags);
+      HideTagCommand = new RelayCommand(HideTag);
+      RenameTagCommand = new RelayCommand(RenameTag);
+      FavoriteTagCommand = new RelayCommand(FavoriteTag);
       ClearSearchCommand = new RelayCommand(ClearSearch);
-      DeleteTracksCommand = new RelayCommand(DeleteTracks);
+      HideTracksCommand = new RelayCommand(HideTracks);
       CopyTracksNameCommand = new RelayCommand(CopyTracksName);
       CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
 
@@ -65,6 +71,7 @@ namespace MusikMacher.components
 
       var _tagSourceList = new CollectionViewSource() { Source = Tags };
       _tagSourceList.SortDescriptions.Add(new SortDescription("IsChecked", ListSortDirection.Descending));
+      _tagSourceList.SortDescriptions.Add(new SortDescription("IsFavorite", ListSortDirection.Descending));
       TagsView = _tagSourceList.View;
       TagsView.Filter = FilterTags;
 
@@ -92,6 +99,12 @@ namespace MusikMacher.components
       Tag tag = obj as Tag;
       if (tag != null)
       {
+        // don't show hidden tags
+        if (tag.IsHidden)
+        {
+          return false;
+        }
+        
         if (tag.IsChecked)
         {
           // always show tagged
@@ -110,6 +123,12 @@ namespace MusikMacher.components
       Track track = obj as Track;
       if (track != null)
       {
+        // don't show hidden files.
+        if (track.IsHidden)
+        {
+          return false;
+        } 
+        
         // filter at search
         if (Search.Length > 0)
         {
@@ -368,7 +387,6 @@ namespace MusikMacher.components
       {
         Point mousePos = e.GetPosition(null);
         Vector diff = valueOfStart - mousePos;
-        Console.WriteLine(diff);
 
         if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
             Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
@@ -478,6 +496,22 @@ namespace MusikMacher.components
 
       }
     }
+    
+    internal void HideTag()
+    {
+      SelectedTag.IsHidden = true;
+      SelectedTag.IsChecked = false;
+      db.SaveChanges();
+      TagsView.Refresh();
+    }
+
+    internal void FavoriteTag()
+    {
+      SelectedTag.IsFavorite = !SelectedTag.IsFavorite;
+      TagsView.Refresh();
+    }
+
+
 
     private void ReloadTags()
     {
@@ -529,18 +563,17 @@ namespace MusikMacher.components
       }
     }
 
-    internal void DeleteTracks()
+    internal void HideTracks()
     {
       // delete current selection
       // TODO: maybee add a question dialog LOL
       selected = Player.SelectedTracks.ToFrozenSet();
       foreach (Track track in selected)
       {
-        // delete in db
-        db.Tracks.Remove(track);
-        // delete in tracks
-        Tracks.Remove(track);
+        // hide
+        track.IsHidden = true;
       }
+      db.SaveChanges();
       RefreshTracksView();
     }
 
@@ -589,6 +622,14 @@ namespace MusikMacher.components
       RaisePropertyChanged(nameof(TrackCount));
       RaisePropertyChanged(nameof(ShowNoSongs));
       ReloadTags();
+    }
+
+    internal void ToggleCurrentTag()
+    {
+      if(SelectedTag != null)
+      {
+        SelectedTag.IsChecked = !SelectedTag.IsChecked;
+      }
     }
   }
 }

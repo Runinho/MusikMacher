@@ -106,17 +106,21 @@
                        x:Name="listBox"
                        ItemsSource="{Binding TagsView}"
                        SelectedItem="{Binding Path=SelectedTag}"
-                       Focusable="False"
+                       Focusable="True"
+                 HorizontalContentAlignment="Stretch"
+                 MouseLeftButtonUp="listBox_MouseLeftButtonUp"
                        >
           <ListBox.ItemContainerStyle>
-            <Style TargetType="Control">
-              <Setter Property="Focusable" Value="False" />
+            <Style TargetType="ListBoxItem">
+              <Setter Property="Focusable" Value="True" />
               <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
             </Style>
           </ListBox.ItemContainerStyle>
           <ListBox.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Rename" Click="MenuItem_Rename"/>
+              <MenuItem Header="Favorite" Command="{Binding FavoriteTagCommand}"/>
+              <MenuItem Header="Rename" Command="{Binding RenameTagCommand}"/>
+              <MenuItem Header="Hide" Command="{Binding HideTagCommand}"/>
             </ContextMenu>
           </ListBox.ContextMenu>
           <ListBox.ItemTemplate>
@@ -176,7 +180,7 @@
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Delete track" Command="{Binding DeleteTracksCommand}"/>
+              <MenuItem Header="Hide track" Command="{Binding HideTracksCommand}"/>
               <MenuItem Header="Copy name" Command="{Binding CopyTracksNameCommand}"/>
               <MenuItem Header="Copy as path" Command="{Binding CopyTracksPathCommand}"/>
             </ContextMenu>

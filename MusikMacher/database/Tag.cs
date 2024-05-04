@@ -51,6 +51,20 @@ namespace LorusMusikMacher.database
       }
     }
 
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+      get { return _isFavorite; }
+      set
+      {
+        if (value != _isFavorite)
+        {
+          _isFavorite = value;
+          OnPropertyChanged(nameof(IsFavorite));
+        }
+      }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)
