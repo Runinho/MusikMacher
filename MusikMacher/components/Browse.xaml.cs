@@ -183,5 +183,10 @@ namespace MusikMacher.components
     {
       model.ToggleCurrentTag();
     }
+
+    private void DataGrid_OnGiveFeedback(object sender, GiveFeedbackEventArgs e)
+    {
+      model.TrackGiveFeedback();
+    }
   }
 }

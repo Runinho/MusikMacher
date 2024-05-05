@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +16,7 @@ using System.Windows.Input;
 using TagLib.Matroska;
 using TagLib.NonContainer;
 using Wpf.Ui.Controls;
+using Point = System.Windows.Point;
 using Tag = LorusMusikMacher.database.Tag;
 using Vector = System.Windows.Vector;
 
@@ -283,6 +285,7 @@ namespace MusikMacher.components
 
     private ICollectionView _tagsView;
     public readonly bool checkPlayFromStart;
+    private Window _dragdropWindow;
 
     public ICollectionView TagsView
     {
@@ -447,11 +450,13 @@ namespace MusikMacher.components
 
           dragData.SetData("MusikMakerTrack", strings); // use the full selection.
           dragData.SetData(DataFormats.Text, toDrag.name);
+          // create own window as tooltip
+          CreateDragDropWindow(selected);
           DragDropEffects effect = DragDrop.DoDragDrop(dataGrid, dragData, DragDropEffects.Copy);
           // pause track 
           if (effect == DragDropEffects.Link)
           {
-            System.Diagnostics.Debug.WriteLine("Got linked so not stopping lol");
+            System.Diagnostics.Debug.WriteLine("Got linked so not stopping");
           }
           else if (effect == DragDropEffects.Copy)
           {
@@ -462,10 +467,52 @@ namespace MusikMacher.components
           {
             Console.WriteLine($"drag failed for {toDrag.name}");
           }
+          // hide visual clue window
+          if (this._dragdropWindow != null)
+          {
+            this._dragdropWindow.Close();
+            this._dragdropWindow = null;
+          }
         }
       }
     }
 
+    private void CreateDragDropWindow(FrozenSet<Track> tracks)
+    {
+      this._dragdropWindow = new DragWindow(tracks);
+
+      Win32Point w32Mouse = new Win32Point();
+      GetCursorPos(ref w32Mouse);
+
+
+      this._dragdropWindow.Left = w32Mouse.X;
+      this._dragdropWindow.Top = w32Mouse.Y;
+      this._dragdropWindow.Show();
+    }
+    
+    // needed to position drag and drop tooltip window
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool GetCursorPos(ref Win32Point pt);
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Win32Point
+    {
+      public Int32 X;
+      public Int32 Y;
+    };
+      
+    // feedback for drag and drop shit
+    public void TrackGiveFeedback()
+    {
+      // update the position of the visual feedback item
+      Win32Point w32Mouse = new Win32Point();
+      GetCursorPos(ref w32Mouse);
+
+      this._dragdropWindow.Left = w32Mouse.X;
+      this._dragdropWindow.Top = w32Mouse.Y + 5;
+    }
+    
     private void SpaceKeyPressed()
     {
       Player.PlayPause();

@@ -187,6 +187,7 @@
                 CanUserDeleteRows="False"
                 Focusable="True"
                 MouseDown="DataGrid_OnClick"
+                GiveFeedback="DataGrid_OnGiveFeedback"
                 >
 
           <DataGrid.Style>
@@ -251,7 +252,7 @@
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove"/>
+      <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove" GiveFeedback="DataGrid_OnGiveFeedback"/>
       <StackPanel Grid.Column="1" Margin="20,0,20,0">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -276,7 +277,12 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
-          <Label Grid.Column="0" Content="{Binding Path=Player.currentTrack.name}" VerticalAlignment="Center" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove"/>
+           <Label Grid.Column="0" 
+                  Content="{Binding Path=Player.currentTrack.name}" 
+                  VerticalAlignment="Center" 
+                  PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" 
+                  PreviewMouseMove="DataGrid_PreviewMouseMove" 
+                  GiveFeedback="DataGrid_OnGiveFeedback"/>
           <!-- Pause Bottom -->
           <Button Grid.Column="2" Width="50" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PauseButtonStyle}" Background="Transparent" BorderThickness="0">
             <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">
