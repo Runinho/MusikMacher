@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using TagLib.Matroska;
 using TagLib.NonContainer;
+using TagLib.Riff;
 using Wpf.Ui.Controls;
 using Point = System.Windows.Point;
 using Tag = LorusMusikMacher.database.Tag;
@@ -446,6 +447,11 @@ namespace MusikMacher.components
               i++;
             }
             dragData = new DataObject(DataFormats.FileDrop, stringPaths);
+          }
+          else
+          {
+            // only the currently played track
+            selected = new List<Track>([toDrag]).ToFrozenSet();
           }
 
           dragData.SetData("MusikMakerTrack", strings); // use the full selection.

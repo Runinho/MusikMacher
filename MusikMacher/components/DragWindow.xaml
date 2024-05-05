@@ -32,7 +32,9 @@
             <Grid Width="32" Height="32" Background="Black">
               <Image Source="{Binding Artwork}"/>
             </Grid>
-            <TextBlock Text="{Binding name}" Background="Black" Foreground="White"></TextBlock>
+            <Grid Background="Black">
+              <TextBlock Text="{Binding name}" VerticalAlignment="Center" Background="Black" Foreground="White"></TextBlock>
+            </Grid>
           </StackPanel>
         </DataTemplate>
       </ItemsControl.ItemTemplate>
