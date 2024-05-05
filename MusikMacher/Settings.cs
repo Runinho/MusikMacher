@@ -92,6 +92,10 @@ namespace MusikMacher
     [DefaultValue("Lorus Musik Macher")] [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public string WindowTitle = "Lorus Musik Macher";
 
+    [DefaultValue(null)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public static DateTime? LastVersionCheck;
+
     public BrowseSettings TrackBrowseSettings = new BrowseSettings();
     public BrowseSettings EffectBrowseSettings = new BrowseSettings();
 

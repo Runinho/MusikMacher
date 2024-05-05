@@ -16,6 +16,11 @@ namespace MusikMacher.components
   {
     public static string VERSION = "v0.1.7-alpha";
 
+    public string Version
+    {
+      get { return VERSION; }
+    }
+
     private string _updateResult = "";
     public string UpdateResult
     {
@@ -58,11 +63,59 @@ namespace MusikMacher.components
       }
     }
 
+
+    private DateTime? _lastVersionCheck;
+    public DateTime? LastVersionCheck
+    {
+      get { return _lastVersionCheck; }
+      set
+      {
+        if (_lastVersionCheck != value)
+        {
+          _lastVersionCheck = value;
+          RaisePropertyChanged(nameof(LastVersionCheck));
+        }
+      }
+    }
+
+    private string _checkResultMessage;
+    public string CheckResultMessage
+    {
+      get { return _checkResultMessage; }
+      set
+      {
+        if (_checkResultMessage != value)
+        {
+          _checkResultMessage = value;
+          RaisePropertyChanged(nameof(CheckResultMessage));
+        }
+      }
+    }
+
+    private UpdateCheckState _updateCheckState = UpdateCheckState.Unkown;
+    public UpdateCheckState UpdateCheckState
+    {
+      get { return _updateCheckState; }
+      set
+      {
+        if (_updateCheckState != value)
+        {
+          _updateCheckState = value;
+          RaisePropertyChanged(nameof(UpdateCheckState));
+        }
+      }
+    }
+
+
     public ICommand CheckCommand { get; private set; }
 
     public CheckUpdateViewModel()
     {
       CheckCommand = new RelayCommand(Check);
+
+      var settings = Settings.getSettings();
+
+      LastVersionCheck = Settings.LastVersionCheck;
     }
 
     public void LogUpdateInfo(string message)
@@ -117,11 +170,15 @@ namespace MusikMacher.components
               // Compare versions
               if (latestVersion == VERSION)
               {
-                LogUpdateInfo($"You are using the latest version '{latestVersion}'!");
+                UpdateCheckState = UpdateCheckState.UpToDate;
+                CheckResultMessage = $"Musik Macher is up to date";
+                LogUpdateInfo(CheckResultMessage);
               }
               else
               {
-                LogUpdateInfo($"A newer version is available ({latestVersion}) you have {VERSION}!");
+                UpdateCheckState = UpdateCheckState.NewVersion;
+                CheckResultMessage = $"A newer version is available ({latestVersion}), you have {VERSION}";
+                LogUpdateInfo(CheckResultMessage);
                 bool foundLink = false;
                 foreach(var asset in release.assets)
                 {
@@ -139,15 +196,24 @@ namespace MusikMacher.components
                   DownloadLink = $"https://github.com/{owner}/{repo}/releases/latest";
                 }
               }
+
+              // update last check time
+              LastVersionCheck = DateTime.Now;
+              Settings.LastVersionCheck = LastVersionCheck;
+              Settings.saveSettings();
             }
             else
             {
-              LogUpdateInfo($"Failed to retrieve release information. Status code: {response.StatusCode}");
+              UpdateCheckState = UpdateCheckState.Failed;
+              CheckResultMessage = $"Failed to retrieve release information. Status code: {response.StatusCode}";
+              LogUpdateInfo(CheckResultMessage);
             }
           }
           catch (Exception ex)
           {
-            LogUpdateInfo($"An error occurred: {ex.Message}");
+            UpdateCheckState = UpdateCheckState.Failed;
+            CheckResultMessage = $"An error occurred: {ex.Message}";
+            LogUpdateInfo(CheckResultMessage);
           }
         }
       });

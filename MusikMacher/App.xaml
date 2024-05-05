@@ -5,11 +5,23 @@
              StartupUri="MainWindow.xaml"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <Application.Resources>
-      <ResourceDictionary>
-        <ResourceDictionary.MergedDictionaries>
-          <ui:ThemesDictionary Theme="Dark" />
-          <ui:ControlsDictionary />
-        </ResourceDictionary.MergedDictionaries>
-      </ResourceDictionary>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ui:ThemesDictionary Theme="Dark" />
+        <ui:ControlsDictionary />
+        <ResourceDictionary Source="/InfoBar.xaml" />
+
+        <ResourceDictionary>
+          <Style
+          x:Key="BodyLargeTextBlockStyle"
+          BasedOn="{StaticResource {x:Type TextBlock}}"
+          TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="LineHeight" Value="20" />
+            <Setter Property="FontWeight" Value="Regular" />
+          </Style>
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
   </Application.Resources>
 </Application>

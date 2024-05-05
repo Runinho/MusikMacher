@@ -8,11 +8,13 @@
         xmlns:localConverter="clr-namespace:MusikMacher.converter"
         xmlns:uc="clr-namespace:MusikMacher.components" 
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:system="http://schemas.microsoft.com/winfx/2009/xaml"
         mc:Ignorable="d"
         Title="Lorus Musik Macher" Height="450" Width="800"
         
         ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
         ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
         ExtendsContentIntoTitleBar="True"
         WindowBackdropType="Mica"
         WindowCornerPreference="Round"
@@ -21,7 +23,7 @@
   <ui:FluentWindow.Resources>
     <!-- Converter -->
     <localConverter:PercentageConverter x:Key="PercentageConverter"/>
-    
+
     <!-- Images -->
     <BitmapImage x:Key="Pepe" UriSource="content/pepe.png" />
 
@@ -45,28 +47,150 @@
         </TabItem>
         <!-- Settings -->
         <TabItem Header="Settings">
-          <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
-            <Label>
-              <TextBlock>
-                <Run Text="Skip music to position: "/>
-                <Run Text="{Binding SkipPosition, Converter={StaticResource PercentageConverter}}"/>
-              </TextBlock>
-            </Label>
-            <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}"/>
-            <Label>
-              <TextBlock>
-                <Run Text="Skip amount on left/right arrow key press: "/>
-                <Run Text="{Binding SkipPositionMovement, Converter={StaticResource PercentageConverter}}"/>
-              </TextBlock>
-            </Label>
-            <CheckBox IsChecked="{Binding PlayEffectsFromBeginning}" Content="Play effects always from beginning"/>
-            <Slider Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPositionMovement}"/>
-            <Label Content="Window title" />
-            <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
-            <CheckBox Margin="0,20,0,0" Grid.Row="5" Content="Tracks need to have all selected tags. (If deselected one suffices)" IsChecked="{Binding Path=AndTags}"/>
-            <uc:CheckUpdate Margin="0,30,0,0"/>
+          <ScrollViewer>
+            <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+              <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="Playback" Margin="0,20,0,8"/>
+                <ui:CardExpander Icon="{ui:SymbolIcon SkipForwardTab20}" >
+                  <ui:CardExpander.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                                Margin="0"
+                                FontTypography="BodyStrong"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="Start Playback Position"
+                                TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                                Appearance="Secondary"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="Set the starting position within the song for playback to begin"
+                                TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardExpander.Header>
+                  <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Slider Grid.Column="0" Margin="0,0,0,0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPosition}" HorizontalContentAlignment="Left"/>
+                    <ui:TextBlock Grid.Column="1" Appearance="Secondary" Margin="10,0,0,0">
+                      <Run Text="{Binding SkipPosition, Converter={StaticResource PercentageConverter}}"/>
+                    </ui:TextBlock>
+                  </Grid>
+                </ui:CardExpander>
+                <ui:CardExpander Icon="{ui:SymbolIcon FastForward20}">
+                  <ui:CardExpander.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                    Margin="0"
+                    FontTypography="BodyStrong"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="Skip Percentage"
+                    TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                    Appearance="Secondary"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="Adjust the percentage of the track to skip when pressing the left/right arrow buttons"
+                    TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardExpander.Header>
+                  <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Slider Grid.Column="0" Focusable="True" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" Value="{Binding SkipPositionMovement}"/>
+                    <ui:TextBlock Grid.Column="1" Appearance="Secondary" Margin="10,0,0,0">
+                      <Run Text="{Binding SkipPositionMovement, Converter={StaticResource PercentageConverter}}"/>
+                    </ui:TextBlock>
+                  </Grid>
+                </ui:CardExpander>
+                <ui:CardControl Icon="{ui:SymbolIcon Play20}">
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                    Margin="0"
+                    FontTypography="BodyStrong"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="Play Effects from Start"
+                    TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                    Appearance="Secondary"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="Ensure playback in the effects tab always begins from the start."
+                    TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Margin="0,0,8,0">
+                      <ui:TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Text" Value="play from playback position" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding PlayEffectsFromBeginning}" Value="True">
+                              <Setter Property="Text" Value="play from start" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </ui:TextBlock.Style>
+                    </ui:TextBlock>
+                    <ui:ToggleSwitch IsChecked="{Binding PlayEffectsFromBeginning}"  />
+                  </StackPanel>
+                </ui:CardControl>
+              </StackPanel>
+             
+                <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="Tags" Margin="0,35,0,8"/>
+                <ui:CardControl Icon="{ui:SymbolIcon Tag20}">
+                    <ui:CardControl.Header>
+                      <StackPanel>
+                        <ui:TextBlock
+                        Margin="0"
+                        FontTypography="BodyStrong"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="Tag Filter"
+                        TextWrapping="WrapWithOverflow" />
+                        <ui:TextBlock
+                        Appearance="Secondary"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="Choose how tracks are filtered: either they must have just one selected tags or all of them."
+                        TextWrapping="WrapWithOverflow" />
+                      </StackPanel>
+                    </ui:CardControl.Header>
+                    <ComboBox SelectedValue="{Binding AndTags}" SelectedValuePath="Tag" Width="80">
+                      <ComboBoxItem Tag="False">One</ComboBoxItem>
+                      <ComboBoxItem Tag="True">All</ComboBoxItem>
+                    </ComboBox>
+                  </ui:CardControl>
+                </StackPanel>
 
-          </StackPanel>
+              <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="Apperance" Margin="0,35,0,8"/>
+                <ui:CardExpander Icon="{ui:SymbolIcon WindowHeaderHorizontal20}">
+                  <ui:CardExpander.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                        Margin="0"
+                        FontTypography="BodyStrong"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="Window Title"
+                        TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                        Appearance="Secondary"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="Personalize the title of the window. For example, you could promote subscribing with Twitch Prime or mention the !macher command."
+                        TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardExpander.Header>
+                  <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
+                </ui:CardExpander>
+              </StackPanel>
+
+              <ui:TextBlock FontTypography="BodyStrong" Text="Version &amp; updates" Margin="0,20,0,8"/>
+              <uc:CheckUpdate Margin="0,0,0,0"/>
+
+            </StackPanel>
+          </ScrollViewer>
         </TabItem>
       </TabControl>
     </Grid>
