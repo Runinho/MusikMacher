@@ -37,6 +37,7 @@ namespace MusikMacher
       SkipPositionMovement = settings.SkipPositionMovement;
       WindowTitle = settings.WindowTitle;
       PlayEffectsFromBeginning = settings.PlayEffectsFromBeginning;
+      ContinuePlayback = settings.ContinuePlayback;
     }
 
     private bool _andTags = false;
@@ -120,9 +121,25 @@ namespace MusikMacher
       }
     }
 
+    private bool _continuePlayback;
+    public bool ContinuePlayback
+        {
+      get => _continuePlayback;
+      set
+      {
+        if (value != _continuePlayback)
+        {
+          _continuePlayback = value;
+          RaisePropertyChanged(nameof(ContinuePlayback));
 
+          // saving location in settings
+          Settings.getSettings().ContinuePlayback = value;
+          Settings.saveSettings();
+        }
+      }
+    }
 
-    private string _windowTitle;
+        private string _windowTitle;
     public string WindowTitle
     {
       get => _windowTitle;

@@ -8,20 +8,28 @@ using System.Windows;
 
 namespace MusikMacher
 {
-  internal class SheduleLoad : LoaderWorker<string, Point[][]>
+  internal class WaveformLoader : LoaderWorker<string, Point[][]>
   {
-    private static SheduleLoad Instance = null;
+    private static WaveformLoader Instance = null;
 
-    public static SheduleLoad getInstance()
+    public static WaveformLoader getInstance()
     {
       if (Instance == null)
       {
-        Instance = new SheduleLoad();
+        Instance = new WaveformLoader();
       }
       return Instance;
     }
 
-    public SheduleLoad() : base(false, true) {
+    public WaveformLoader() : this(1)
+    {
+    }
+
+    public WaveformLoader(int workers) : base(false, true, workers) {
+    }
+
+    public WaveformLoader(bool empty, int workers) : base(false, empty, workers)
+    {
     }
 
     internal override Point[][] Handle(string item)

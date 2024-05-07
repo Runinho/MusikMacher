@@ -20,6 +20,10 @@ namespace MusikMacher
     [DefaultValue(0.5)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double Volume = 0.5;
+
+    [DefaultValue(null)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public List<SortDescription>? TracksSortingDescriptions = [];
   }
 
     // persistant Settings storage
@@ -60,6 +64,14 @@ namespace MusikMacher
     [DefaultValue(200)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public double DialogTop;
+    
+    [DefaultValue(200)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public double DialogPreloadeWaveformsLeft;
+
+    [DefaultValue(200)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public double DialogPreloadeWaveformsTop;
 
     [DefaultValue(false)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
@@ -76,13 +88,17 @@ namespace MusikMacher
     [DefaultValue(true)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool PlayEffectsFromBeginning;
-    
+
+    [DefaultValue(false)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool ContinuePlayback;
+
+        [DefaultValue("Lorus Musik Macher")] [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public string WindowTitle = "Lorus Musik Macher";
+
     [DefaultValue(null)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public List<SortDescription>? TracksSortingDescriptions = [];
-
-    [DefaultValue("Lorus Musk Macher")] [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public string WindowTitle = "Lorus Musk Macher";
+    public static DateTime? LastVersionCheck;
 
     public BrowseSettings TrackBrowseSettings = new BrowseSettings();
     public BrowseSettings EffectBrowseSettings = new BrowseSettings();

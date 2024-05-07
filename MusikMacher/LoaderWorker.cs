@@ -12,10 +12,16 @@ namespace MusikMacher
   internal abstract class LoaderWorker<I, O>
   {
     private BlockingCollection<Tuple<I, Action<O>>> bc;
-    private Task t;
+    private List<Task> t;
     private bool _empty;
+    private bool _cancled = false;
 
-    public LoaderWorker(bool stack, bool empty)
+    public LoaderWorker(bool stack, bool empty): this(stack, empty, 1)
+    { 
+      
+    }
+
+      public LoaderWorker(bool stack, bool empty, int workers)
     {
       _empty = empty; // empty queue before handeling
 
@@ -26,7 +32,16 @@ namespace MusikMacher
       {
         bc = new BlockingCollection<Tuple<I, Action<O>>>();
       }
-      t = Task.Run(WorkerMain);
+      if(workers <= 0) {
+        // use 1 worker.
+        workers = 1;
+      }
+
+      t = new List<Task>();
+      for (int i = 0; i < workers; i++)
+      {
+        t.Add(Task.Run(WorkerMain));
+      }
     }
 
     internal void Shedule(Tuple<I, Action<O>> element)
@@ -36,7 +51,7 @@ namespace MusikMacher
 
     private void WorkerMain()
     {
-      while (true)
+      while (!_cancled)
       {
         var task = bc.Take();
         // empty till last element
@@ -66,6 +81,12 @@ namespace MusikMacher
       }
     }
 
+    // do the actual work
     internal abstract O Handle(I item);
+
+    public void Cancle()
+    {
+      _cancled = true;
+    }
   }
 }

@@ -6,15 +6,19 @@ using NAudio.Gui;
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using TagLib.Matroska;
 using TagLib.NonContainer;
+using TagLib.Riff;
 using Wpf.Ui.Controls;
+using Point = System.Windows.Point;
 using Tag = LorusMusikMacher.database.Tag;
 using Vector = System.Windows.Vector;
 
@@ -32,18 +36,28 @@ namespace MusikMacher.components
     public ICommand AddTagCommand { get; private set; }
     public ICommand ClearTagsCommand { get; private set; }
     public ICommand ClearSearchCommand { get; private set; }
+    public ICommand HideTracksCommand { get; private set; }
+    public ICommand FavoriteTagCommand { get; private set; }
+    public ICommand CopyTracksNameCommand { get; private set; }
+    public ICommand CopyTracksPathCommand { get; private set; }
+    public ICommand HideTagCommand { get; private set; }
+    public ICommand RenameTagCommand { get; private set; }
 
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
       this.checkPlayFromStart = checkPlayFromStart;
-      this.db = new TrackContext(v);
-      db.Database.OpenConnection();
-      db.Database.EnsureCreated();
+      this.db = TrackContext.GetTrackContext(v);
 
       SpaceKeyPressedCommand = new RelayCommand(SpaceKeyPressed);
       AddTagCommand = new RelayCommand(AddTag);
       ClearTagsCommand = new RelayCommand(ClearTags);
+      HideTagCommand = new RelayCommand(HideTag);
+      RenameTagCommand = new RelayCommand(RenameTag);
+      FavoriteTagCommand = new RelayCommand(FavoriteTag);
       ClearSearchCommand = new RelayCommand(ClearSearch);
+      HideTracksCommand = new RelayCommand(HideTracks);
+      CopyTracksNameCommand = new RelayCommand(CopyTracksName);
+      CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
 
       Player = new PlayerModel(this);
 
@@ -61,10 +75,12 @@ namespace MusikMacher.components
 
       var _tagSourceList = new CollectionViewSource() { Source = Tags };
       _tagSourceList.SortDescriptions.Add(new SortDescription("IsChecked", ListSortDirection.Descending));
+      _tagSourceList.SortDescriptions.Add(new SortDescription("IsFavorite", ListSortDirection.Descending));
       TagsView = _tagSourceList.View;
       TagsView.Filter = FilterTags;
 
       // load Settings
+      TracksSortingDescriptions = settings.TracksSortingDescriptions;
       Search = settings.Search;
     }
 
@@ -88,6 +104,12 @@ namespace MusikMacher.components
       Tag tag = obj as Tag;
       if (tag != null)
       {
+        // don't show hidden tags
+        if (tag.IsHidden)
+        {
+          return false;
+        }
+        
         if (tag.IsChecked)
         {
           // always show tagged
@@ -106,12 +128,22 @@ namespace MusikMacher.components
       Track track = obj as Track;
       if (track != null)
       {
+        // don't show hidden files.
+        if (track.IsHidden)
+        {
+          return false;
+        } 
+        
         // filter at search
         if (Search.Length > 0)
         {
-          if (!track.name.ToLower().Contains(Search.ToLower()))
+          var words = Search.Split(" ");
+          foreach(var word in words)
           {
-            return false;
+            if (!track.name.ToLower().Contains(word.ToLower()))
+            {
+              return false;
+            }
           }
         }
         // check with tags
@@ -169,6 +201,26 @@ namespace MusikMacher.components
         }
       }
     }
+
+    private List<SortDescription>? _tracksSortingDescriptions;
+
+    public List<SortDescription>? TracksSortingDescriptions
+    {
+      get => _tracksSortingDescriptions;
+      set
+      {
+        if (value != _tracksSortingDescriptions)
+        {
+          //save in settings
+          _tracksSortingDescriptions = value;
+          RaisePropertyChanged(nameof(TracksSortingDescriptions));
+          
+          settings.TracksSortingDescriptions = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
 
     private string _searchTag = "";
     public string SearchTag
@@ -239,6 +291,7 @@ namespace MusikMacher.components
 
     private ICollectionView _tagsView;
     public readonly bool checkPlayFromStart;
+    private Window _dragdropWindow;
 
     public ICollectionView TagsView
     {
@@ -364,7 +417,6 @@ namespace MusikMacher.components
       {
         Point mousePos = e.GetPosition(null);
         Vector diff = valueOfStart - mousePos;
-        Console.WriteLine(diff);
 
         if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
             Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
@@ -401,14 +453,21 @@ namespace MusikMacher.components
             }
             dragData = new DataObject(DataFormats.FileDrop, stringPaths);
           }
+          else
+          {
+            // only the currently played track
+            selected = new List<Track>([toDrag]).ToFrozenSet();
+          }
 
           dragData.SetData("MusikMakerTrack", strings); // use the full selection.
           dragData.SetData(DataFormats.Text, toDrag.name);
+          // create own window as tooltip
+          CreateDragDropWindow(selected);
           DragDropEffects effect = DragDrop.DoDragDrop(dataGrid, dragData, DragDropEffects.Copy);
           // pause track 
           if (effect == DragDropEffects.Link)
           {
-            System.Diagnostics.Debug.WriteLine("Got linked so not stopping lol");
+            System.Diagnostics.Debug.WriteLine("Got linked so not stopping");
           }
           else if (effect == DragDropEffects.Copy)
           {
@@ -419,10 +478,52 @@ namespace MusikMacher.components
           {
             Console.WriteLine($"drag failed for {toDrag.name}");
           }
+          // hide visual clue window
+          if (this._dragdropWindow != null)
+          {
+            this._dragdropWindow.Close();
+            this._dragdropWindow = null;
+          }
         }
       }
     }
 
+    private void CreateDragDropWindow(FrozenSet<Track> tracks)
+    {
+      this._dragdropWindow = new DragWindow(tracks);
+
+      Win32Point w32Mouse = new Win32Point();
+      GetCursorPos(ref w32Mouse);
+
+
+      this._dragdropWindow.Left = w32Mouse.X;
+      this._dragdropWindow.Top = w32Mouse.Y;
+      this._dragdropWindow.Show();
+    }
+    
+    // needed to position drag and drop tooltip window
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool GetCursorPos(ref Win32Point pt);
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Win32Point
+    {
+      public Int32 X;
+      public Int32 Y;
+    };
+      
+    // feedback for drag and drop shit
+    public void TrackGiveFeedback()
+    {
+      // update the position of the visual feedback item
+      Win32Point w32Mouse = new Win32Point();
+      GetCursorPos(ref w32Mouse);
+
+      this._dragdropWindow.Left = w32Mouse.X;
+      this._dragdropWindow.Top = w32Mouse.Y + 5;
+    }
+    
     private void SpaceKeyPressed()
     {
       Player.PlayPause();
@@ -474,6 +575,22 @@ namespace MusikMacher.components
 
       }
     }
+    
+    internal void HideTag()
+    {
+      SelectedTag.IsHidden = true;
+      SelectedTag.IsChecked = false;
+      db.SaveChanges();
+      TagsView.Refresh();
+    }
+
+    internal void FavoriteTag()
+    {
+      SelectedTag.IsFavorite = !SelectedTag.IsFavorite;
+      TagsView.Refresh();
+    }
+
+
 
     private void ReloadTags()
     {
@@ -525,21 +642,48 @@ namespace MusikMacher.components
       }
     }
 
-    internal void DeleteTracks()
+    internal void HideTracks()
     {
       // delete current selection
       // TODO: maybee add a question dialog LOL
       selected = Player.SelectedTracks.ToFrozenSet();
       foreach (Track track in selected)
       {
-        // delete in db
-        db.Tracks.Remove(track);
-        // delete in tracks
-        Tracks.Remove(track);
+        // hide
+        track.IsHidden = true;
       }
+      db.SaveChanges();
       RefreshTracksView();
     }
 
+    private void CopyTracksName()
+    {
+      // copy the selected track names into the clipboard
+      selected = Player.SelectedTracks.ToFrozenSet();
+      if (selected.Count == 1)
+      {
+        Clipboard.SetText(selected.First().name);
+      }
+      else
+      {
+        Clipboard.SetText(string.Join(", ", selected.Select(t => t.name)));
+      }
+    }
+    
+    private void CopyTracksPath()
+    {
+      // copy the selected track names into the clipboard
+      selected = Player.SelectedTracks.ToFrozenSet();
+      if (selected.Count == 1)
+      {
+        Clipboard.SetText(selected.First().path);
+      }
+      else
+      {
+        Clipboard.SetText(string.Join("\n", selected.Select(t => t.path)));
+      }
+    }
+    
     public void RefreshTracksView()
     {
       TracksView.Refresh();
@@ -557,6 +701,14 @@ namespace MusikMacher.components
       RaisePropertyChanged(nameof(TrackCount));
       RaisePropertyChanged(nameof(ShowNoSongs));
       ReloadTags();
+    }
+
+    internal void ToggleCurrentTag()
+    {
+      if(SelectedTag != null)
+      {
+        SelectedTag.IsChecked = !SelectedTag.IsChecked;
+      }
     }
   }
 }

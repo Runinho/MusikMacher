@@ -4,25 +4,70 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusikMacher.components"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-    <Button Command="{Binding CheckCommand}">check for update</Button>
-    <Label Content="{Binding UpdateResult}" />
-    <TextBlock>
-      <TextBlock.Style>
-        <Style TargetType="TextBlock">
+    <ui:CardControl Icon="{ui:SymbolIcon ArrowSync20}">
+      <ui:CardControl.Header>
+        <StackPanel>
+          <ui:TextBlock
+            Margin="0"
+            FontTypography="BodyStrong"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="{Binding Version}"
+            TextWrapping="WrapWithOverflow" />
+          <ui:TextBlock
+            Appearance="Secondary"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextWrapping="WrapWithOverflow">
+            <Run Text="Last checked:"></Run>
+            <Run>
+              <Run.Style>
+                <Style TargetType="Run">
+                  <Setter Property="Text" Value="{Binding LastVersionCheck}" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding LastVersionCheck}" Value="{x:Null}">
+                      <Setter Property="Text" Value="never checked" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Run.Style>
+            </Run>
+          </ui:TextBlock>
+        </StackPanel>
+      </ui:CardControl.Header>
+      <Button Command="{Binding CheckCommand}">Check for update</Button>
+    </ui:CardControl>
+    <ui:InfoBar Title="{Binding CheckResultMessage}"
+                             IsClosable="False">
+      <ui:InfoBar.Style>
+        <Style TargetType="ui:InfoBar" BasedOn="{StaticResource BaseInfoBarStyle}">
+          <Setter Property="Severity" Value="Success" />
+          <Setter Property="IsOpen" Value="True" />
           <Style.Triggers>
-            <DataTrigger Binding="{Binding DownloadLink}" Value="">
-              <Setter Property="Visibility" Value="Collapsed"/>
+            <DataTrigger Binding="{Binding UpdateCheckState}" Value="Unkown">
+              <Setter Property="IsOpen" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding UpdateCheckState}" Value="NewVersion">
+              <Setter Property="Severity" Value="Informational" />
+              <Setter Property="Content">
+                <Setter.Value>
+                  <ui:HyperlinkButton NavigateUri="{Binding DownloadLink}" Icon="{ui:SymbolIcon Link24}">
+                    <ui:TextBlock>
+                      <Run Text="download "/>
+                      <Run Text="{Binding DownloadFilename}"/>
+                    </ui:TextBlock>
+                  </ui:HyperlinkButton>
+                </Setter.Value>
+              </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding UpdateCheckState}" Value="Failed">
+              <Setter Property="Severity" Value="Error" />
             </DataTrigger>
           </Style.Triggers>
         </Style>
-      </TextBlock.Style>
-      <Hyperlink NavigateUri="{Binding DownloadLink}" RequestNavigate="Hyperlink_RequestNavigate">
-          <Run Text="Click here to download "/>
-         <Run Text="{Binding DownloadFilename}"/>
-      </Hyperlink>
-    </TextBlock>
+      </ui:InfoBar.Style>
+    </ui:InfoBar>
   </StackPanel>
 </UserControl>

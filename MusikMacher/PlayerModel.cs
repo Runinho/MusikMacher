@@ -55,8 +55,18 @@ namespace MusikMacher
       timer.Tick += Timer_Tick;
 
       mediaPlayer.MediaOpened += MediaOpend;
+      mediaPlayer.MediaEnded += MediaEnded;
 
       Volume = this.browseViewModel.settings.Volume;
+    }
+
+    private void MediaEnded(object? sender, EventArgs e)
+    {
+        // move to next?
+        if(Settings.getSettings().ContinuePlayback)
+        {
+            browseViewModel.TracksView.MoveCurrentToNext();
+        }
     }
 
     private void MediaOpend(object sender, EventArgs e)
@@ -154,7 +164,7 @@ namespace MusikMacher
             }
 
             // load in waveform in other thread
-            SheduleLoad.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
+            WaveformLoader.getInstance().Shedule(new Tuple<string, Action<Point[][]>>(_currentTrack.path,
                   (Point[][] points) =>
                   {
                     System.Diagnostics.Debug.WriteLine($"loaded waveform is same track??: {_currentTrack == value}");

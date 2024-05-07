@@ -149,7 +149,7 @@ namespace MusikMacher.components
 
     private void DataGrid_Delete(object sender, RoutedEventArgs e)
     {
-      model.DeleteTracks();
+      model.HideTracks();
     }
     private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -177,6 +177,16 @@ namespace MusikMacher.components
           bindedList.Remove(track);
         }
       }
+    }
+
+    private void listBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      model.ToggleCurrentTag();
+    }
+
+    private void DataGrid_OnGiveFeedback(object sender, GiveFeedbackEventArgs e)
+    {
+      model.TrackGiveFeedback();
     }
   }
 }

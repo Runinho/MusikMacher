@@ -1,0 +1,40 @@
+﻿<ui:FluentWindow x:Class="MusikMacher.dialog.PreloadWaveformsWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:MusikMacher.dialog"
+                 xmlns:localConverter="clr-namespace:MusikMacher.converter"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 mc:Ignorable="d"
+                 Title="Caching Waveforms" Height="200" Width="500">
+  <ui:FluentWindow.Resources>
+    <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
+  </ui:FluentWindow.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar
+      Title="Caching waveforms"
+      Grid.Row="0" />
+
+    <Grid Grid.Row="1" Margin="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Row="0">
+        <Run Text="[" />
+        <Run Text="{Binding LoadedTracks}" />
+        <Run Text="/" />
+        <Run Text="{Binding NumberTracks}" />
+        <Run Text="] Estimated time left " />
+        <Run Text="{Binding EstimatedTimeLeft, Converter={StaticResource SecondsToTimeStringConverter}}" />
+      </TextBlock>
+      <ProgressBar Grid.Row="1" Maximum="{Binding NumberTracks}" Value="{Binding LoadedTracks}" />
+    </Grid>
+  </Grid>
+</ui:FluentWindow>

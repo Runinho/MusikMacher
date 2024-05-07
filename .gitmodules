@@ -1,0 +1,6 @@
+[submodule "NLayer"]
+	path = NLayer
+	url = https://github.com/Runinho/NLayer
+[submodule "NAudio"]
+	path = NAudio
+	url = https://github.com/Runinho/NAudio

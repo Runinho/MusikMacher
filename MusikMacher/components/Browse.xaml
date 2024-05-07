@@ -106,28 +106,59 @@
                        x:Name="listBox"
                        ItemsSource="{Binding TagsView}"
                        SelectedItem="{Binding Path=SelectedTag}"
-                       Focusable="False"
+                       Focusable="True"
+                 HorizontalContentAlignment="Stretch"
+                 MouseLeftButtonUp="listBox_MouseLeftButtonUp"
                        >
           <ListBox.ItemContainerStyle>
-            <Style TargetType="Control">
-              <Setter Property="Focusable" Value="False" />
+            <Style TargetType="ListBoxItem">
+              <Setter Property="Focusable" Value="True" />
               <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
             </Style>
           </ListBox.ItemContainerStyle>
           <ListBox.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Rename" Click="MenuItem_Rename"/>
+              <MenuItem Header="Favorite" Command="{Binding FavoriteTagCommand}"/>
+              <MenuItem Header="Rename" Command="{Binding RenameTagCommand}"/>
+              <MenuItem Header="Hide" Command="{Binding HideTagCommand}"/>
             </ContextMenu>
           </ListBox.ContextMenu>
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Content="{Binding Name}" HorizontalContentAlignment="Stretch"
-                                                     AllowDrop="True"
-                       DragEnter="Tag_DragEnter"
-                       DragOver="Tag_DragOver"
-                       Drop="Tag_Drop"
-                       Focusable="False"
-                              />
+              <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        AllowDrop="True"
+                        DragEnter="Tag_DragEnter"
+                        DragOver="Tag_DragOver"
+                        Drop="Tag_Drop"
+                        Focusable="False"
+                >
+                <CheckBox.Style>
+                  <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                        <Setter Property="Content">
+                          <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                              <!--<TextBlock Text="★ "/> -->
+                              <!-- Start emoji -->
+                              <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            </StackPanel>
+                          </Setter.Value>
+                        </Setter>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                        <Setter Property="Content">
+                          <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                          </Setter.Value>
+                        </Setter>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </CheckBox.Style>
+              </CheckBox>
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
@@ -142,9 +173,10 @@
         <!-- search see: https://stackoverflow.com/a/21672408 -->
         <ui:TextBox PlaceholderText="Find in songs (Ctrl + F)" x:Name="SoundSearchTextBox" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- data -->
-        <ui:DataGrid
+        <local:MyDataGrid
                 x:Name="dataGrid" 
-                Grid.Row="1" 
+                Grid.Row="1"                
+                TracksSortingDescriptions="{Binding TracksSortingDescriptions, Mode=TwoWay}"
                 ItemsSource="{Binding TracksView}" 
                 SelectedItem="{Binding Path=Player.currentTrack, Mode=TwoWay}"
                 SelectionChanged="DataGrid_SelectionChanged"
@@ -155,8 +187,12 @@
                 CanUserDeleteRows="False"
                 Focusable="True"
                 MouseDown="DataGrid_OnClick"
+                GiveFeedback="DataGrid_OnGiveFeedback"
                 >
 
+          <DataGrid.Style>
+            <Style BasedOn="{StaticResource DefaultDataGridStyle}" TargetType="{x:Type DataGrid}" />
+          </DataGrid.Style>
           <DataGrid.RowStyle>
             <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="DataGridRow">
               <Style.Triggers>
@@ -176,7 +212,9 @@
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Delete track" Click="DataGrid_Delete"/>
+              <MenuItem Header="Hide track" Command="{Binding HideTracksCommand}"/>
+              <MenuItem Header="Copy name" Command="{Binding CopyTracksNameCommand}"/>
+              <MenuItem Header="Copy as path" Command="{Binding CopyTracksPathCommand}"/>
             </ContextMenu>
           </DataGrid.ContextMenu>
           <DataGrid.Columns>
@@ -193,7 +231,7 @@
             <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
             <!-- Add more columns here if needed -->
           </DataGrid.Columns>
-        </ui:DataGrid>
+        </local:MyDataGrid>
         <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="10,5,5,0">
                 <Run Text="Tracks in view: " />
                 <Run Text="{Binding TrackCount, Mode=OneWay}" />
@@ -214,7 +252,7 @@
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove"/>
+      <Image Grid.Column="0" Width="129" Height="128" Source="{Binding Player.currentTrack.Artwork}" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove" GiveFeedback="DataGrid_OnGiveFeedback"/>
       <StackPanel Grid.Column="1" Margin="20,0,20,0">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -239,7 +277,12 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
-          <Label Grid.Column="0" Content="{Binding Path=Player.currentTrack.name}" VerticalAlignment="Center" PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" PreviewMouseMove="DataGrid_PreviewMouseMove"/>
+           <Label Grid.Column="0" 
+                  Content="{Binding Path=Player.currentTrack.name}" 
+                  VerticalAlignment="Center" 
+                  PreviewMouseLeftButtonDown="DataGrid_TrackPreviewMouseLeftButtonDownAlwaysDrag" 
+                  PreviewMouseMove="DataGrid_PreviewMouseMove" 
+                  GiveFeedback="DataGrid_OnGiveFeedback"/>
           <!-- Pause Bottom -->
           <Button Grid.Column="2" Width="50" Focusable="False" Command="{Binding Path=Player.PlayPauseCommand}" Style="{StaticResource PauseButtonStyle}" Background="Transparent" BorderThickness="0">
             <Grid Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40">

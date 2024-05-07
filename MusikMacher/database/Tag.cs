@@ -37,6 +37,33 @@ namespace LorusMusikMacher.database
       }
     }
 
+    private bool _isHidden;
+    public bool IsHidden
+    {
+      get { return _isHidden; }
+      set
+      {
+        if (value != _isHidden)
+        {
+          _isHidden = value;
+          OnPropertyChanged(nameof(IsHidden));
+        }
+      }
+    }
+
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+      get { return _isFavorite; }
+      set
+      {
+        if (value != _isFavorite)
+        {
+          _isFavorite = value;
+          OnPropertyChanged(nameof(IsFavorite));
+        }
+      }
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
