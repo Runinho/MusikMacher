@@ -6,6 +6,7 @@ using NAudio.Gui;
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -136,9 +137,13 @@ namespace MusikMacher.components
         // filter at search
         if (Search.Length > 0)
         {
-          if (!track.name.ToLower().Contains(Search.ToLower()))
+          var words = Search.Split(" ");
+          foreach(var word in words)
           {
-            return false;
+            if (!track.name.ToLower().Contains(word.ToLower()))
+            {
+              return false;
+            }
           }
         }
         // check with tags

@@ -137,6 +137,38 @@
                     <ui:ToggleSwitch IsChecked="{Binding PlayEffectsFromBeginning}"  />
                   </StackPanel>
                 </ui:CardControl>
+                <ui:CardControl Icon="{ui:SymbolIcon VideoPlayPause20}">
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                    Margin="0"
+                    FontTypography="BodyStrong"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="Continue Playback"
+                    TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                    Appearance="Secondary"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="Automatically play the next track once the current one ends. When enabled, this feature emulates standard music player behavior."
+                    TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Margin="0,0,8,0">
+                      <ui:TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Text" Value="stop playback" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding ContinuePlayback}" Value="True">
+                              <Setter Property="Text" Value="continue playback" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </ui:TextBlock.Style>
+                    </ui:TextBlock>
+                    <ui:ToggleSwitch IsChecked="{Binding ContinuePlayback}"  />
+                  </StackPanel>
+                </ui:CardControl>
               </StackPanel>
              
                 <StackPanel>
