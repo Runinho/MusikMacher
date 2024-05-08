@@ -4,17 +4,53 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MusikMacher.components"
+             xmlns:localConverter="clr-namespace:MusikMacher.converter"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
+  <UserControl.Resources>
+    <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
+  </UserControl.Resources>
   <Grid Margin="20">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="200" />
+      <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <ui:TextBox Grid.Row="0" Text="{Binding PremiereFilePath}" />
-    <Button Grid.Row="1" Command="{Binding LoadPremiereDataCommand}">Load Premiere</Button>
-    <TextBlock Grid.Row="2" Text="{Binding PremiereLog}" />
+    <Button Grid.Row="1" Command="{Binding LoadPremiereDataCommand}">Load Project (.prproj)</Button>
+    <TextBox Grid.Row="2" Text="{Binding PremiereLog}" x:Name="textBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged"/>
+    <CheckBox Grid.Row="3" IsChecked="{Binding FilterTrack1}">Show only Track Index == 1</CheckBox>
+    <ui:DataGrid Grid.Row="4"
+                 ItemsSource="{Binding ClipsView}"
+                 IsReadOnly="False">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn Header="Include" Width="32">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <CheckBox IsChecked="{Binding Include, Mode=TwoWay}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="" Width="32">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Image Source="{Binding Artwork}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="InTime" Binding="{Binding Path=InTime, Converter={StaticResource SecondsToTimeStringConverter}}" />
+        <DataGridTextColumn Header="OutTime" Binding="{Binding Path=OutTime, Converter={StaticResource SecondsToTimeStringConverter}}" />
+        <DataGridTextColumn Header="Time" Binding="{Binding Path=Time, StringFormat={}{0:F2}}" />
+        <DataGridTextColumn Header="Track Index" Binding="{Binding Path=TrackIndex}" />
+      </DataGrid.Columns>
+    </ui:DataGrid>
+    <ui:Button Grid.Row="5" Command="{Binding GenerateCommand}">
+      Generate Youtube timestemps
+    </ui:Button>
   </Grid>
 </UserControl>
