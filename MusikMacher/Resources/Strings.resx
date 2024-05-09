@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddTag" xml:space="preserve">
+    <value>add Tag</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>all</value>
+  </data>
+  <data name="CachingWaveforms" xml:space="preserve">
+    <value>Caching Waveforms</value>
+  </data>
+  <data name="CheckForUpdate" xml:space="preserve">
+    <value>check for update</value>
+  </data>
+  <data name="ContinuePlayback" xml:space="preserve">
+    <value>Continue Playback</value>
+  </data>
+  <data name="ContinuePlaybackDescription" xml:space="preserve">
+    <value>Automatically play the next track once the current one ends. When enabled, this feature emulates standard music player behavior.</value>
+  </data>
+  <data name="ContinuePlaybackFalse" xml:space="preserve">
+    <value>stop playback</value>
+  </data>
+  <data name="ContinuePlaybackTrue" xml:space="preserve">
+    <value>continue playback</value>
+  </data>
+  <data name="CopyAsPath" xml:space="preserve">
+    <value>Copy as path</value>
+  </data>
+  <data name="CopyName" xml:space="preserve">
+    <value>Copy name</value>
+  </data>
+  <data name="CreationTime" xml:space="preserve">
+    <value>Creation time</value>
+  </data>
+  <data name="DownloadPost" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DownloadPre" xml:space="preserve">
+    <value>download </value>
+  </data>
+  <data name="Effects" xml:space="preserve">
+    <value>Effects</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="ErrorOccured" xml:space="preserve">
+    <value>An error occurred: {0}</value>
+  </data>
+  <data name="EstimatedTimeLeft" xml:space="preserve">
+    <value>Estimated time left</value>
+  </data>
+  <data name="FailedSubsection" xml:space="preserve">
+    <value>Failed to load from {0}: Directory does not exists.</value>
+  </data>
+  <data name="FailedToRetreve" xml:space="preserve">
+    <value>Failed to retrieve release information. Status code: {0}</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="FindInSongs" xml:space="preserve">
+    <value>Find in songs (Ctrl + F)</value>
+  </data>
+  <data name="FindInTags" xml:space="preserve">
+    <value>Find in tags (Ctrl + T)</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="HideTrack" xml:space="preserve">
+    <value>Hide track</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>done.</value>
+  </data>
+  <data name="ImportInto" xml:space="preserve">
+    <value>Import into</value>
+  </data>
+  <data name="ImportSubfolders" xml:space="preserve">
+    <value>Import subfolders</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageDescription" xml:space="preserve">
+    <value>Display language of the user interface.</value>
+  </data>
+  <data name="LastChecked" xml:space="preserve">
+    <value>Last checked:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="LoadData" xml:space="preserve">
+    <value>Load data</value>
+  </data>
+  <data name="LoadedSuccessfulSubsection" xml:space="preserve">
+    <value>Found {0} known songs and created {1}new ones in database</value>
+  </data>
+  <data name="LoadingDataFrom" xml:space="preserve">
+    <value>Trying to load data from `{0}`</value>
+  </data>
+  <data name="LoadingDataFromSublocation" xml:space="preserve">
+    <value>loading from subfolder {0}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NeverChecked" xml:space="preserve">
+    <value>Never checked</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>A newer version is available ({0}), you have {1}</value>
+  </data>
+  <data name="NoSongsFound" xml:space="preserve">
+    <value>No songs found.</value>
+  </data>
+  <data name="One" xml:space="preserve">
+    <value>one</value>
+  </data>
+  <data name="PathToSearch" xml:space="preserve">
+    <value>Path to search</value>
+  </data>
+  <data name="PauseTooltip" xml:space="preserve">
+    <value>Pause (Space)</value>
+  </data>
+  <data name="PlayEffectsFromStart" xml:space="preserve">
+    <value>Play Effects from Start</value>
+  </data>
+  <data name="PlayEffectsFromStartDescription" xml:space="preserve">
+    <value>Ensure playback in the effects tab always begins from the start.</value>
+  </data>
+  <data name="PlayEffectsFromStartFalse" xml:space="preserve">
+    <value>play from playback position</value>
+  </data>
+  <data name="PlayEffectsFromStartTrue" xml:space="preserve">
+    <value>play from start</value>
+  </data>
+  <data name="PlayTooltip" xml:space="preserve">
+    <value>Play (Space)</value>
+  </data>
+  <data name="PreloadAllWaveforms" xml:space="preserve">
+    <value>Preload all Waveforms</value>
+  </data>
+  <data name="Premiere" xml:space="preserve">
+    <value>Premiere</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="ResetSearch" xml:space="preserve">
+    <value>reset search</value>
+  </data>
+  <data name="ResetTags" xml:space="preserve">
+    <value>reset tags</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsApperance" xml:space="preserve">
+    <value>Apperance</value>
+  </data>
+  <data name="SettingsLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsPlayback" xml:space="preserve">
+    <value>Playback</value>
+  </data>
+  <data name="SettingsTags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="SettingsVersionAndUpdates" xml:space="preserve">
+    <value>Version &amp;amp; updates</value>
+  </data>
+  <data name="SkipBackTooltip" xml:space="preserve">
+    <value>Skip back (Left Arrow)</value>
+  </data>
+  <data name="SkipBackTooltipDescription" xml:space="preserve">
+    <value>Skip back the track about the configured time. (see Settings to change amount)</value>
+  </data>
+  <data name="SkipForwardTooltip" xml:space="preserve">
+    <value>Skip forward (Right Arrow)</value>
+  </data>
+  <data name="SkipForwardTooltipDescription" xml:space="preserve">
+    <value>Skip forward the track about the configured time. (see Settings to change amount)</value>
+  </data>
+  <data name="SkipPercentage" xml:space="preserve">
+    <value>Skip Percentage</value>
+  </data>
+  <data name="SkipPercentageDescription" xml:space="preserve">
+    <value>Adjust the percentage of the track to skip when pressing the left/right arrow buttons</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="StartPlaybackPosition" xml:space="preserve">
+    <value>Start Playback Position</value>
+  </data>
+  <data name="StartPlaybackPositionDescription" xml:space="preserve">
+    <value>Set the starting position within the song for playback to begin</value>
+  </data>
+  <data name="TagFilter" xml:space="preserve">
+    <value>Tag Filter</value>
+  </data>
+  <data name="TagFilterDescription" xml:space="preserve">
+    <value>Choose how tracks are filtered: either they must have just one selected tags or all of them.</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TryWithoutTagsOrSearch" xml:space="preserve">
+    <value>Try without tags or search?</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>Musik Macher is up to date</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>Window Title</value>
+  </data>
+  <data name="WindowTitleDescription" xml:space="preserve">
+    <value>Personalize the title of the window. For example, you could promote subscribing with Twitch Prime or mention the !macher command.</value>
+  </data>
+</root>

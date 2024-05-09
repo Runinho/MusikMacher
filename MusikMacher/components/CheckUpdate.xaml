@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusikMacher.components"
+             xmlns:rs="clr-namespace:MusikMacher.Resources"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,14 +22,14 @@
             Appearance="Secondary"
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             TextWrapping="WrapWithOverflow">
-            <Run Text="Last checked:"></Run>
+            <Run Text="{x:Static rs:Strings.LastChecked}"></Run>
             <Run>
               <Run.Style>
                 <Style TargetType="Run">
                   <Setter Property="Text" Value="{Binding LastVersionCheck}" />
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding LastVersionCheck}" Value="{x:Null}">
-                      <Setter Property="Text" Value="never checked" />
+                      <Setter Property="Text" Value="{x:Static rs:Strings.NeverChecked}" />
                     </DataTrigger>
                   </Style.Triggers>
                 </Style>
@@ -37,7 +38,7 @@
           </ui:TextBlock>
         </StackPanel>
       </ui:CardControl.Header>
-      <Button Command="{Binding CheckCommand}">Check for update</Button>
+      <Button Command="{Binding CheckCommand}" Content="{x:Static rs:Strings.CheckForUpdate}"></Button>
     </ui:CardControl>
     <ui:InfoBar Title="{Binding CheckResultMessage}"
                              IsClosable="False">
@@ -55,8 +56,9 @@
                 <Setter.Value>
                   <ui:HyperlinkButton NavigateUri="{Binding DownloadLink}" Icon="{ui:SymbolIcon Link24}">
                     <ui:TextBlock>
-                      <Run Text="download "/>
+                      <Run Text="{x:Static rs:Strings.DownloadPre}"/>
                       <Run Text="{Binding DownloadFilename}"/>
+                      <Run Text="{x:Static rs:Strings.DownloadPost}"/>
                     </ui:TextBlock>
                   </ui:HyperlinkButton>
                 </Setter.Value>

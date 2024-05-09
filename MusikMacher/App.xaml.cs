@@ -11,6 +11,23 @@ namespace MusikMacher
   {
     public App() : base()
     {
+      var language = Settings.getSettings().Language;
+      if (language == "")
+      {
+        var name = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+        string[] cultures = { "de-DE", "en-US" };
+        if (cultures.Contains(name))
+        {
+          language = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+        }
+        else
+        {
+          language = "en-US"; // fallback and default
+        }
+        Settings.getSettings().Language = language;
+      }
+      System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(language);
+
       this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
     }
 

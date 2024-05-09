@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.VisualBasic.Logging;
+using MusikMacher.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace MusikMacher.components
 {
   class CheckUpdateViewModel: ViewModelBase
   {
-    public static string VERSION = "v0.1.10-premierepreview2-alpha";
+    public static string VERSION = "v0.1.10-alpha";
 
     public string Version
     {
@@ -171,13 +172,14 @@ namespace MusikMacher.components
               if (latestVersion == VERSION)
               {
                 UpdateCheckState = UpdateCheckState.UpToDate;
-                CheckResultMessage = $"Musik Macher is up to date";
+                CheckResultMessage = Strings.UpToDate;
                 LogUpdateInfo(CheckResultMessage);
               }
               else
               {
                 UpdateCheckState = UpdateCheckState.NewVersion;
-                CheckResultMessage = $"A newer version is available ({latestVersion}), you have {VERSION}";
+                var test = Strings.NewVersionAvailable;
+                CheckResultMessage = String.Format(Strings.NewVersionAvailable, latestVersion, VERSION);
                 LogUpdateInfo(CheckResultMessage);
                 bool foundLink = false;
                 foreach(var asset in release.assets)
@@ -205,14 +207,14 @@ namespace MusikMacher.components
             else
             {
               UpdateCheckState = UpdateCheckState.Failed;
-              CheckResultMessage = $"Failed to retrieve release information. Status code: {response.StatusCode}";
+              CheckResultMessage = String.Format(Strings.FailedToRetreve, response.StatusCode);
               LogUpdateInfo(CheckResultMessage);
             }
           }
           catch (Exception ex)
           {
             UpdateCheckState = UpdateCheckState.Failed;
-            CheckResultMessage = $"An error occurred: {ex.Message}";
+            CheckResultMessage = String.Format(Strings.ErrorOccured, ex.Message);
             LogUpdateInfo(CheckResultMessage);
           }
         }

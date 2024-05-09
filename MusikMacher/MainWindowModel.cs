@@ -38,6 +38,7 @@ namespace MusikMacher
       WindowTitle = settings.WindowTitle;
       PlayEffectsFromBeginning = settings.PlayEffectsFromBeginning;
       ContinuePlayback = settings.ContinuePlayback;
+      Language = settings.Language;
     }
 
     private bool _andTags = false;
@@ -139,7 +140,7 @@ namespace MusikMacher
       }
     }
 
-        private string _windowTitle;
+    private string _windowTitle;
     public string WindowTitle
     {
       get => _windowTitle;
@@ -149,6 +150,20 @@ namespace MusikMacher
         {
           _windowTitle = value;
           RaisePropertyChanged(nameof(WindowTitle));
+        }
+      }
+    }
+
+    private string _language;
+    public string Language
+    {
+      get => _language;
+      set
+      {
+        if (value != _language)
+        {
+          _language = value;
+          RaisePropertyChanged(nameof(Language));
         }
       }
     }

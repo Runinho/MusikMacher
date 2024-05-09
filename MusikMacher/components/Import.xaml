@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusikMacher.components"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:rs="clr-namespace:MusikMacher.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >
@@ -19,23 +20,33 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <Label  Grid.Row="0">
-      Path to search
-    </Label>
+    <Label  Grid.Row="0" Content="{x:Static rs:Strings.PathToSearch}"/>
     <TextBox Grid.Row="1" Text="{Binding Path=dataLocation}"/>
-    <CheckBox Grid.Row="2" Content="Import subfolders" IsChecked="{Binding Path=ImportSubfolders}"/>
-    <Label Grid.Row="3">
-      Import into
-    </Label>
+    <CheckBox Grid.Row="2" Content="{x:Static rs:Strings.ImportSubfolders}" IsChecked="{Binding Path=ImportSubfolders}"/>
+    <Label Grid.Row="3" Content="{x:Static rs:Strings.ImportInto}"/>
     <ComboBox Grid.Row="4" SelectedItem="{Binding ImportInto}" ItemsSource="{Binding ImportIntoItems}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
-          <TextBlock Text="{Binding Path=Name}" />
+          <TextBlock>
+            <TextBlock.Style>
+              <Style TargetType="TextBlock">
+                <Setter Property="Text" Value="{Binding Path=Name}" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Path=Name}" Value="Songs">
+                    <Setter Property="Text" Value="{x:Static rs:Strings.Songs}" />
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding Path=Name}" Value="Effects">
+                    <Setter Property="Text" Value="{x:Static rs:Strings.Effects}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </TextBlock.Style>
+          </TextBlock>
         </DataTemplate>
       </ComboBox.ItemTemplate>
     </ComboBox>
-    <Button Grid.Row="5" Content="Load Data" Command="{Binding LoadDataCommand}"/>
-    <Button Grid.Row="6" Content="Preload all waveforms" Command="{Binding LoadWaveformsCommand}"/>
+    <Button Grid.Row="5" Content="{x:Static rs:Strings.LoadData}" Command="{Binding LoadDataCommand}"/>
+    <Button Grid.Row="6" Content="{x:Static rs:Strings.PreloadAllWaveforms}" Command="{Binding LoadWaveformsCommand}"/>
     <ScrollViewer Grid.Row="7">
       <TextBlock Text="{Binding Path=loadingLog}"/>
     </ScrollViewer>

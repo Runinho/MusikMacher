@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:MusikMacher"
         xmlns:localConverter="clr-namespace:MusikMacher.converter"
+        xmlns:rs="clr-namespace:MusikMacher.Resources"
         xmlns:uc="clr-namespace:MusikMacher.components" 
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:system="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -35,38 +36,37 @@
     </Grid.RowDefinitions>
     <Grid Grid.Row="1">
       <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabItem Header="Songs">
+        <TabItem Header="{x:Static rs:Strings.Songs}">
           <uc:Browse x:Name="tracksBrowse"/>
         </TabItem>
-        <TabItem Header="Effects">
+        <TabItem Header="{x:Static rs:Strings.Effects}">
           <uc:Browse x:Name="effectsBrowse"/>
         </TabItem>
         <!-- Import -->
-        <TabItem Header="Import">
+        <TabItem Header="{x:Static rs:Strings.Import}">
           <uc:Import x:Name="import" />
         </TabItem>
-        <TabItem Header="Premiere"> 
+        <TabItem Header="{x:Static rs:Strings.Premiere}">
           <uc:PremiereLoader/>
         </TabItem>
         <!-- Settings -->
-        <TabItem Header="Settings">
+        <TabItem Header="{x:Static rs:Strings.Settings}">
           <ScrollViewer>
             <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
               <StackPanel>
-                <ui:TextBlock FontTypography="BodyStrong" Text="Playback" Margin="0,20,0,8"/>
+                <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsPlayback}" Margin="0,20,0,8"/>
                 <ui:CardExpander Icon="{ui:SymbolIcon SkipForwardTab20}" >
                   <ui:CardExpander.Header>
                     <StackPanel>
                       <ui:TextBlock
-                                Margin="0"
                                 FontTypography="BodyStrong"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="Start Playback Position"
+                                Text="{x:Static rs:Strings.StartPlaybackPosition}"
                                 TextWrapping="WrapWithOverflow" />
                       <ui:TextBlock
                                 Appearance="Secondary"
                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                Text="Set the starting position within the song for playback to begin"
+                                Text="{x:Static rs:Strings.StartPlaybackPositionDescription}"
                                 TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                   </ui:CardExpander.Header>
@@ -88,12 +88,12 @@
                     Margin="0"
                     FontTypography="BodyStrong"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="Skip Percentage"
+                    Text="{x:Static rs:Strings.SkipPercentage}"
                     TextWrapping="WrapWithOverflow" />
                       <ui:TextBlock
                     Appearance="Secondary"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Adjust the percentage of the track to skip when pressing the left/right arrow buttons"
+                    Text="{x:Static rs:Strings.SkipPercentageDescription}"
                     TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                   </ui:CardExpander.Header>
@@ -115,12 +115,12 @@
                     Margin="0"
                     FontTypography="BodyStrong"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="Play Effects from Start"
+                    Text="{x:Static rs:Strings.PlayEffectsFromStart}"
                     TextWrapping="WrapWithOverflow" />
                       <ui:TextBlock
                     Appearance="Secondary"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Ensure playback in the effects tab always begins from the start."
+                    Text="{x:Static rs:Strings.PlayEffectsFromStartDescription}"
                     TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                   </ui:CardControl.Header>
@@ -128,10 +128,10 @@
                     <ui:TextBlock Margin="0,0,8,0">
                       <ui:TextBlock.Style>
                         <Style TargetType="TextBlock">
-                          <Setter Property="Text" Value="play from playback position" />
+                          <Setter Property="Text" Value="{x:Static rs:Strings.PlayEffectsFromStartFalse}" />
                           <Style.Triggers>
                             <DataTrigger Binding="{Binding PlayEffectsFromBeginning}" Value="True">
-                              <Setter Property="Text" Value="play from start" />
+                              <Setter Property="Text" Value="{x:Static rs:Strings.PlayEffectsFromStartTrue}" />
                             </DataTrigger>
                           </Style.Triggers>
                         </Style>
@@ -147,12 +147,12 @@
                     Margin="0"
                     FontTypography="BodyStrong"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="Continue Playback"
+                    Text="{x:Static rs:Strings.ContinuePlayback}"
                     TextWrapping="WrapWithOverflow" />
                       <ui:TextBlock
                     Appearance="Secondary"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Automatically play the next track once the current one ends. When enabled, this feature emulates standard music player behavior."
+                    Text="{x:Static rs:Strings.ContinuePlaybackDescription}"
                     TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                   </ui:CardControl.Header>
@@ -160,10 +160,10 @@
                     <ui:TextBlock Margin="0,0,8,0">
                       <ui:TextBlock.Style>
                         <Style TargetType="TextBlock">
-                          <Setter Property="Text" Value="stop playback" />
+                          <Setter Property="Text" Value="{x:Static rs:Strings.ContinuePlaybackFalse}" />
                           <Style.Triggers>
                             <DataTrigger Binding="{Binding ContinuePlayback}" Value="True">
-                              <Setter Property="Text" Value="continue playback" />
+                              <Setter Property="Text" Value="{x:Static rs:Strings.ContinuePlaybackTrue}" />
                             </DataTrigger>
                           </Style.Triggers>
                         </Style>
@@ -173,34 +173,34 @@
                   </StackPanel>
                 </ui:CardControl>
               </StackPanel>
-             
-                <StackPanel>
-                <ui:TextBlock FontTypography="BodyStrong" Text="Tags" Margin="0,35,0,8"/>
+
+              <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsTags}" Margin="0,35,0,8"/>
                 <ui:CardControl Icon="{ui:SymbolIcon Tag20}">
-                    <ui:CardControl.Header>
-                      <StackPanel>
-                        <ui:TextBlock
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
                         Margin="0"
                         FontTypography="BodyStrong"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="Tag Filter"
+                        Text="{x:Static rs:Strings.TagFilter}"
                         TextWrapping="WrapWithOverflow" />
-                        <ui:TextBlock
+                      <ui:TextBlock
                         Appearance="Secondary"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="Choose how tracks are filtered: either they must have just one selected tags or all of them."
+                        Text="{x:Static rs:Strings.TagFilterDescription}"
                         TextWrapping="WrapWithOverflow" />
-                      </StackPanel>
-                    </ui:CardControl.Header>
-                    <ComboBox SelectedValue="{Binding AndTags}" SelectedValuePath="Tag" Width="80">
-                      <ComboBoxItem Tag="False">One</ComboBoxItem>
-                      <ComboBoxItem Tag="True">All</ComboBoxItem>
-                    </ComboBox>
-                  </ui:CardControl>
-                </StackPanel>
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <ComboBox SelectedValue="{Binding AndTags}" SelectedValuePath="Tag" Width="90">
+                    <ComboBoxItem Tag="False" Content="{x:Static rs:Strings.One}"></ComboBoxItem>
+                    <ComboBoxItem Tag="True" Content="{x:Static rs:Strings.All}"></ComboBoxItem>
+                  </ComboBox>
+                </ui:CardControl>
+              </StackPanel>
 
               <StackPanel>
-                <ui:TextBlock FontTypography="BodyStrong" Text="Apperance" Margin="0,35,0,8"/>
+                <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsApperance}" Margin="0,35,0,8"/>
                 <ui:CardExpander Icon="{ui:SymbolIcon WindowHeaderHorizontal20}">
                   <ui:CardExpander.Header>
                     <StackPanel>
@@ -208,20 +208,45 @@
                         Margin="0"
                         FontTypography="BodyStrong"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="Window Title"
+                        Text="{x:Static rs:Strings.WindowTitle}"
                         TextWrapping="WrapWithOverflow" />
                       <ui:TextBlock
                         Appearance="Secondary"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="Personalize the title of the window. For example, you could promote subscribing with Twitch Prime or mention the !macher command."
+                        Text="{x:Static rs:Strings.WindowTitleDescription}"
                         TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                   </ui:CardExpander.Header>
                   <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
                 </ui:CardExpander>
               </StackPanel>
+              
+              <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsLanguage}" Margin="0,35,0,8"/>
+                <ui:CardControl Icon="{ui:SymbolIcon LocalLanguage20}">
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                        Margin="0"
+                        FontTypography="BodyStrong"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{x:Static rs:Strings.Language}"
+                        TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                        Appearance="Secondary"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{x:Static rs:Strings.LanguageDescription}"
+                        TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <ComboBox SelectedValue="{Binding Language}" SelectedValuePath="Tag" Width="110" SelectionChanged="mnuCultureChanged">
+                    <ComboBoxItem Tag="de-DE" Content="{x:Static rs:Strings.German}"/>
+                    <ComboBoxItem Tag="en-US" Content="{x:Static rs:Strings.English}"/>
+                  </ComboBox>
+                </ui:CardControl>
+              </StackPanel>
 
-              <ui:TextBlock FontTypography="BodyStrong" Text="Version &amp; updates" Margin="0,20,0,8"/>
+              <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsVersionAndUpdates}" Margin="0,20,0,8"/>
               <uc:CheckUpdate Margin="0,0,0,0"/>
 
             </StackPanel>

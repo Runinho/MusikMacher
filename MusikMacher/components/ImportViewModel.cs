@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using MusikMacher.dialog;
+using MusikMacher.Resources;
 
 namespace MusikMacher
 {
@@ -162,7 +163,7 @@ namespace MusikMacher
       var currentbrowseViewModel = ImportInto.ViewModel;
       var db = currentbrowseViewModel.db;
 
-      loadingLog = "Trying to load data from " + dataLocation + "\n";
+      loadingLog = String.Format(Strings.LoadingDataFrom, dataLocation) + "\n";
       // we set the folder name as the tag
       var parent = Path.GetFileName(dataLocation);
       LoadData([parent], dataLocation, db);
@@ -174,7 +175,7 @@ namespace MusikMacher
 
     private void LoadData(List<string> parents, string location, TrackContext db)
     {
-      loadingLog += "loading from sublocation " + location + "\n";
+      logLoading(String.Format(Strings.LoadingDataFromSublocation, location));
       string loadFrom = location;
 
       int existing = 0;
@@ -255,13 +256,13 @@ namespace MusikMacher
         }
 
         db.SaveChanges();
-        logLoading($"Found {existing} known songs and created {created} new ones in database.");
+        logLoading(String.Format(Strings.LoadedSuccessfulSubsection, existing, created));
       }
       else
       {
-        logLoading("Failed to load from '" + loadFrom + "': Directory does not exists.");
+        logLoading(String.Format(Strings.FailedSubsection, loadFrom));
       }
-      logLoading("Done.");
+      logLoading(Strings.ImportDone);
     }
   }
 }

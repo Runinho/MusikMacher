@@ -2,6 +2,8 @@
 using MusikMacher.components;
 using System.Collections.Frozen;
 using System.DirectoryServices.ActiveDirectory;
+using System.Globalization;
+using System.Resources;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -88,6 +90,39 @@ namespace MusikMacher
 
       Settings.saveSettings(); // maybee this is enough and we can remove all the other saves?
 
+    }
+
+    private void mnuCultureChanged(object sender, EventArgs e)
+    {
+      if(sender is System.Windows.Controls.ComboBox cb)
+      {
+        if(cb.SelectedValue is string s)
+        {
+          if(System.Threading.Thread.CurrentThread.CurrentUICulture.Name != s)
+          {
+            Settings.getSettings().Language = s;
+            Settings.saveSettings();
+
+            // TODO: dialog to ask for restart
+            //ContentDialog dialog = new ContentDialog();
+            //
+            //// XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+            //dialog.XamlRoot = this.XamlRoot;
+            //dialog.Style = System.Windows.Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            //dialog.Title = "Changeing the Language requires a restart";
+            //dialog.PrimaryButtonText = "Restart";
+            //dialog.CloseButtonText = "Cancel";
+            //dialog.DefaultButton = ContentDialogButton.Primary;
+            //dialog.Content = new ContentDialogContent();
+            //
+            //var result = await dialog.ShowAsync();
+
+
+            System.Windows.Forms.Application.Restart();
+            System.Windows.Application.Current.Shutdown();
+          }
+        }
+      }
     }
   }
 }

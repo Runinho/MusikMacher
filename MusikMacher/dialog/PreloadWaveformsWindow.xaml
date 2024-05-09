@@ -6,8 +6,9 @@
                  xmlns:local="clr-namespace:MusikMacher.dialog"
                  xmlns:localConverter="clr-namespace:MusikMacher.converter"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:rs="clr-namespace:MusikMacher.Resources"
                  mc:Ignorable="d"
-                 Title="Caching Waveforms" Height="200" Width="500">
+                 Title="{x:Static rs:Strings.CachingWaveforms}" Height="200" Width="500">
   <ui:FluentWindow.Resources>
     <localConverter:SecondsToTimeStringConverter x:Key="SecondsToTimeStringConverter"/>
   </ui:FluentWindow.Resources>
@@ -18,7 +19,7 @@
     </Grid.RowDefinitions>
 
     <ui:TitleBar
-      Title="Caching waveforms"
+      Title="{x:Static rs:Strings.CachingWaveforms}"
       Grid.Row="0" />
 
     <Grid Grid.Row="1" Margin="10">
@@ -31,7 +32,9 @@
         <Run Text="{Binding LoadedTracks}" />
         <Run Text="/" />
         <Run Text="{Binding NumberTracks}" />
-        <Run Text="] Estimated time left " />
+        <Run Text="]" />
+        <Run Text="{x:Static rs:Strings.EstimatedTimeLeft}" />
+        <Run Text=" " />
         <Run Text="{Binding EstimatedTimeLeft, Converter={StaticResource SecondsToTimeStringConverter}}" />
       </TextBlock>
       <ProgressBar Grid.Row="1" Maximum="{Binding NumberTracks}" Value="{Binding LoadedTracks}" />

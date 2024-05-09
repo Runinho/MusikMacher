@@ -100,6 +100,10 @@ namespace MusikMacher
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public string PremiereFilePath = "";
 
+    [DefaultValue("")]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public string Language = "";
+
     [DefaultValue(null)]
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public static DateTime? LastVersionCheck;

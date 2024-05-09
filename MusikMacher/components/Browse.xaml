@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusikMacher.components"
              xmlns:localConverter="clr-namespace:MusikMacher.converter"
+             xmlns:rs="clr-namespace:MusikMacher.Resources"
              xmlns:uc="clr-namespace:MusikMacher.components" 
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
@@ -88,7 +89,7 @@
 
     <Grid Grid.Row="0">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="200"/>
+        <ColumnDefinition Width="210"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
@@ -100,8 +101,8 @@
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ui:TextBox x:Name="TagSearchTextBox" Grid.Row="0"  PlaceholderText="Find in tags (Ctrl + T)" Text="{Binding SearchTag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="1" Command="{Binding ClearTagsCommand}">reset tags</Button>
+        <ui:TextBox x:Name="TagSearchTextBox" Grid.Row="0"  PlaceholderText="{x:Static rs:Strings.FindInTags}" Text="{Binding SearchTag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="1" Command="{Binding ClearTagsCommand}" Content="{x:Static rs:Strings.ResetTags}"></Button>
         <ListBox Grid.Row="2"
                        x:Name="listBox"
                        ItemsSource="{Binding TagsView}"
@@ -118,9 +119,9 @@
           </ListBox.ItemContainerStyle>
           <ListBox.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Favorite" Command="{Binding FavoriteTagCommand}"/>
-              <MenuItem Header="Rename" Command="{Binding RenameTagCommand}"/>
-              <MenuItem Header="Hide" Command="{Binding HideTagCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.Favorite}" Command="{Binding FavoriteTagCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.Rename}" Command="{Binding RenameTagCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.Hide}" Command="{Binding HideTagCommand}"/>
             </ContextMenu>
           </ListBox.ContextMenu>
           <ListBox.ItemTemplate>
@@ -162,7 +163,7 @@
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
-        <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="3" Command="{Binding Path=AddTagCommand}">Add Tag</Button>
+        <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="3" Command="{Binding Path=AddTagCommand}" Content="{x:Static rs:Strings.AddTag}"></Button>
       </Grid>
       <Grid Grid.Column="1" >
         <Grid.RowDefinitions>
@@ -171,7 +172,7 @@
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!-- search see: https://stackoverflow.com/a/21672408 -->
-        <ui:TextBox PlaceholderText="Find in songs (Ctrl + F)" x:Name="SoundSearchTextBox" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <ui:TextBox PlaceholderText="{x:Static rs:Strings.FindInSongs}" x:Name="SoundSearchTextBox" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- data -->
         <local:MyDataGrid
                 x:Name="dataGrid" 
@@ -212,9 +213,9 @@
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="Hide track" Command="{Binding HideTracksCommand}"/>
-              <MenuItem Header="Copy name" Command="{Binding CopyTracksNameCommand}"/>
-              <MenuItem Header="Copy as path" Command="{Binding CopyTracksPathCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.HideTrack}" Command="{Binding HideTracksCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.CopyName}" Command="{Binding CopyTracksNameCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.CopyAsPath}" Command="{Binding CopyTracksPathCommand}"/>
             </ContextMenu>
           </DataGrid.ContextMenu>
           <DataGrid.Columns>
@@ -225,10 +226,10 @@
                 </DataTemplate>
               </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn Header="Name" Binding="{Binding name}" />
-            <DataGridTextColumn Header="Length" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
-            <DataGridTextColumn Header="Creation time" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
-            <DataGridTextColumn Header="Tags" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
+            <DataGridTextColumn Header="{x:Static rs:Strings.Name}" Binding="{Binding name}" />
+            <DataGridTextColumn Header="{x:Static rs:Strings.Length}" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
+            <DataGridTextColumn Header="{x:Static rs:Strings.CreationTime}" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
+            <DataGridTextColumn Header="{x:Static rs:Strings.Tags}" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
             <!-- Add more columns here if needed -->
           </DataGrid.Columns>
         </local:MyDataGrid>
@@ -237,11 +238,11 @@
                 <Run Text="{Binding TrackCount, Mode=OneWay}" />
         </TextBlock>
         <StackPanel Margin="0,50,0,0" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding ShowNoSongs}">
-          <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="50px">No songs found.</Label>
-          <Label HorizontalAlignment="Center">Try without tags or search?</Label>
+          <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="50px" Content="{x:Static rs:Strings.NoSongsFound}"/>
+          <Label HorizontalAlignment="Center" Content="{x:Static rs:Strings.TryWithoutTagsOrSearch}"/>
           <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-            <Button Focusable="False" Margin="0,0,5,0" HorizontalAlignment="Center" Command="{Binding ClearTagsCommand}">reset tags</Button>
-            <Button Focusable="False" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding ClearSearchCommand}">reset search</Button>
+            <Button Focusable="False" Margin="0,0,5,0" HorizontalAlignment="Center" Command="{Binding ClearTagsCommand}" Content="{x:Static rs:Strings.ResetTags}"></Button>
+            <Button Focusable="False" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding ClearSearchCommand}" Content="{x:Static rs:Strings.ResetSearch}"></Button>
           </StackPanel>
         </StackPanel>
       </Grid>
@@ -294,7 +295,7 @@
             <Button.ToolTip>
               <ToolTip>
                 <StackPanel>
-                  <TextBlock FontWeight="Bold">Pause (Space)</TextBlock>
+                  <TextBlock FontWeight="Bold" Text="{x:Static rs:Strings.PauseTooltip}" />
                 </StackPanel>
               </ToolTip>
             </Button.ToolTip>
@@ -312,7 +313,7 @@
             <Button.ToolTip>
               <ToolTip>
                 <StackPanel>
-                  <TextBlock FontWeight="Bold">Play (Space)</TextBlock>
+                  <TextBlock FontWeight="Bold" Text="{x:Static rs:Strings.PlayTooltip}"/>
                 </StackPanel>
               </ToolTip>
             </Button.ToolTip>
@@ -330,8 +331,8 @@
             <Button.ToolTip>
               <ToolTip>
                 <StackPanel>
-                  <TextBlock FontWeight="Bold">Skip back (Left Arrow)</TextBlock>
-                  <TextBlock>Skip the track about 1/10 back in time.</TextBlock>
+                  <TextBlock FontWeight="Bold" Text="{x:Static rs:Strings.SkipBackTooltip}" />
+                  <TextBlock Text="{x:Static rs:Strings.SkipBackTooltipDescription}" TextWrapping="Wrap" TextAlignment="Left"/>
                 </StackPanel>
               </ToolTip>
             </Button.ToolTip>
@@ -348,8 +349,8 @@
             <Button.ToolTip>
               <ToolTip>
                 <StackPanel>
-                  <TextBlock FontWeight="Bold">Skip forward (Right Arrow)</TextBlock>
-                  <TextBlock>Skip the track about 1/10 forward in time.</TextBlock>
+                  <TextBlock FontWeight="Bold" Text="{x:Static rs:Strings.SkipForwardTooltip}" />
+                  <TextBlock Text="{x:Static rs:Strings.SkipForwardTooltipDescription}" TextWrapping="Wrap" TextAlignment="Left"/>
                 </StackPanel>
               </ToolTip>
             </Button.ToolTip>
