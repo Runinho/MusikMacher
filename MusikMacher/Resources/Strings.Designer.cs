@@ -225,9 +225,9 @@ namespace MusikMacher.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Failed to retrieve release information. Status code: {0}.
         /// </summary>
-        public static string FailedToRetreve {
+        public static string FailedToRetrieve {
             get {
-                return ResourceManager.GetString("FailedToRetreve", resourceCulture);
+                return ResourceManager.GetString("FailedToRetrieve", resourceCulture);
             }
         }
         

@@ -171,7 +171,7 @@
   <data name="FailedSubsection" xml:space="preserve">
     <value>Failed to load from {0}: Directory does not exists.</value>
   </data>
-  <data name="FailedToRetreve" xml:space="preserve">
+  <data name="FailedToRetrieve" xml:space="preserve">
     <value>Failed to retrieve release information. Status code: {0}</value>
   </data>
   <data name="Favorite" xml:space="preserve">

@@ -207,7 +207,7 @@ namespace MusikMacher.components
             else
             {
               UpdateCheckState = UpdateCheckState.Failed;
-              CheckResultMessage = String.Format(Strings.FailedToRetreve, response.StatusCode);
+              CheckResultMessage = String.Format(Strings.FailedToRetrieve, response.StatusCode);
               LogUpdateInfo(CheckResultMessage);
             }
           }
