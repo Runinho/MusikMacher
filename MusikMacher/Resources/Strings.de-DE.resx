@@ -256,7 +256,7 @@
     <value>Effekte werden immer vom Anfang abgespielt</value>
   </data>
   <data name="PlayEffectsFromStartFalse" xml:space="preserve">
-    <value>Von der Initiale Wiedergabeposition abspielen</value>
+    <value>Von der initialen Wiedergabeposition abspielen</value>
   </data>
   <data name="PlayEffectsFromStartTrue" xml:space="preserve">
     <value>Von Anfang an abspielen</value>
