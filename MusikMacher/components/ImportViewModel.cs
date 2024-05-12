@@ -201,7 +201,7 @@ namespace MusikMacher
           // Create a FileInfo object to get file information
           FileInfo fileInfo = new FileInfo(filePath);
 
-          if (fileInfo.Extension == ".mp3" || fileInfo.Extension == ".m4a" || fileInfo.Extension == ".mp4")
+          if (fileInfo.Extension == ".mp3" || fileInfo.Extension == ".m4a" || fileInfo.Extension == ".mp4" || fileInfo.Extension == ".wav")
           {
             // Found mp3 file.
             // Output file details

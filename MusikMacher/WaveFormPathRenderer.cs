@@ -24,6 +24,8 @@ namespace MusikMacher
       int bytesPerSample = (waveStream.WaveFormat.BitsPerSample / 8);
       var samples = waveStream.Length / (bytesPerSample);
       var samplesPerPixel = (int)(samples / settings.Width);
+      // check that it is devisable by blockalign
+      samplesPerPixel = ((int)(samplesPerPixel / waveStream.WaveFormat.BlockAlign)) * waveStream.WaveFormat.BlockAlign;
       var stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
       peakProvider.Init(waveStream.ToSampleProvider(), samplesPerPixel * stepSize);
 
