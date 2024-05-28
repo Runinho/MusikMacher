@@ -189,6 +189,7 @@ namespace MusikMacher{
                 {
                   Console.WriteLine($"Failed to load track index for AudioClipTrack with ObjectUID {trackObjectUID}");
                 }
+                log("trackIndex: " + trackIndex);
 
                 var trackItems = audioClipTrack.XPathSelectElements(".//TrackItem");
                 foreach (var trackItem in trackItems)
@@ -252,8 +253,8 @@ namespace MusikMacher{
                   if (!title.EndsWith(".mp4")) {
                     clips.Add(new Clip(filePath,
                       title,
-                      TimeSpan.FromSeconds(long.Parse(songInPoint) / (double)audioRateLong),
-                      TimeSpan.FromSeconds(long.Parse(songOutPoint) / (double)audioRateLong),
+                      TimeSpan.FromSeconds(long.Parse(clipStartString) / (double)audioRateLong),
+                      TimeSpan.FromSeconds(long.Parse(clipEndString) / (double)audioRateLong),
                       trackIndex));
                   }
                   // TODO: reformat timestaps into mp3s.
