@@ -219,6 +219,11 @@ namespace MusikMacher
             {
               // we do nothing
               // TODO: maybe check if the original location is still valid?
+              if (!Path.Exists(songExists.path))
+              {
+                logLoading($"file {songExists.path} moved to {filePath}");
+                songExists.path = filePath;
+              }
               // TODO: do some hashing of the content???
               if (tag != null)
               {
