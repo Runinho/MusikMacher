@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using NAudio.Gui;
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Numerics;
@@ -40,6 +43,7 @@ namespace MusikMacher.components
     public ICommand FavoriteTagCommand { get; private set; }
     public ICommand CopyTracksNameCommand { get; private set; }
     public ICommand CopyTracksPathCommand { get; private set; }
+    public ICommand CopyTracksFileCommand { get; private set; }
     public ICommand HideTagCommand { get; private set; }
     public ICommand RenameTagCommand { get; private set; }
 
@@ -58,6 +62,7 @@ namespace MusikMacher.components
       HideTracksCommand = new RelayCommand(HideTracks);
       CopyTracksNameCommand = new RelayCommand(CopyTracksName);
       CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
+      CopyTracksFileCommand = new RelayCommand(CopyTracksFile);
 
       Player = new PlayerModel(this);
 
@@ -444,21 +449,19 @@ namespace MusikMacher.components
           // Sadly the following is not working
           if (sender is Wpf.Ui.Controls.DataGrid dg)
           {
-            var stringPaths = new string[strings.Length];
-            i = 0;
+            List<string> stringPaths = new List<string>();
             foreach (var item in selected)
             {
-              stringPaths[i] = item.path;
-              i++;
+              stringPaths.Add(item.path.ToString());
+              Debug.WriteLine(item.path.ToString());
             }
-            dragData = new DataObject(DataFormats.FileDrop, stringPaths);
+            dragData = new DataObject(DataFormats.FileDrop, stringPaths.ToArray());
           }
           else
           {
             // only the currently played track
             selected = new List<Track>([toDrag]).ToFrozenSet();
           }
-
           dragData.SetData("MusikMakerTrack", strings); // use the full selection.
           dragData.SetData(DataFormats.Text, toDrag.name);
           // create own window as tooltip
@@ -519,9 +522,12 @@ namespace MusikMacher.components
       // update the position of the visual feedback item
       Win32Point w32Mouse = new Win32Point();
       GetCursorPos(ref w32Mouse);
+      if(this._dragdropWindow != null)
+      {
 
-      this._dragdropWindow.Left = w32Mouse.X;
-      this._dragdropWindow.Top = w32Mouse.Y + 5;
+        this._dragdropWindow.Left = w32Mouse.X;
+        this._dragdropWindow.Top = w32Mouse.Y + 5;
+      }
     }
     
     private void SpaceKeyPressed()
@@ -683,7 +689,20 @@ namespace MusikMacher.components
         Clipboard.SetText(string.Join("\n", selected.Select(t => t.path)));
       }
     }
-    
+
+    public void CopyTracksFile()
+    {
+      // copy the selected track names into the clipboard
+      selected = Player.SelectedTracks.ToFrozenSet();
+      StringCollection paths = new StringCollection();
+      foreach (var elm in selected)
+      {
+        paths.Add(elm.path);
+      }
+
+      Clipboard.SetFileDropList(paths);
+    }
+
     public void RefreshTracksView()
     {
       TracksView.Refresh();

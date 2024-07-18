@@ -120,229 +120,232 @@
   <data name="AddTag" xml:space="preserve">
     <value>Tag hinzufügen</value>
   </data>
-    <data name="All" xml:space="preserve">
-      <value>Alle</value>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
   </data>
-    <data name="CachingWaveforms" xml:space="preserve">
-      <value>Signalverläufe vorladen</value>
+  <data name="CachingWaveforms" xml:space="preserve">
+    <value>Signalverläufe vorladen</value>
   </data>
-    <data name="CheckForUpdate" xml:space="preserve">
-      <value>auf Updates prüfen</value>
+  <data name="CheckForUpdate" xml:space="preserve">
+    <value>auf Updates prüfen</value>
   </data>
-    <data name="ContinuePlayback" xml:space="preserve">
-      <value>Weiter abspielen</value>
+  <data name="ContinuePlayback" xml:space="preserve">
+    <value>Weiter abspielen</value>
   </data>
-    <data name="ContinuePlaybackDescription" xml:space="preserve">
-      <value>Die nächste Spur automatisch abspielen, sobald die aktuelle endet. Wenn aktiviert, ahmt diese Funktion das Standardverhalten eines Musikplayers nach.</value>
+  <data name="ContinuePlaybackDescription" xml:space="preserve">
+    <value>Die nächste Spur automatisch abspielen, sobald die aktuelle endet. Wenn aktiviert, ahmt diese Funktion das Standardverhalten eines Musikplayers nach.</value>
   </data>
-    <data name="ContinuePlaybackFalse" xml:space="preserve">
-      <value>Wiedergabe stoppen</value>
+  <data name="ContinuePlaybackFalse" xml:space="preserve">
+    <value>Wiedergabe stoppen</value>
   </data>
-    <data name="ContinuePlaybackTrue" xml:space="preserve">
-      <value>Nächsten Song spielen</value>
+  <data name="ContinuePlaybackTrue" xml:space="preserve">
+    <value>Nächsten Song spielen</value>
   </data>
-    <data name="CopyAsPath" xml:space="preserve">
-      <value>Dateipfad kopieren</value>
+  <data name="CopyAsPath" xml:space="preserve">
+    <value>Dateipfad kopieren</value>
   </data>
-    <data name="CopyName" xml:space="preserve">
-      <value>Name kopieren</value>
+  <data name="CopyFile" xml:space="preserve">
+    <value>Datei kopieren</value>
   </data>
-    <data name="CreationTime" xml:space="preserve">
-      <value>Erstellungszeit</value>
+  <data name="CopyName" xml:space="preserve">
+    <value>Name kopieren</value>
   </data>
-    <data name="DownloadPost" xml:space="preserve">
-      <value>Herunterladen</value>
+  <data name="CreationTime" xml:space="preserve">
+    <value>Erstellungszeit</value>
   </data>
-    <data name="DownloadPre" xml:space="preserve">
-      <value />
+  <data name="DownloadPost" xml:space="preserve">
+    <value>Herunterladen</value>
   </data>
-    <data name="Effects" xml:space="preserve">
-      <value>Effekte</value>
+  <data name="DownloadPre" xml:space="preserve">
+    <value />
   </data>
-    <data name="English" xml:space="preserve">
-      <value>Englisch</value>
+  <data name="Effects" xml:space="preserve">
+    <value>Effekte</value>
   </data>
-    <data name="ErrorOccurred" xml:space="preserve">
-      <value>Es ist ein Fehler aufgetreten: {0}</value>
+  <data name="English" xml:space="preserve">
+    <value>Englisch</value>
   </data>
-    <data name="EstimatedTimeLeft" xml:space="preserve">
-      <value>Geschätzte verbleibende Zeit:</value>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Es ist ein Fehler aufgetreten: {0}</value>
   </data>
-    <data name="FailedSubsection" xml:space="preserve">
-      <value>Fehler beim Laden aus {0}: Der Ordner existiert nicht.</value>
+  <data name="EstimatedTimeLeft" xml:space="preserve">
+    <value>Geschätzte verbleibende Zeit:</value>
   </data>
-    <data name="FailedToRetrieve" xml:space="preserve">
-      <value>Fehler beim Aufrufen von neuer Versionsinformation. Statuscode: {0}</value>
+  <data name="FailedSubsection" xml:space="preserve">
+    <value>Fehler beim Laden aus {0}: Der Ordner existiert nicht.</value>
   </data>
-    <data name="Favorite" xml:space="preserve">
-      <value>Favorisieren</value>
+  <data name="FailedToRetrieve" xml:space="preserve">
+    <value>Fehler beim Aufrufen von neuer Versionsinformation. Statuscode: {0}</value>
   </data>
-    <data name="FindInSongs" xml:space="preserve">
-      <value>In Liedern suchen (Ctrl + F)</value>
+  <data name="Favorite" xml:space="preserve">
+    <value>Favorisieren</value>
   </data>
-    <data name="FindInTags" xml:space="preserve">
-      <value>In Tags suchen (Ctrl + T)</value>
+  <data name="FindInSongs" xml:space="preserve">
+    <value>In Liedern suchen (Ctrl + F)</value>
   </data>
-    <data name="German" xml:space="preserve">
-      <value>Deutsch</value>
+  <data name="FindInTags" xml:space="preserve">
+    <value>In Tags suchen (Ctrl + T)</value>
   </data>
-    <data name="Hide" xml:space="preserve">
-      <value>Ausblenden</value>
+  <data name="German" xml:space="preserve">
+    <value>Deutsch</value>
   </data>
-    <data name="HideTrack" xml:space="preserve">
-      <value>Lied ausblenden</value>
+  <data name="Hide" xml:space="preserve">
+    <value>Ausblenden</value>
   </data>
-    <data name="Import" xml:space="preserve">
-      <value>Importieren</value>
+  <data name="HideTrack" xml:space="preserve">
+    <value>Lied ausblenden</value>
   </data>
-    <data name="ImportDone" xml:space="preserve">
-      <value>Fertig.</value>
+  <data name="Import" xml:space="preserve">
+    <value>Importieren</value>
   </data>
-    <data name="ImportInto" xml:space="preserve">
-      <value>Importieren in</value>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Fertig.</value>
   </data>
-    <data name="ImportSubfolders" xml:space="preserve">
-      <value>Unterordner importieren</value>
+  <data name="ImportInto" xml:space="preserve">
+    <value>Importieren in</value>
   </data>
-    <data name="Language" xml:space="preserve">
-      <value>Sprache</value>
+  <data name="ImportSubfolders" xml:space="preserve">
+    <value>Unterordner importieren</value>
   </data>
-    <data name="LanguageDescription" xml:space="preserve">
-      <value>Anzeigesprache der Bedienoberfläche</value>
+  <data name="Language" xml:space="preserve">
+    <value>Sprache</value>
   </data>
-    <data name="LastChecked" xml:space="preserve">
-      <value>Letzte Prüfung:</value>
+  <data name="LanguageDescription" xml:space="preserve">
+    <value>Anzeigesprache der Bedienoberfläche</value>
   </data>
-    <data name="Length" xml:space="preserve">
-      <value>Länge</value>
+  <data name="LastChecked" xml:space="preserve">
+    <value>Letzte Prüfung:</value>
   </data>
-    <data name="LoadData" xml:space="preserve">
-      <value>Daten laden</value>
+  <data name="Length" xml:space="preserve">
+    <value>Länge</value>
   </data>
-    <data name="LoadedSuccessfulSubsection" xml:space="preserve">
-      <value> {0} bekannte Lieder gefunden und  {1} neue hinzugefügt</value>
+  <data name="LoadData" xml:space="preserve">
+    <value>Daten laden</value>
   </data>
-    <data name="LoadingDataFrom" xml:space="preserve">
-      <value>Lade Lieder aus `{0}`</value>
+  <data name="LoadedSuccessfulSubsection" xml:space="preserve">
+    <value> {0} bekannte Lieder gefunden und  {1} neue hinzugefügt</value>
   </data>
-    <data name="LoadingDataFromSublocation" xml:space="preserve">
-      <value>Lade Lieder aus Unterordner {0}</value>
+  <data name="LoadingDataFrom" xml:space="preserve">
+    <value>Lade Lieder aus `{0}`</value>
   </data>
-    <data name="Name" xml:space="preserve">
-      <value>Name</value>
+  <data name="LoadingDataFromSublocation" xml:space="preserve">
+    <value>Lade Lieder aus Unterordner {0}</value>
   </data>
-    <data name="NeverChecked" xml:space="preserve">
-      <value>Noch nicht geprüft</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-    <data name="NewVersionAvailable" xml:space="preserve">
-      <value>Eine neue Version ist verfügbar ({0}), du bist gerade auf {1}</value>
+  <data name="NeverChecked" xml:space="preserve">
+    <value>Noch nicht geprüft</value>
   </data>
-    <data name="NoSongsFound" xml:space="preserve">
-      <value>Keine Lieder gefunden.</value>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Eine neue Version ist verfügbar ({0}), du bist gerade auf {1}</value>
   </data>
-    <data name="One" xml:space="preserve">
-      <value>Einen</value>
+  <data name="NoSongsFound" xml:space="preserve">
+    <value>Keine Lieder gefunden.</value>
   </data>
-    <data name="PathToSearch" xml:space="preserve">
-      <value>Zu durchsuchender Dateipfad</value>
+  <data name="One" xml:space="preserve">
+    <value>Einen</value>
   </data>
-    <data name="PauseTooltip" xml:space="preserve">
-      <value>Pause (Space)</value>
+  <data name="PathToSearch" xml:space="preserve">
+    <value>Zu durchsuchender Dateipfad</value>
   </data>
-    <data name="PlayEffectsFromStart" xml:space="preserve">
-      <value>Effekte von Anfang an abspielen</value>
+  <data name="PauseTooltip" xml:space="preserve">
+    <value>Pause (Space)</value>
   </data>
-    <data name="PlayEffectsFromStartDescription" xml:space="preserve">
-      <value>Effekte werden immer vom Anfang abgespielt</value>
+  <data name="PlayEffectsFromStart" xml:space="preserve">
+    <value>Effekte von Anfang an abspielen</value>
   </data>
-    <data name="PlayEffectsFromStartFalse" xml:space="preserve">
-      <value>Von der initialen Wiedergabeposition abspielen</value>
+  <data name="PlayEffectsFromStartDescription" xml:space="preserve">
+    <value>Effekte werden immer vom Anfang abgespielt</value>
   </data>
-    <data name="PlayEffectsFromStartTrue" xml:space="preserve">
-      <value>Von Anfang an abspielen</value>
+  <data name="PlayEffectsFromStartFalse" xml:space="preserve">
+    <value>Von der initialen Wiedergabeposition abspielen</value>
   </data>
-    <data name="PlayTooltip" xml:space="preserve">
-      <value>Wiedergabe (Space)</value>
+  <data name="PlayEffectsFromStartTrue" xml:space="preserve">
+    <value>Von Anfang an abspielen</value>
   </data>
-    <data name="PreloadAllWaveforms" xml:space="preserve">
-      <value>Alle Signalverläufe vorladen</value>
+  <data name="PlayTooltip" xml:space="preserve">
+    <value>Wiedergabe (Space)</value>
   </data>
-    <data name="Premiere" xml:space="preserve">
-      <value>Premiere</value>
+  <data name="PreloadAllWaveforms" xml:space="preserve">
+    <value>Alle Signalverläufe vorladen</value>
   </data>
-    <data name="Rename" xml:space="preserve">
-      <value>Umbenennen</value>
+  <data name="Premiere" xml:space="preserve">
+    <value>Premiere</value>
   </data>
-    <data name="ResetSearch" xml:space="preserve">
-      <value>Suche zurücksetzen</value>
+  <data name="Rename" xml:space="preserve">
+    <value>Umbenennen</value>
+  </data>
+  <data name="ResetSearch" xml:space="preserve">
+    <value>Suche zurücksetzen</value>
   </data>
   <data name="ResetTags" xml:space="preserve">
-      <value>Tag-Auswahl zurücksetzen</value>
+    <value>Tag-Auswahl zurücksetzen</value>
   </data>
   <data name="Settings" xml:space="preserve">
-      <value>Einstellungen</value>
+    <value>Einstellungen</value>
   </data>
   <data name="SettingsApperance" xml:space="preserve">
-      <value>Aussehen</value>
+    <value>Aussehen</value>
   </data>
   <data name="SettingsLanguage" xml:space="preserve">
-      <value>Sprache</value>
+    <value>Sprache</value>
   </data>
   <data name="SettingsPlayback" xml:space="preserve">
-      <value>Wiedergabe</value>
+    <value>Wiedergabe</value>
   </data>
   <data name="SettingsTags" xml:space="preserve">
-      <value>Tags</value>
+    <value>Tags</value>
   </data>
   <data name="SettingsVersionAndUpdates" xml:space="preserve">
-      <value>Version &amp; Updates</value>
+    <value>Version &amp; Updates</value>
   </data>
   <data name="SkipBackTooltip" xml:space="preserve">
-      <value>Zurückspulen (linke Pfeiltaste)</value>
+    <value>Zurückspulen (linke Pfeiltaste)</value>
   </data>
   <data name="SkipBackTooltipDescription" xml:space="preserve">
-      <value>Die aktuelle Wiedergabe vorspulen. Sprungweite ist in den Einstellungen konfigurierbar.</value>
+    <value>Die aktuelle Wiedergabe vorspulen. Sprungweite ist in den Einstellungen konfigurierbar.</value>
   </data>
   <data name="SkipForwardTooltip" xml:space="preserve">
-      <value>Vorspulen (rechte Pfeiltaste)</value>
+    <value>Vorspulen (rechte Pfeiltaste)</value>
   </data>
   <data name="SkipForwardTooltipDescription" xml:space="preserve">
-      <value>Die aktuelle Wiedergabe zurückspulen. Sprungweite ist in den Einstellungen konfigurierbar.</value>
+    <value>Die aktuelle Wiedergabe zurückspulen. Sprungweite ist in den Einstellungen konfigurierbar.</value>
   </data>
   <data name="SkipPercentage" xml:space="preserve">
-      <value>Sprungweite</value>
+    <value>Sprungweite</value>
   </data>
   <data name="SkipPercentageDescription" xml:space="preserve">
-      <value>Prozentualer Anteil des Liedes, der beim Drücken der Pfeiltasten links/rechts übersprungen werden soll</value>
+    <value>Prozentualer Anteil des Liedes, der beim Drücken der Pfeiltasten links/rechts übersprungen werden soll</value>
   </data>
   <data name="Songs" xml:space="preserve">
-      <value>Lieder</value>
+    <value>Lieder</value>
   </data>
   <data name="StartPlaybackPosition" xml:space="preserve">
-      <value>Initiale Wiedergabeposition</value>
+    <value>Initiale Wiedergabeposition</value>
   </data>
   <data name="StartPlaybackPositionDescription" xml:space="preserve">
-      <value>Position innerhalb des Songs, an dem die Wiedergabe startet</value>
+    <value>Position innerhalb des Songs, an dem die Wiedergabe startet</value>
   </data>
   <data name="TagFilter" xml:space="preserve">
-      <value>Tag-Filterung</value>
+    <value>Tag-Filterung</value>
   </data>
   <data name="TagFilterDescription" xml:space="preserve">
-      <value>Songs müssen nur einen ausgewählten Tag haben oder sie müssen alle haben.</value>
+    <value>Songs müssen nur einen ausgewählten Tag haben oder sie müssen alle haben.</value>
   </data>
   <data name="Tags" xml:space="preserve">
-      <value>Tags</value>
+    <value>Tags</value>
   </data>
   <data name="TryWithoutTagsOrSearch" xml:space="preserve">
-      <value>Ohne Tag-Auswahl oder Suche probieren?</value>
+    <value>Ohne Tag-Auswahl oder Suche probieren?</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
-      <value>Musik Macher ist auf dem neuesten Stand</value>
+    <value>Musik Macher ist auf dem neuesten Stand</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
-      <value>Titel des Fensters</value>
+    <value>Titel des Fensters</value>
   </data>
   <data name="WindowTitleDescription" xml:space="preserve">
-      <value>Gib dem Fenster einen individuellen Titel. Du könntest zum Beispiel darauf hinweisen, dass man mit Twitch Prime abonnieren kann oder den !macher-Befehl erwähnen.</value>
+    <value>Gib dem Fenster einen individuellen Titel. Du könntest zum Beispiel darauf hinweisen, dass man mit Twitch Prime abonnieren kann oder den !macher-Befehl erwähnen.</value>
   </data>
 </root>

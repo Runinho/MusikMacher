@@ -144,6 +144,9 @@
   <data name="CopyAsPath" xml:space="preserve">
     <value>Copy as path</value>
   </data>
+  <data name="CopyFile" xml:space="preserve">
+    <value>Copy as File</value>
+  </data>
   <data name="CopyName" xml:space="preserve">
     <value>Copy name</value>
   </data>

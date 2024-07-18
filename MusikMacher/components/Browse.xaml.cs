@@ -188,5 +188,10 @@ namespace MusikMacher.components
     {
       model.TrackGiveFeedback();
     }
+
+    private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+    {
+      model.CopyTracksFile();
+    }
   }
 }

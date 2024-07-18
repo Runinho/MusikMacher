@@ -190,7 +190,9 @@
                 MouseDown="DataGrid_OnClick"
                 GiveFeedback="DataGrid_OnGiveFeedback"
                 >
-
+          <DataGrid.CommandBindings>
+            <CommandBinding Command="{x:Static ApplicationCommands.Copy}" Executed="CommandBinding_Executed"/>
+          </DataGrid.CommandBindings>
           <DataGrid.Style>
             <Style BasedOn="{StaticResource DefaultDataGridStyle}" TargetType="{x:Type DataGrid}" />
           </DataGrid.Style>
@@ -216,6 +218,7 @@
               <MenuItem Header="{x:Static rs:Strings.HideTrack}" Command="{Binding HideTracksCommand}"/>
               <MenuItem Header="{x:Static rs:Strings.CopyName}" Command="{Binding CopyTracksNameCommand}"/>
               <MenuItem Header="{x:Static rs:Strings.CopyAsPath}" Command="{Binding CopyTracksPathCommand}"/>
+              <MenuItem Header="{x:Static rs:Strings.CopyFile}" Command="{Binding CopyTracksFileCommand}"/>
             </ContextMenu>
           </DataGrid.ContextMenu>
           <DataGrid.Columns>
