@@ -220,7 +220,7 @@
                   <ui:TextBox Text="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" />
                 </ui:CardExpander>
               </StackPanel>
-              
+
               <StackPanel>
                 <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsLanguage}" Margin="0,35,0,8"/>
                 <ui:CardControl Icon="{ui:SymbolIcon LocalLanguage20}">
@@ -245,9 +245,44 @@
                   </ComboBox>
                 </ui:CardControl>
               </StackPanel>
+              <StackPanel>
+                <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.Fixes}" Margin="0,35,0,8"/>
+                <ui:CardControl Icon="{ui:SymbolIcon Image20}">
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+                        Margin="0"
+                        FontTypography="BodyStrong"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{x:Static rs:Strings.LoadCovers}"
+                        TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+                        Appearance="Secondary"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{x:Static rs:Strings.LoadCoversDescription}"
+                        TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Margin="0,0,8,0">
+                      <ui:TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Text" Value="{x:Static rs:Strings.LoadCoversFalse}" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding LoadCovers}" Value="True">
+                              <Setter Property="Text" Value="{x:Static rs:Strings.LoadCoversTrue}" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </ui:TextBlock.Style>
+                    </ui:TextBlock>
+                    <ui:ToggleSwitch IsChecked="{Binding LoadCovers}"  />
+                  </StackPanel>
+                </ui:CardControl>
+              </StackPanel>
 
               <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsVersionAndUpdates}" Margin="0,20,0,8"/>
-              <uc:CheckUpdate Margin="0,0,0,0"/>
+            <uc:CheckUpdate Margin="0,0,0,0"/>
 
             </StackPanel>
           </ScrollViewer>

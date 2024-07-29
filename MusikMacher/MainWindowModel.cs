@@ -39,6 +39,7 @@ namespace MusikMacher
       PlayEffectsFromBeginning = settings.PlayEffectsFromBeginning;
       ContinuePlayback = settings.ContinuePlayback;
       Language = settings.Language;
+      LoadCovers = settings.LoadCovers;
     }
 
     private bool _andTags = false;
@@ -135,6 +136,24 @@ namespace MusikMacher
 
           // saving location in settings
           Settings.getSettings().ContinuePlayback = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
+    private bool _loadCovers;
+    public bool LoadCovers
+    {
+      get => _loadCovers;
+      set
+      {
+        if (value != _loadCovers)
+        {
+          _loadCovers = value;
+          RaisePropertyChanged(nameof(LoadCovers));
+
+          // saving location in settings
+          Settings.getSettings().LoadCovers = value;
           Settings.saveSettings();
         }
       }

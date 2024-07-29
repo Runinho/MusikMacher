@@ -101,20 +101,30 @@ namespace MusikMacher
           return _artwork;
         } else
         {
-          _artworkLoaded = true;
-          
-          // load in waveform in other thread
-          ArtworkLoader.getInstance().Shedule(new Tuple<string, Action<byte[]?>>(path,
-                (byte[]? data) =>
-                {
-                  if (data != null)
-                  {
-                    _artwork = DataToBitmapImage(data);
-                    OnPropertyChanged(nameof(Artwork));
-                  }
-                }));
-          return null;
+          if (Settings.getSettings().LoadCovers)
+          {
+            _artworkLoaded = true;
+            try
+            {
+              // load in waveform in other thread
+              ArtworkLoader.getInstance().Shedule(new Tuple<string, Action<byte[]?>>(path,
+                    (byte[]? data) =>
+                    {
+                      if (data != null)
+                      {
+                        _artwork = DataToBitmapImage(data);
+                        OnPropertyChanged(nameof(Artwork));
+                      }
+                    }));
+              return null;
+            }
+            catch (Exception e)
+            {
+              System.Diagnostics.Debug.WriteLine($"Failed to load artwork for {path}: {e}");
+            }
+          }
         }
+        return null;
       }
     }
 

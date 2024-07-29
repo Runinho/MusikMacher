@@ -142,6 +142,15 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy as File.
+        /// </summary>
+        public static string CopyFile {
+            get {
+                return ResourceManager.GetString("CopyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy name.
         /// </summary>
         public static string CopyName {
@@ -259,6 +268,15 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fixes.
+        /// </summary>
+        public static string Fixes {
+            get {
+                return ResourceManager.GetString("Fixes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to German.
         /// </summary>
         public static string German {
@@ -354,6 +372,42 @@ namespace MusikMacher.Resources {
         public static string Length {
             get {
                 return ResourceManager.GetString("Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load cover art.
+        /// </summary>
+        public static string LoadCovers {
+            get {
+                return ResourceManager.GetString("LoadCovers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the application crashes often it might help to disable cover loading.
+        /// </summary>
+        public static string LoadCoversDescription {
+            get {
+                return ResourceManager.GetString("LoadCoversDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to no cover art.
+        /// </summary>
+        public static string LoadCoversFalse {
+            get {
+                return ResourceManager.GetString("LoadCoversFalse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to load cover art.
+        /// </summary>
+        public static string LoadCoversTrue {
+            get {
+                return ResourceManager.GetString("LoadCoversTrue", resourceCulture);
             }
         }
         

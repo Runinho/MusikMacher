@@ -186,6 +186,9 @@
   <data name="FindInTags" xml:space="preserve">
     <value>In Tags suchen (Ctrl + T)</value>
   </data>
+  <data name="Fixes" xml:space="preserve">
+    <value>Fixes</value>
+  </data>
   <data name="German" xml:space="preserve">
     <value>Deutsch</value>
   </data>
@@ -218,6 +221,18 @@
   </data>
   <data name="Length" xml:space="preserve">
     <value>Länge</value>
+  </data>
+  <data name="LoadCovers" xml:space="preserve">
+    <value>Coverart laden</value>
+  </data>
+  <data name="LoadCoversDescription" xml:space="preserve">
+    <value>Wenn das Programm oft abstuertzt hilft es manchmal wenn Covers nicht geladen werden</value>
+  </data>
+  <data name="LoadCoversFalse" xml:space="preserve">
+    <value>keine Coverarts</value>
+  </data>
+  <data name="LoadCoversTrue" xml:space="preserve">
+    <value>Coverarts laden</value>
   </data>
   <data name="LoadData" xml:space="preserve">
     <value>Daten laden</value>

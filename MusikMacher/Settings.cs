@@ -111,6 +111,10 @@ namespace MusikMacher
     public BrowseSettings TrackBrowseSettings = new BrowseSettings();
     public BrowseSettings EffectBrowseSettings = new BrowseSettings();
 
+    [DefaultValue(true)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool LoadCovers = true;
+
     public static Settings getSettings()
     {
       if (Instance == null)
