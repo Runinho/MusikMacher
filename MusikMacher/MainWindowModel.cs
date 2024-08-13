@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using LorusMusikMacher.database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32.SafeHandles;
 using MusikMacher.components;
 using System;
 using System.Collections.Frozen;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,6 +42,7 @@ namespace MusikMacher
       ContinuePlayback = settings.ContinuePlayback;
       Language = settings.Language;
       LoadCovers = settings.LoadCovers;
+      OpenConsole = settings.OpenConsole;
     }
 
     private bool _andTags = false;
@@ -157,6 +160,29 @@ namespace MusikMacher
           Settings.saveSettings();
         }
       }
+    }
+
+    private bool _openConsole;
+    public bool OpenConsole
+    {
+      get => _openConsole;
+      set
+      {
+        if (value != _openConsole)
+        {
+          _openConsole = value;
+          RaisePropertyChanged(nameof(OpenConsole));
+
+          // saving location in settings
+          Settings.getSettings().OpenConsole = value;
+          Settings.saveSettings();
+        }
+      }
+    }
+
+    public ICommand OpenConsoleCommand
+    {
+      get; private set;
     }
 
     private string _windowTitle;

@@ -279,6 +279,25 @@
                     <ui:ToggleSwitch IsChecked="{Binding LoadCovers}"  />
                   </StackPanel>
                 </ui:CardControl>
+
+                <ui:CardControl Icon="{ui:SymbolIcon WindowConsole20}">
+                  <ui:CardControl.Header>
+                    <StackPanel>
+                      <ui:TextBlock
+      Margin="0"
+      FontTypography="BodyStrong"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      Text="{x:Static rs:Strings.OpenConsole}"
+      TextWrapping="WrapWithOverflow" />
+                      <ui:TextBlock
+      Appearance="Secondary"
+      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+      Text="{x:Static rs:Strings.OpenConsoleDescription}"
+      TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                  </ui:CardControl.Header>
+                  <ui:ToggleSwitch IsChecked="{Binding OpenConsole}"  />
+                </ui:CardControl>
               </StackPanel>
 
               <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Strings.SettingsVersionAndUpdates}" Margin="0,20,0,8"/>

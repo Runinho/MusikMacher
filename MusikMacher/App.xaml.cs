@@ -1,6 +1,10 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MusikMacher
 {
@@ -11,6 +15,10 @@ namespace MusikMacher
   {
     public App() : base()
     {
+      if(Settings.getSettings().OpenConsole)
+      {
+        AllocConsole();
+      }
       var language = Settings.getSettings().Language;
       if (language == "")
       {
@@ -35,6 +43,8 @@ namespace MusikMacher
     {
       MessageBox.Show("Unhandled exception occurred: \n" + e.Exception.Message + " Stack trace:" + e.Exception.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
-  }
 
+    [DllImport("kernel32")]
+    static extern bool AllocConsole();
+  }
 }

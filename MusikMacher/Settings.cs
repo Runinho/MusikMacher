@@ -115,6 +115,10 @@ namespace MusikMacher
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool LoadCovers = true;
 
+    [DefaultValue(false)]
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool OpenConsole;
+
     public static Settings getSettings()
     {
       if (Instance == null)

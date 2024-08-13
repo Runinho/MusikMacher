@@ -130,7 +130,7 @@ namespace MusikMacher
 
     public static byte[]? LoadArtworkData(string path)
     {
-      if (path.EndsWith(".mp3"))
+      if (path.ToLower().EndsWith(".mp3"))
       {
         // load meta data from mp3 file
         // Get the tag for the file

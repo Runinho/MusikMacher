@@ -493,6 +493,24 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Log.
+        /// </summary>
+        public static string OpenConsole {
+            get {
+                return ResourceManager.GetString("OpenConsole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To debug the application it might be helpful to open the console to view the log output in realtime. Requires programm restart to open console..
+        /// </summary>
+        public static string OpenConsoleDescription {
+            get {
+                return ResourceManager.GetString("OpenConsoleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path to search.
         /// </summary>
         public static string PathToSearch {

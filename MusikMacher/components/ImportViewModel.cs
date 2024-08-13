@@ -201,7 +201,9 @@ namespace MusikMacher
           // Create a FileInfo object to get file information
           FileInfo fileInfo = new FileInfo(filePath);
 
-          if (fileInfo.Extension == ".mp3" || fileInfo.Extension == ".m4a" || fileInfo.Extension == ".mp4" || fileInfo.Extension == ".wav")
+          string extension = fileInfo.Extension.ToLower();
+
+          if (extension == ".mp3" || extension == ".m4a" || extension == ".mp4" || extension == ".wav")
           {
             // Found mp3 file.
             // Output file details
@@ -221,6 +223,7 @@ namespace MusikMacher
               // TODO: maybe check if the original location is still valid?
               if (!Path.Exists(songExists.path))
               {
+                // TODO: reload covers.
                 logLoading($"file {songExists.path} moved to {filePath}");
                 songExists.path = filePath;
               }

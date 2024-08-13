@@ -261,6 +261,12 @@
   <data name="One" xml:space="preserve">
     <value>one</value>
   </data>
+  <data name="OpenConsole" xml:space="preserve">
+    <value>View Log</value>
+  </data>
+  <data name="OpenConsoleDescription" xml:space="preserve">
+    <value>To debug the application it might be helpful to open the console to view the log output in realtime. Requires programm restart to open console.</value>
+  </data>
   <data name="PathToSearch" xml:space="preserve">
     <value>Path to search</value>
   </data>

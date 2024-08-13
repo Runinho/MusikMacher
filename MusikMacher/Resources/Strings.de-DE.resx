@@ -261,6 +261,12 @@
   <data name="One" xml:space="preserve">
     <value>Einen</value>
   </data>
+  <data name="OpenConsole" xml:space="preserve">
+    <value>Progamm Log</value>
+  </data>
+  <data name="OpenConsoleDescription" xml:space="preserve">
+    <value>Um die Fehlerbehebung zu vereinfachen kann die WIndows Console geoffnet werden um Logeinträge in Echzeit anzuschauen. Neustart des Programms beneötigt um Konsole zu öffnen,</value>
+  </data>
   <data name="PathToSearch" xml:space="preserve">
     <value>Zu durchsuchender Dateipfad</value>
   </data>
