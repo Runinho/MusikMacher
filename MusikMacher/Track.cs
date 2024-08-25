@@ -20,8 +20,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Microsoft.WindowsAPICodePack.Shell;
-using TagLib.Mpeg;
 
 namespace MusikMacher
 {
@@ -107,7 +105,7 @@ namespace MusikMacher
             try
             {
               // load in waveform in other thread
-              ArtworkLoader.getInstance().Shedule(new Tuple<string, Action<byte[]?>>(path,
+              ArtworkOutsideLoader.getInstance().Shedule(new Tuple<string, Action<byte[]?>>(path,
                     (byte[]? data) =>
                     {
                       if (data != null)
@@ -126,52 +124,6 @@ namespace MusikMacher
         }
         return null;
       }
-    }
-
-    public static byte[]? LoadArtworkData(string path)
-    {
-      if (path.ToLower().EndsWith(".mp3"))
-      {
-        // load meta data from mp3 file
-        // Get the tag for the file
-        TagLib.Tag tag = null;
-        TagLib.File tagFile = null;
-        try
-        {
-          tagFile = TagLib.File.Create(path);
-          tag = tagFile.Tag;
-        }
-        catch (Exception)
-        {
-          System.Diagnostics.Debug.WriteLine("Could not parse tags for file " + path);
-        }
-
-        // If we have no pictures, bail out
-        if (tagFile == null || tag == null || tag.Pictures.Length == 0) return null;
-
-        // Find the frontcover
-        var picture = tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
-        //if (picture == null) picture = tag.Pictures.First();
-        if (picture == null) return null;
-
-
-        return picture.Data.ToArray();
-      } else
-      {
-        // fall back to ShellFile provided thumbnail
-        var thumbnail = ShellFile.FromFilePath(path).Thumbnail;
-        // convert to bytes
-        if (thumbnail != null)
-        {
-          using (MemoryStream outStream = new MemoryStream())
-          {
-            thumbnail.Bitmap.Save(outStream, ImageFormat.Png);
-            return outStream.ToArray();
-          }
-        }
-      }
-
-      return null;
     }
     
     public static BitmapSource? DataToBitmapImage(byte[] data)

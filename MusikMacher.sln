@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudio.Extras", "NAudio\NAu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusikMacherTest", "MusikMacherTest\MusikMacherTest.csproj", "{E0554835-33C0-4CCA-AC70-24DF05CA78B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverartHelper", "CoverartHelper\CoverartHelper.csproj", "{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,14 @@ Global
 		{E0554835-33C0-4CCA-AC70-24DF05CA78B0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0554835-33C0-4CCA-AC70-24DF05CA78B0}.Release|x64.ActiveCfg = Release|x64
 		{E0554835-33C0-4CCA-AC70-24DF05CA78B0}.Release|x64.Build.0 = Release|x64
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Debug|x64.Build.0 = Debug|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Release|x64.ActiveCfg = Release|Any CPU
+		{D95B01EB-E994-4D1B-AEC4-47B30C5C1D49}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
