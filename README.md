@@ -28,6 +28,8 @@ The software uses .Net 7 WPF with data binding and Entity Framework as a databas
 Download [Visual Studio 2022](https://visualstudio.microsoft.com/de/downloads/) and .Net 8 to compile the solution.
 You also need the UWP development kit to compile NAudio. Don't forget to initalize the submodules with `git submodule init` before compiling.
 
+Make sure to compile `CoverartHelper`, otherwise coverarts do not get loaded.
+
 ## Feedback
 This is currently a prototype and alpha level software, and there is a lot to do.
 If you have ideas or find annoying bugs, feel free to file an [issue](https://github.com/Runinho/MusikMacher/issues/new). Pull requests are welcome :)
