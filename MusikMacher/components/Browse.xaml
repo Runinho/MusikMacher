@@ -7,7 +7,7 @@
              xmlns:localConverter="clr-namespace:MusikMacher.converter"
              xmlns:rs="clr-namespace:MusikMacher.Resources"
              xmlns:uc="clr-namespace:MusikMacher.components" 
-             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" d:DataContext="{d:DesignInstance Type=local:BrowseViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >
@@ -212,6 +212,7 @@
             <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
             <KeyBinding Key="Left" Command="{Binding Path=Player.SkipBackwardCommand}" />
             <KeyBinding Key="Right" Command="{Binding Path=Player.SkipForwardCommand}" />
+            <KeyBinding Key="R" Command="{Binding RandomSongCommand}"/>
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>
             <ContextMenu>

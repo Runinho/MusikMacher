@@ -39,10 +39,14 @@ namespace MusikMacher
       var browseTracksViewModel = new BrowseViewModel("tracks", settings.TrackBrowseSettings, false);
       var effectsTracksViewModel = new BrowseViewModel("effects", settings.EffectBrowseSettings, true);
       var importDataModel = new ImportViewModel(model, browseTracksViewModel, effectsTracksViewModel);
+
+      browseTracksViewModel.ScrollTrackIntoView = tracksBrowse.ScrollTrackIntoView;
+      effectsTracksViewModel.ScrollTrackIntoView = effectsBrowse.ScrollTrackIntoView;
+
       import.DataContext = importDataModel;
       tracksBrowse.model = browseTracksViewModel;
       tracksBrowse.DataContext = browseTracksViewModel;
-
+      
       effectsBrowse.model = effectsTracksViewModel;
       effectsBrowse.DataContext = effectsTracksViewModel;
 

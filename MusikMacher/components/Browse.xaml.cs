@@ -36,6 +36,15 @@ namespace MusikMacher.components
       //dataGrid.LoadedSortingDirection = settings.TracksSortingDescriptions;
     }
 
+    public void ScrollTrackIntoView(int index)
+    {
+      if (index == -1)
+      {
+        index = 0;
+      }
+      dataGrid.ScrollIntoView(dataGrid.Items[index]);
+    }
+
     private void Browse_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.F)
@@ -74,6 +83,7 @@ namespace MusikMacher.components
         }
       }
     }
+
 
     private void DataGrid_OnClick(object sender, MouseButtonEventArgs e)
     {

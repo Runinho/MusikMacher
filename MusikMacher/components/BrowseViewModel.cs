@@ -43,6 +43,8 @@ namespace MusikMacher.components
     public ICommand CopyTracksFileCommand { get; private set; }
     public ICommand HideTagCommand { get; private set; }
     public ICommand RenameTagCommand { get; private set; }
+    public ICommand RandomSongCommand  {  get; private set; }
+
 
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
       this.settings = settings;
@@ -60,6 +62,7 @@ namespace MusikMacher.components
       CopyTracksNameCommand = new RelayCommand(CopyTracksName);
       CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
       CopyTracksFileCommand = new RelayCommand(CopyTracksFile);
+      RandomSongCommand = new RelayCommand(RandomSong);
 
       Player = new PlayerModel(this);
 
@@ -294,6 +297,7 @@ namespace MusikMacher.components
     private ICollectionView _tagsView;
     public readonly bool checkPlayFromStart;
     private Window _dragdropWindow;
+    internal Action<int> ScrollTrackIntoView;
 
     public ICollectionView TagsView
     {
@@ -725,6 +729,28 @@ namespace MusikMacher.components
       {
         SelectedTag.IsChecked = !SelectedTag.IsChecked;
       }
+    }
+
+    private void RandomSong()
+    {
+      if (TracksView.IsEmpty)
+      {
+        return;
+      }
+      Random random = new Random();
+      int randomIndex = random.Next(0, TrackCount-1); // without last
+      
+
+      Track selected =  TracksView.Cast<Track>().ElementAt(randomIndex);
+      if(selected == Player.currentTrack)
+      {
+        // just use the last
+        selected = TracksView.Cast<Track>().ElementAt(TrackCount-1);
+      }
+      Player.currentTrack = selected;
+      // scroll to bottom so the view is at the top
+      ScrollTrackIntoView(TrackCount - 1);
+      ScrollTrackIntoView(randomIndex);
     }
   }
 }
