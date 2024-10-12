@@ -134,7 +134,7 @@ namespace MusikMacher.components
       if (track != null)
       {
         // don't show hidden files.
-        if (track.IsHidden)
+        if (track.IsHidden && !ShowHidden)
         {
           return false;
         } 
@@ -283,6 +283,21 @@ namespace MusikMacher.components
         {
           _selectedTags = value;
           RaisePropertyChanged(nameof(SelectedTags));
+        }
+      }
+    }
+
+    public bool _showHidden = false;
+    public bool ShowHidden
+    {
+      get { return _showHidden; }
+      set
+      {
+        if (value != _showHidden)
+        {
+          _showHidden = value;
+          RefreshTracksView();
+          RaisePropertyChanged(nameof(ShowHidden));
         }
       }
     }
@@ -656,8 +671,8 @@ namespace MusikMacher.components
       selected = Player.SelectedTracks.ToFrozenSet();
       foreach (Track track in selected)
       {
-        // hide
-        track.IsHidden = true;
+        // toggle
+        track.IsHidden = !track.IsHidden;
       }
       db.SaveChanges();
       RefreshTracksView();

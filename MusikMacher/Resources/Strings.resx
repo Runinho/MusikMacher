@@ -321,6 +321,9 @@
   <data name="SettingsVersionAndUpdates" xml:space="preserve">
     <value>Version &amp;amp; updates</value>
   </data>
+  <data name="ShowHiddenTooltip" xml:space="preserve">
+    <value>Show hidden tracks</value>
+  </data>
   <data name="SkipBackTooltip" xml:space="preserve">
     <value>Skip back (Left Arrow)</value>
   </data>
@@ -359,6 +362,9 @@
   </data>
   <data name="TryWithoutTagsOrSearch" xml:space="preserve">
     <value>Try without tags or search?</value>
+  </data>
+  <data name="UnhideTrack" xml:space="preserve">
+    <value>Unhide track</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
     <value>Musik Macher is up to date</value>

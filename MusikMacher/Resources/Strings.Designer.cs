@@ -673,6 +673,15 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show hidden tracks.
+        /// </summary>
+        public static string ShowHiddenTooltip {
+            get {
+                return ResourceManager.GetString("ShowHiddenTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skip back (Left Arrow).
         /// </summary>
         public static string SkipBackTooltip {
@@ -786,6 +795,15 @@ namespace MusikMacher.Resources {
         public static string TryWithoutTagsOrSearch {
             get {
                 return ResourceManager.GetString("TryWithoutTagsOrSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unhide track.
+        /// </summary>
+        public static string UnhideTrack {
+            get {
+                return ResourceManager.GetString("UnhideTrack", resourceCulture);
             }
         }
         

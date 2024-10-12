@@ -321,6 +321,9 @@
   <data name="SettingsVersionAndUpdates" xml:space="preserve">
     <value>Version &amp; Updates</value>
   </data>
+  <data name="ShowHiddenTooltip" xml:space="preserve">
+    <value>Ausgeblendete Lieder anzeigen</value>
+  </data>
   <data name="SkipBackTooltip" xml:space="preserve">
     <value>Zurückspulen (linke Pfeiltaste)</value>
   </data>
@@ -359,6 +362,9 @@
   </data>
   <data name="TryWithoutTagsOrSearch" xml:space="preserve">
     <value>Ohne Tag-Auswahl oder Suche probieren?</value>
+  </data>
+  <data name="UnhideTrack" xml:space="preserve">
+    <value>Lied einblenden</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
     <value>Musik Macher ist auf dem neuesten Stand</value>
