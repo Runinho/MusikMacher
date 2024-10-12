@@ -159,6 +159,16 @@
                           </Setter.Value>
                         </Setter>
                       </DataTrigger>
+                      <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                        <Setter Property="Content">
+                          <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                              <ui:SymbolIcon Symbol="EyeOff16" Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                              <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                            </StackPanel>
+                          </Setter.Value>
+                        </Setter>
+                      </DataTrigger>
                     </Style.Triggers>
                   </Style>
                 </CheckBox.Style>
@@ -166,8 +176,25 @@
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
-        <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Grid.Row="3" Command="{Binding Path=AddTagCommand}" Content="{x:Static rs:Strings.AddTag}"></Button>
+        <Grid Grid.Row="3">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <Button Focusable="False" Margin="10" HorizontalAlignment="Stretch" Command="{Binding Path=AddTagCommand}" Content="{x:Static rs:Strings.AddTag}"></Button>
+          <ToggleButton Grid.Column="1" Margin="0 0 0 0"  IsChecked="{Binding ShowHiddenTags}">
+            <ui:SymbolIcon Symbol="EyeOff16" />
+            <ToggleButton.ToolTip>
+              <ToolTip>
+                <StackPanel>
+                  <TextBlock FontWeight="Bold" Text="{x:Static rs:Strings.ShowHiddenTagsTooltip}" />
+                </StackPanel>
+              </ToolTip>
+            </ToggleButton.ToolTip>
+          </ToggleButton>
+        </Grid>
       </Grid>
+      
       <Grid Grid.Column="1" >
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>

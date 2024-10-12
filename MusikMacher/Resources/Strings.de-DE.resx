@@ -321,6 +321,9 @@
   <data name="SettingsVersionAndUpdates" xml:space="preserve">
     <value>Version &amp; Updates</value>
   </data>
+  <data name="ShowHiddenTagsTooltip" xml:space="preserve">
+    <value>Ausgeblendete Tags anzeigen</value>
+  </data>
   <data name="ShowHiddenTooltip" xml:space="preserve">
     <value>Ausgeblendete Lieder anzeigen</value>
   </data>

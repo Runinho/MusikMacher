@@ -673,6 +673,15 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show hidden tags.
+        /// </summary>
+        public static string ShowHiddenTagsTooltip {
+            get {
+                return ResourceManager.GetString("ShowHiddenTagsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show hidden tracks.
         /// </summary>
         public static string ShowHiddenTooltip {

@@ -321,6 +321,9 @@
   <data name="SettingsVersionAndUpdates" xml:space="preserve">
     <value>Version &amp;amp; updates</value>
   </data>
+  <data name="ShowHiddenTagsTooltip" xml:space="preserve">
+    <value>Show hidden tags</value>
+  </data>
   <data name="ShowHiddenTooltip" xml:space="preserve">
     <value>Show hidden tracks</value>
   </data>

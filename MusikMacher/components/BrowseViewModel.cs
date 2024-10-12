@@ -110,7 +110,7 @@ namespace MusikMacher.components
       if (tag != null)
       {
         // don't show hidden tags
-        if (tag.IsHidden)
+        if (tag.IsHidden && !ShowHiddenTags)
         {
           return false;
         }
@@ -157,7 +157,7 @@ namespace MusikMacher.components
         int matchedTags = 0;
         foreach (Tag tag in Tags)
         {
-          if (tag.IsChecked)
+          if (tag.IsChecked && (!tag.IsHidden || ShowHiddenTags))
           {
             numTagChecked++;
             if (track.Tags.Contains(tag))
@@ -298,6 +298,25 @@ namespace MusikMacher.components
           _showHidden = value;
           RefreshTracksView();
           RaisePropertyChanged(nameof(ShowHidden));
+        }
+      }
+    }
+
+    public bool _showHiddenTags = false;
+    public bool ShowHiddenTags
+    {
+      get
+      {
+        return _showHiddenTags;
+      }
+      set
+      {
+        if (value != _showHiddenTags)
+        {
+          _showHiddenTags = value;
+          RefreshTagsView();
+          RefreshTracksView();
+          RaisePropertyChanged(nameof(ShowHiddenTags));
         }
       }
     }
@@ -600,8 +619,11 @@ namespace MusikMacher.components
     
     internal void HideTag()
     {
-      SelectedTag.IsHidden = true;
-      SelectedTag.IsChecked = false;
+      SelectedTag.IsHidden = !SelectedTag.IsHidden;
+      if (SelectedTag.IsHidden == false)
+      {
+        SelectedTag.IsChecked = false;
+      }
       db.SaveChanges();
       TagsView.Refresh();
     }
@@ -724,6 +746,11 @@ namespace MusikMacher.components
       TracksView.Refresh();
       RaisePropertyChanged(nameof(TrackCount));
       RaisePropertyChanged(nameof(ShowNoSongs));
+    }
+
+    public void RefreshTagsView()
+    {
+      TagsView.Refresh();
     }
 
     internal void ReloadData()
