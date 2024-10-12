@@ -129,6 +129,12 @@
   <data name="CheckForUpdate" xml:space="preserve">
     <value>check for update</value>
   </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>add comment</value>
+  </data>
   <data name="ContinuePlayback" xml:space="preserve">
     <value>Continue Playback</value>
   </data>

@@ -129,6 +129,12 @@
   <data name="CheckForUpdate" xml:space="preserve">
     <value>auf Updates prüfen</value>
   </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Kommentar hinzufügen</value>
+  </data>
   <data name="ContinuePlayback" xml:space="preserve">
     <value>Weiter abspielen</value>
   </data>
@@ -193,7 +199,7 @@
     <value>Deutsch</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Ausblenden</value>
+    <value>Ein/Ausblenden</value>
   </data>
   <data name="HideTrack" xml:space="preserve">
     <value>Lied ausblenden</value>

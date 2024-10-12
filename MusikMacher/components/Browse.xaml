@@ -303,6 +303,7 @@
             <DataGridTextColumn Header="{x:Static rs:Strings.Length}" Binding="{Binding Path=length, Converter={StaticResource SecondsToTimeStringConverter}}" />
             <DataGridTextColumn Header="{x:Static rs:Strings.CreationTime}" Binding="{Binding creationTime, StringFormat='dd.MM.yyyy'}" />
             <DataGridTextColumn Header="{x:Static rs:Strings.Tags}" Binding="{Binding Path=Tags, Converter={StaticResource TagListConverter}}" />
+            <DataGridTextColumn Header="{x:Static rs:Strings.Comment}" Binding="{Binding Path=comment, Mode=TwoWay}"/>
             <!-- Add more columns here if needed -->
           </DataGrid.Columns>
         </local:MyDataGrid>
@@ -428,8 +429,15 @@
               </ToolTip>
             </Button.ToolTip>
           </Button>
-          <Slider Grid.Column="4"  Focusable="False" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
-        </Grid>
+          <Grid Grid.Column="4">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <ui:TextBox x:Name="CommentTextBox"  PlaceholderText="{x:Static rs:Strings.CommentAdd}" Text="{Binding Player.currentTrack.comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+            <Slider Grid.Column="1" Focusable="False" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Minimum="0" Maximum="1" Value="{Binding Player.Volume}" TickFrequency="0.1" SmallChange="0.05" LargeChange="0.1"/>
+          </Grid>
+          </Grid>
       </StackPanel>
     </Grid>
   </Grid>

@@ -145,7 +145,7 @@ namespace MusikMacher.components
           var words = Search.Split(" ");
           foreach(var word in words)
           {
-            if (!track.name.ToLower().Contains(word.ToLower()))
+            if (!track.name.ToLower().Contains(word.ToLower()) && !track.comment.ToLower().Contains(word.ToLower()))
             {
               return false;
             }

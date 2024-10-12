@@ -97,6 +97,24 @@ namespace MusikMacher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to add comment.
+        /// </summary>
+        public static string CommentAdd {
+            get {
+                return ResourceManager.GetString("CommentAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue Playback.
         /// </summary>
         public static string ContinuePlayback {
