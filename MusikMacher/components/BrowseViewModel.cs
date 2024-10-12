@@ -143,9 +143,11 @@ namespace MusikMacher.components
         if (Search.Length > 0)
         {
           var words = Search.Split(" ");
+          bool hasComment = track.comment.Length > 0;
           foreach(var word in words)
           {
-            if (!track.name.ToLower().Contains(word.ToLower()) && !track.comment.ToLower().Contains(word.ToLower()))
+            var lowerWord = word.ToLower();
+            if (!track.name.ToLower().Contains(lowerWord) && !(hasComment && track.comment.ToLower().Contains(lowerWord)))
             {
               return false;
             }
