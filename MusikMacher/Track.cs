@@ -32,6 +32,7 @@ namespace MusikMacher
       this.name = name;
       this.creationTime = creationTime;
       this.path = path;
+      this.comment = "";
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -54,6 +55,25 @@ namespace MusikMacher
     public string path { get; set; }
     [Key]
     public string name { get; set; }
+
+    private string _comment;
+    [DefaultValue("")]
+    public string comment
+    {
+      get
+      {
+        return _comment;
+      }
+      set
+      {
+        if (_comment != value)
+        {
+          _comment = value;
+          OnPropertyChanged(nameof(comment));
+        }
+      }
+    }
+
     public TagList Tags { get; } = [];
 
     private int? _length;
@@ -85,6 +105,9 @@ namespace MusikMacher
         }
       }
     }
+
+    [NotMapped]
+    public int index = 0;
 
     [NotMapped]
     private bool _artworkLoaded = false;
