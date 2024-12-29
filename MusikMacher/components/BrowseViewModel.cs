@@ -31,6 +31,8 @@ namespace MusikMacher.components
     private Nullable<Point> startPoint;
     private FrozenSet<Track> selected;
 
+    private Stack<Track> PreviousRandomTracks = new Stack<Track>();
+
     public PlayerModel Player { get; private set; }
     public ICommand SpaceKeyPressedCommand { get; private set; }
     public ICommand AddTagCommand { get; private set; }
@@ -44,6 +46,7 @@ namespace MusikMacher.components
     public ICommand HideTagCommand { get; private set; }
     public ICommand RenameTagCommand { get; private set; }
     public ICommand RandomSongCommand  {  get; private set; }
+    public ICommand PreviousRandomSongCommand  {  get; private set; }
 
 
     public BrowseViewModel(string v, BrowseSettings settings, bool checkPlayFromStart) {
@@ -63,6 +66,7 @@ namespace MusikMacher.components
       CopyTracksPathCommand = new RelayCommand(CopyTracksPath);
       CopyTracksFileCommand = new RelayCommand(CopyTracksFile);
       RandomSongCommand = new RelayCommand(RandomSong);
+      PreviousRandomSongCommand = new RelayCommand(PreviousRandomSong);
 
       Player = new PlayerModel(this);
 
@@ -791,10 +795,37 @@ namespace MusikMacher.components
         // just use the last
         selected = TracksView.Cast<Track>().ElementAt(TrackCount-1);
       }
+
+      PreviousRandomTracks.Push(selected);
+
       Player.currentTrack = selected;
       // scroll to bottom so the view is at the top
       ScrollTrackIntoView(TrackCount - 1);
       ScrollTrackIntoView(randomIndex);
+    }
+
+    private void PreviousRandomSong()
+    {
+      Track selected;
+      if (PreviousRandomTracks.TryPop(out selected))
+      {
+        if(Player.currentTrack == selected)
+        {
+          // just take another one
+          if(!PreviousRandomTracks.TryPop(out selected))
+          {
+            // failed to load another one. -> so we do nothing.
+            return;
+          }
+        }
+
+        Player.currentTrack = selected;
+        // scroll to bottom so the view is at the top
+        ScrollTrackIntoView(TrackCount - 1);
+
+        var index = TracksView.Cast<Track>().ToList().IndexOf(selected);
+        ScrollTrackIntoView(index);
+      }
     }
   }
 }

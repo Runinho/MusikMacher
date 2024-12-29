@@ -262,6 +262,7 @@
             <KeyBinding Key="Space" Command="{Binding SpaceKeyPressedCommand}" />
             <KeyBinding Key="Left" Command="{Binding Path=Player.SkipBackwardCommand}" />
             <KeyBinding Key="Right" Command="{Binding Path=Player.SkipForwardCommand}" />
+            <KeyBinding Key="E" Command="{Binding PreviousRandomSongCommand}"/>
             <KeyBinding Key="R" Command="{Binding RandomSongCommand}"/>
           </DataGrid.InputBindings>
           <DataGrid.ContextMenu>

@@ -71,14 +71,18 @@ namespace MusikMacher.components
           {
             index = 0;
           }
-          dataGrid.ScrollIntoView(dataGrid.Items[index]);
-          dataGrid.UpdateLayout();
-          var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-          var direction = (e.Key == Key.Up ? FocusNavigationDirection.Up : FocusNavigationDirection.Down);
-          if (row != null)
+          // only scroll when there is Items to show
+          if(dataGrid.Items.Count > 0)
           {
-            row.MoveFocus(new TraversalRequest(direction));
-            e.Handled = true;
+            dataGrid.ScrollIntoView(dataGrid.Items[index]);
+            dataGrid.UpdateLayout();
+            var row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
+            var direction = (e.Key == Key.Up ? FocusNavigationDirection.Up : FocusNavigationDirection.Down);
+            if (row != null)
+            {
+              row.MoveFocus(new TraversalRequest(direction));
+              e.Handled = true;
+            }
           }
         }
       }
